@@ -1,0 +1,55 @@
+<div class="flex flex-col flex-auto min-w-0 mb-10" >
+    <app-page-heading>
+        <ng-container titleSlot>
+            <div class="flex justify-between w-full ml-4">
+                <ng-container>
+                    <div class="text-white text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate">
+                        Axes Product Transactions
+                    </div>
+                </ng-container>
+                <div class="flex items-center">
+                    <mat-icon class="icon-size-5 text-axe-grey" [svgIcon]="'heroicons_outline:receipt-tax'"></mat-icon>
+                    <div class="ml-1.5 leading-6 truncate text-axe-grey">
+                        <!-- You have {{ openStatusCount(quotes) }} Pending Quotes on record -->
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </app-page-heading>
+    <div class="flex-auto border-t -mt-px pt-4 sm:pt-6">
+        <div class="w-full  mx-auto">
+            <div class="sm:col-span-2 md:col-span-4 flex flex-col flex-auto p-6 gap-4 shadow rounded-2xl overflow-visible bg-zinc-100">
+                <div class="flex flex-col sm:flex-row items-start justify-between">
+                    <div class="text-lg font-medium tracking-tight leading-6 truncate flex items-center justify-between w-full">
+                        <div class="flex items-center gap-2">
+                            <mat-icon class="icon-size-5 text-axe-blue" [svgIcon]="'heroicons_custom:quotes'"></mat-icon>
+                            <span class="text-sky-700 font-semibold text-base tracking-wider">TRANSACTIONS
+                                TABLE</span>
+                        </div>
+                        <ng-container actionSlot>
+                            <a class="bg-sky-700 rounded-md" mat-flat-button [color]="'accent'" (click)="onBtExport()">
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                                <span class="ml-2 font-medium text-sm">EXPORT</span>
+                            </a>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+                                     [columnDefs]="productTransactionColDefs"
+                                     [defaultColDef]="defaultColDef"
+                                     [getRowStyle]="lastRowBorder"
+                                     [copyHeadersToClipboard]="true"
+                                     [rowData]="productTransactions"
+                                     [animateRows]="true"
+                                     [rowSelection]="rowSelection"
+                                     [statusBar]="statusBar"
+                                     [gridOptions]="gridOptions"
+                                     [rowMultiSelectWithClick]="true"
+                                     (gridReady)="onGridReady($event)">
+                    </ag-grid-angular>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

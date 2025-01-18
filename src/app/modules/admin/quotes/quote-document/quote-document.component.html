@@ -1,0 +1,184 @@
+<div class="flex flex-col flex-auto w-full" *ngIf="quote">
+  <app-page-heading>
+    <ng-container titleSlot>
+      <div class="flex justify-between w-full ml-4">
+        <ng-container>
+          <div
+            #exportElRef
+            class="text-white text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate"
+          >
+            Quote {{ quote.id }}
+          </div>
+        </ng-container>
+        <button
+          class="hidden sm:inline-flex bg-axe-blue px-4 text-white text-base font-medium rounded-md self-start"
+          mat-stroked-button
+          (click)="exportAsPdf()"
+        >
+          <mat-icon
+            class="icon-size-5 text-white"
+            [svgIcon]="'heroicons_mini:arrow-up-on-square'"
+          ></mat-icon>
+          <span class="ml-2 text-white">Export</span>
+        </button>
+      </div>
+    </ng-container>
+  </app-page-heading>
+
+  <div class="flex-1">
+    <div
+      class="inset-0 min-w-0 text-center overflow-auto print:overflow-visible"
+      cdkScrollable
+      *ngIf="quote"
+    >
+      <div class="inline-block p-6 sm:p-5 text-left print:p-5">
+        <div
+          #exportable
+          class="max-w-240 p-10 rounded-2xl shadow bg-card print:w-auto print:p-10 print:rounded-none print:shadow-none print:bg-transparent"
+        >
+          <div class="flex items-start">
+            <div class="grid grid-rows-2 place-items-start gap-y-12">
+              <div class="grid auto-cols-max grid-flow-col gap-x-8">
+                <div class="place-self-center w-24">
+                  <img class="w-24" src="assets/images/logo/axe.jpeg" />
+                </div>
+                <div class="pl-10 border-l text-md">
+                  <div class="font-medium">AXE BUILD PRIVATE LIMITED</div>
+                  <div>31 Asbestos Road Kelvin West</div>
+                  <div>Bulawayo, Zimbabwe</div>
+                  <div>BP#2003132251</div>
+                  <div>+263-292-482-349</div>
+                  <div>axebuild09&#64;gmail.com</div>
+                </div>
+              </div>
+
+              <div
+                class="grid auto-cols-max grid-flow-col gap-x-8"
+                *ngIf="quote?.project?.client as client"
+              >
+                <div class="place-self-center w-24 text-center text-2xl text-secondary">
+                  Bill To
+                </div>
+                <div class="pl-10 border-l text-md">
+                  <div class="font-medium">{{ client.name }}</div>
+                  <div *ngIf="street">
+                    {{ street }}
+                  </div>
+                  <div *ngIf="suburb">
+                    {{ suburb }}
+                  </div>
+                  <div *ngIf="phone">
+                    {{ phone }}
+                  </div>
+                  <div *ngIf="email">
+                    {{ email }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-x-4 gap-y-1 ml-auto">
+              <!-- <div
+                class="justify-self-end text-3xl tracking-tight text-secondary"
+                [class.text-red-500]="!isAcceptedQuote"
+              >
+                {{ (isAcceptedQuote ? '' : quote?.status) | uppercase }} QUOTE
+              </div> -->
+              <div class="text-3xl">#{{ quote.id }}</div>
+              <div class="justify-self-end font-medium tracking-tight text-secondary">
+                DATE ISSUED
+              </div>
+              <div class="font-medium">{{ quote.dateIssued | date : 'MMM dd, yyyy' }}</div>
+            </div>
+          </div>
+
+          <div
+            class="grid grid-cols-12 gap-x-1 mt-5"
+            *ngIf="quote.consumablesOnQuote.length; else elseBlock"
+          >
+            <div class="col-span-6 font-medium text-md text-secondary">DESCRIPTION</div>
+            <div class="col-span-2 font-medium text-md text-right text-secondary">QTY</div>
+            <div class="col-span-2 font-medium text-md text-right text-secondary">UNIT PRICE</div>
+            <div class="col-span-2 font-medium text-md text-end text-secondary">TOTAL</div>
+          </div>
+
+          <ng-template #elseBlock>
+            <div class="grid grid-cols-12 gap-x-1 mt-5">
+              <div class="col-span-10 font-medium text-md text-secondary">DESCRIPTION</div>
+              <div class="col-span-2 font-medium text-md text-end text-secondary">TOTAL</div>
+            </div>
+          </ng-template>
+
+          <div class="col-span-12 my-4 border-b"></div>
+
+          <app-quote-document-product-line-items
+            [quote]="quote"
+            *ngIf="quote.products"
+          ></app-quote-document-product-line-items>
+
+          <app-quote-document-consumable-line-items
+            [quote]="quote"
+            *ngIf="quote.consumablesOnQuote"
+          ></app-quote-document-consumable-line-items>
+
+          <div
+            [ngStyle]="{ display: quote.outsourcedProducts ? 'block' : 'none' }"
+            class="col-span-12 gap-x-1 grid grid-cols-12"
+            *ngFor="let outsource of quote.outsourcedProducts"
+          >
+            <div class="col-span-8">
+              <div class="text-lg font-medium">Outsourced Cost</div>
+              <div class="mt-2 text-md text-secondary">Outsource Product</div>
+            </div>
+            <div class="col-span-3 self-center text-right">
+              {{ outsource.finishedGoodsTotalCost | currency : 'USD' }}
+            </div>
+            <div class="col-span-12 my-4 border-b"></div>
+          </div>
+
+          <div
+            class="grid grid-cols-12 col-span-12 gap-x-1 mt-3"
+            [class.page-break]="getLength() == 7"
+          >
+            <div class="col-span-10 self-center font-medium tracking-tight text-secondary">
+              SUBTOTAL
+            </div>
+            <div class="col-span-2 text-right text-lg font-medium">
+              {{ totals.totalExcVat | currency : 'USD' }}
+            </div>
+          </div>
+
+          <div class="col-span-12 my-3 border-b"></div>
+
+          <div class="grid grid-cols-12 col-span-12 gap-x-1 mt-3">
+            <div class="col-span-10 self-center font-medium tracking-tight text-secondary">TAX</div>
+            <div class="col-span-2 text-right text-lg font-medium">
+              {{ totals.totalVat | currency : 'USD' }}
+            </div>
+          </div>
+
+          <div class="col-span-12 my-3 border-b"></div>
+
+          <div class="grid grid-cols-12 col-span-12 gap-x-1 mt-3">
+            <div class="col-span-10 self-center text-2xl font-medium tracking-tight text-secondary">
+              TOTAL
+            </div>
+            <div class="col-span-2 text-right text-2xl font-medium -ml-4">
+              {{ totals.totalIncVat | currency : 'USD' }}
+            </div>
+          </div>
+
+          <div class="mt-16">
+            <div class="font-medium">Please pay within 7 days. Thank you for your business.</div>
+            <div class="flex items-start mt-4">
+              <img class="flex-0 w-10 mt-2" src="assets/images/logo/axe.jpeg" />
+              <div class="ml-6 mt-3 text-sm text-secondary">
+                This quote is valid for 30 days from the date of issuance. Prices are subject to
+                change based on material costs at the time of order.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

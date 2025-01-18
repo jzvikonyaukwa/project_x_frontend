@@ -1,0 +1,46 @@
+/* Ensure the parent container uses flexbox and occupies the full height of the page */
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  // min-height: 100vh; /* Ensure the container takes the full height of the viewport */
+}
+
+.flex-1 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.exportable-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-info {
+  margin-top: auto; /* Pushes the section to the bottom */
+}
+
+/* Screen Styles */
+@media screen {
+  .exportable-content {
+    max-width: 210mm; /* A4 width */
+    padding: 20mm;
+    box-sizing: border-box;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .exportable-content {
+    width: 210mm;
+    padding: 10mm;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .contact-info {
+    margin-top: auto;
+  }
+}

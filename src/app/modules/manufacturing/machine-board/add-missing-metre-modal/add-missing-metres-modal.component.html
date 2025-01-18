@@ -1,0 +1,47 @@
+
+<div class="p-5" *ngIf="coil">
+  <div class="w-full flex items-center justify-between mb-5">
+    <span class="font-medium text-lg tracking-tighter">Add wastage Coil ID: {{coil.steelCoilId ??
+      coil.id}}.</span>
+    <span class="cursor-pointer" (click)="onDialogClose()">
+      <mat-icon [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
+    </span>
+  </div>
+
+  <form [formGroup]="missingMetresForm" (ngSubmit)="onSubmit(missingMetresForm)">
+    <div class="flex flex-col items-start justify-start w-full mb-5">
+      <label for="missing-meters-input"
+        class="text-[#64748B] text-base font-normal tracking-tighter mb-1">Missing Metres in
+        meters*</label>
+      <mat-form-field id="missing-meters-input" class="w-full mt-4 sm:mt-0 mb-1"
+        [subscriptSizing]="'dynamic'">
+        <input formControlName="missingMetres" type="number" matInput />
+      </mat-form-field>
+
+      <span class="text-[#A5B1C3] tracking-tighter text-xs font-medium">Currently
+        {{coil.estimatedMetersRemaining ?? coil.metersRemaining}} meters is left</span>
+        <label for="missing-meters-input"
+               class="text-[#64748B] text-base font-normal tracking-tighter mb-1">Reason for Entry*</label>
+
+        <mat-form-field id="missing-meters-reason" class="w-full mt-4 sm:mt-0 mb-1"
+                        [subscriptSizing]="'dynamic'">
+            <input formControlName="reason" type="string" matInput />
+        </mat-form-field>
+    </div>
+    <mat-form-field class="w-full text-lg">
+      <mat-label>Date</mat-label>
+      <input matInput formControlName="date" [matDatepicker]="picker" />
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <div class="flex items-center justify-between gap-8">
+      <button
+        class="bg-[#64748B80] rounded-md text-center text-white w-48 p-[5px] text-base font-normal tracking-tighter"
+        (click)="onDialogClose()">Cancel</button>
+      <button
+        class="bg-[#0071BC] rounded-md text-center text-white w-48 p-[5px] text-base font-normal tracking-tighter"
+        type="submit">Submit</button>
+    </div>
+  </form>
+</div>

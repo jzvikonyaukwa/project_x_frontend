@@ -1,0 +1,132 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+    <app-page-heading>
+        <ng-container titleSlot>
+            <div class="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate text-white">
+                Machine's Loading Page
+            </div>
+        </ng-container>
+    </app-page-heading>
+
+    <div class="w-full max-w-screen-xl mx-auto my-20 ">
+        <div
+            class="text-2xl mb-10 md:text-5xl text-center font-semibold tracking-tight leading-7 capitalize md:leading-snug truncate text-axe-dark-blue">
+            Coils in Stock
+        </div>
+        <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine" [columnDefs]="columnDefs" [rowData]="rowData$ | async"
+            (gridReady)="onGridReady($event)" [rowSelection]="rowSelection" (selectionChanged)="onSelectionChanged()"></ag-grid-angular>
+    </div>
+
+    <div class="flex flex-col flex-auto w-full mx-auto" *ngIf="scheduledCuttingLists">
+
+        <div
+            class="text-2xl mb-10 md:text-5xl text-center font-semibold tracking-tight leading-7 capitalize md:leading-snug truncate text-axe-dark-blue">
+            All Cutting Lists
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-between w-full max-w-xs sm:max-w-none">
+            <mat-form-field class="w-full sm:w-36 ml-8" [subscriptSizing]="'dynamic'">
+                <mat-select [value]="'all'" (selectionChange)="filterByCategory($event)">
+                    <mat-option [value]="'all'">All</mat-option>
+                    <ng-container *ngFor="let category of categories">
+                        <mat-option [value]="category.slug">{{ category }}</mat-option>
+                    </ng-container>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="w-full sm:w-72 mt-4 sm:mt-0 sm:ml-4" [subscriptSizing]="'dynamic'">
+                <mat-icon matPrefix class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                <input (input)="filterByQuery(query.value)" placeholder="Search by title or description" matInput #query />
+            </mat-form-field>
+            <mat-slide-toggle class="mt-8 mr-8 sm:mt-0 sm:ml-auto" [color]="'primary'" (change)="toggleCompleted($event)">
+                Hide quotes in draft phase
+            </mat-slide-toggle>
+        </div>
+
+        <ng-container *ngIf="this.filteredScheduledCuttingLists?.length; else noCuttingLists">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 sm:m-10">
+                <ng-container *ngFor="let cuttingList of filteredScheduledCuttingLists; trackBy: trackByFn">
+                    <div class="flex flex-col h-fit shadow rounded-2xl overflow-hidden bg-card" [ngClass]="'bg-' +  cuttingList.cssColor">
+                        <div class="flex flex-col p-6">
+                            <div class="flex justify-between ">
+                                <div class="py-0.5 rounded-full text-sm font-semibold">
+                                    {{ cuttingList.clientName }}
+                                </div>
+                                <div class="py-0.5 rounded-full text-sm font-semibold capitalize">
+                                    Quote: {{ cuttingList.quoteStatus }}
+                                </div>
+                            </div>
+                            <div class="flex justify-between">
+                                <div class="mt-4 text-lg font-medium capitalize justify-center">
+                                    {{ cuttingList.cuttingList.profile }}
+                                </div>
+                                <div class="mt-4 text-lg font-medium capitalize">
+                                    {{ cuttingList.finish }}
+                                </div>
+                            </div>
+                            <div class="flex justify-between">
+                                <div class="mt-4 text-lg font-medium capitalize">
+                                    {{ cuttingList.color }}
+                                </div>
+                                <div class="mt-4 text-lg font-medium capitalize">
+                                    {{ cuttingList.gauge }}
+                                </div>
+                            </div>
+                            <div class="w-full h-1 my-6 border-t-2"></div>
+
+                            <div class="flex justify-between">
+                                <div class="flex items-center leading-5 text-md text-secondary">
+                                    <mat-icon class="icon-size-5 text-hint" [svgIcon]="'heroicons_solid:clock'"></mat-icon>
+
+                                    <div class="ml-1.5">
+                                        Number of Products
+                                        {{ cuttingList.cuttingList.manufacturedProducts.length }}
+                                    </div>
+                                </div>
+                                <div class="flex items-center leading-5 text-md text-secondary">
+                                    <mat-icon class="icon-size-5 text-hint" [svgIcon]="'heroicons_solid:clock'"></mat-icon>
+                                    <div class="ml-1.5 text-axe-dark-blue">Total meters {{
+                                        calculateTotalMeters(cuttingList.cuttingList.manufacturedProducts) }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="flex justify-between px-6 py-4 bg-gray-50 dark:bg-transparent">
+                            <a mat-stroked-button (click)="changeCuttingListStatusChange(cuttingList.cuttingList.id)">
+                                <span class="inline-flex items-center">
+                                    <ng-container>
+                                        <span>Work On</span>
+                                    </ng-container>
+                                    <mat-icon class="ml-1.5 icon-size-5" [svgIcon]="'heroicons_solid:arrow-sm-up'"></mat-icon>
+                                </span>
+                            </a>
+
+                            <a mat-stroked-button [routerLink]="'/cutting-lists/' + cuttingList.cuttingList.id">
+                                <span class="inline-flex items-center">
+                                    <ng-container>
+                                        <span>View</span>
+                                    </ng-container>
+                                    <mat-icon class="ml-1.5 icon-size-5" [svgIcon]="'heroicons_solid:arrow-sm-right'"></mat-icon>
+                                </span>
+                            </a>
+                        </div>
+
+                    </div>
+                </ng-container>
+            </div>
+        </ng-container>
+        <ng-template #noCuttingLists>
+            <div class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent mb-20">
+                <mat-icon class="icon-size-24" [svgIcon]="'heroicons_outline:document-search'"></mat-icon>
+                <div class="mt-6 text-2xl font-semibold tracking-tight text-secondary">
+                    No cutting lists associated with an 'accepted' quoted!
+                </div>
+            </div>
+        </ng-template>
+    </div>
+
+    <!-- <div class="w-full max-w-screen-xl mx-auto my-20">
+        <app-machines-sheduled-cutting-lists [machineId]="machineId"></app-machines-sheduled-cutting-lists>
+    </div> -->
+</div>

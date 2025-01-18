@@ -1,0 +1,320 @@
+<fuse-alert
+  class="mt-8 mb-4"
+  *ngIf="showAlert"
+  [dismissible]="true"
+  [dismissed]="false"
+  [appearance]="'outline'"
+  [showIcon]="false"
+  [type]="alert.type"
+>
+  {{ alert.message }}
+</fuse-alert>
+
+<div class="border-2 border-sky-700 rounded-lg border-opacity-25 p-5">
+  <form [formGroup]="grvForm" (ngSubmit)="onSubmit()">
+    <div class="flex flex-row justify-between items-center gap-8">
+      <mat-form-field class="flex flex-col flex-auto">
+        <mat-label>Date Received</mat-label>
+        <input
+          matInput
+          formControlName="dateReceived"
+          [max]="currentTime"
+          [matDatepicker]="picker"
+        />
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="flex flex-col flex-auto">
+        <mat-label>Comments</mat-label>
+        <input matInput formControlName="comments" />
+      </mat-form-field>
+    </div>
+
+    <div class="flex flex-row justify-between items-center gap-8">
+      <mat-form-field class="flex flex-col flex-auto">
+        <mat-label>Warehouse</mat-label>
+        <mat-select formControlName="warehouse">
+          <mat-option
+            *ngFor="let warehouse of warehouses"
+            [value]="warehouse"
+            [compareWith]="compareFn"
+            >{{ warehouse.name | uppercase }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="flex flex-col flex-auto" *ngIf="grvForm.get('warehouse').valid">
+        <mat-label>Supplier</mat-label>
+        <mat-select formControlName="supplierId">
+          <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">{{
+            supplier.name
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="flex flex-col flex-auto" *ngIf="grvForm.get('supplierId').valid">
+        <mat-label>Supplier Grv Code</mat-label>
+        <input matInput formControlName="supplierGrvCode" />
+      </mat-form-field>
+
+      <mat-form-field class="flex flex-col flex-auto" *ngIf="grvForm.get('supplierId').valid">
+        <mat-label>Grv Paid Status</mat-label>
+        <mat-select formControlName="paid">
+          <mat-option [value]="true">Yes</mat-option>
+          <mat-option [value]="false">No</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div *ngIf="grvForm.get('warehouse').valid">
+      <div
+        class="flex flex-col my-5 border-2 border-axe-dark-blue rounded-lg border-opacity-25 p-5 pb-3"
+        *ngIf="purchaseOrdersForSupplier && purchaseOrdersForSupplier.length > 0"
+      >
+        <div class="flex flex-row justify-between items-center mb-5">
+          <span class="text-sky-700 font-semibold text-lg tracking-wider capitalize"
+            >Purchase Orders for Supplier</span
+          >
+        </div>
+
+        <ag-grid-angular
+          style="width: 100%; height: 100%"
+          class="ag-theme-alpine"
+          [columnDefs]="SUPPLIERS_PO_COL_DEF"
+          [defaultColDef]="DEFAULT_COL_DEF"
+          [rowData]="purchaseOrdersForSupplier"
+          [animateRows]="true"
+          [rowSelection]="'single'"
+          (rowSelected)="onSelectionChangedForPurchaseOrder($event)"
+          (gridReady)="suppliersPurchaseOrdersOnGridReady($event)"
+        ></ag-grid-angular>
+      </div>
+
+      <div
+        class="flex flex-col my-5 border-2 border-axe-dark-blue rounded-lg border-opacity-25 p-5 pb-3"
+        *ngIf="!editGrv && steelProducts && steelProducts.length > 0"
+      >
+        <div class="flex flex-row justify-between items-center mb-5">
+          <span class="text-sky-700 font-semibold text-lg tracking-wider capitalize"
+            >Steel on order with supplier</span
+          >
+        </div>
+
+        <ag-grid-angular
+          style="width: 100%; height: 100%"
+          class="ag-theme-quartz"
+          [columnDefs]="GRV_STEEL_COLUMN_DEFS"
+          [defaultColDef]="DEFAULT_COL_DEF"
+          [rowData]="steelProducts"
+          [animateRows]="true"
+          [rowSelection]="rowSelection"
+          (rowSelected)="onSelectionChangedForSteel($event)"
+          (gridReady)="steelOnGridReady($event)"
+        ></ag-grid-angular>
+      </div>
+
+      <div
+        class="flex flex-col my-5 border-2 border-axe-dark-blue rounded-lg border-opacity-25 p-5 pb-3"
+        *ngIf="consumableProducts && consumableProducts.length > 0"
+      >
+        <div class="flex flex-row justify-between items-center mb-5">
+          <span class="text-sky-700 font-semibold text-lg tracking-wider capitalize"
+            >Consumables on order with supplier</span
+          >
+        </div>
+
+        <ag-grid-angular
+          style="width: 100%; height: 100%"
+          class="ag-theme-quartz"
+          [columnDefs]="GRV_CONSUMABLES_COLUMN_DEFS"
+          [defaultColDef]="DEFAULT_COL_DEF"
+          [rowData]="consumableProducts"
+          [animateRows]="true"
+          [rowSelection]="rowSelection"
+          (rowSelected)="onSelectionChangedForConsumables($event)"
+          (gridReady)="consumablesOnGridReady($event)"
+        ></ag-grid-angular>
+      </div>
+
+      <div formArrayName="consumablesOnGrv" class="form-group pl-4 pr-4 mb-4">
+        <ng-container
+          *ngFor="
+            let consumableGroup of consumablesOnGrv.controls;
+            let i = index;
+            let isFirst = first
+          "
+        >
+          <hr *ngIf="!isFirst" />
+
+          <ng-container [formGroup]="consumableGroup">
+            <div class="border-2 border-pink-500 rounded-lg border-opacity-25 p-4">
+              <h2 class="font-bold text-lg mb-2">Consumable {{ i + 1 }}:</h2>
+
+              <div class="flex gap-4">
+                <mat-form-field class="flex flex-col flex-auto">
+                  <mat-label>Consumable</mat-label>
+                  <mat-select formControlName="consumable">
+                    <mat-option *ngFor="let consumable of consumableOptions" [value]="consumable">{{
+                      consumable.name
+                    }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="flex flex-col flex-auto">
+                  <mat-label>Quantity</mat-label>
+                  <input matInput type="number" min="0" formControlName="qtyOrdered" />
+                </mat-form-field>
+
+                <mat-form-field class="flex flex-col flex-auto">
+                  <mat-label>Landed Cost Per Unit</mat-label>
+                  <input matInput type="number" min="0" formControlName="landedPrice" />
+                </mat-form-field>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+
+      <div formArrayName="steelCoils" class="form-group pl-4 pr-4 my-4">
+        <ng-container
+          *ngFor="let productGroup of steelCoils.controls; let i = index; let isFirst = first"
+        >
+          <hr *ngIf="!isFirst" />
+          <h2 class="font-bold text-lg my-5">Product {{ i + 1 }}:</h2>
+          <ng-container [formGroup]="productGroup">
+            <div class="flex flex-row justify-between items-center mb-5">
+              <span class="text-red-500 font-semibold text-lg tracking-wider"
+                >Click to remove product</span
+              >
+              <button mat-icon-button (click)="removeSteelCoil(i)" type="button">
+                <mat-icon
+                  class="icon-size-5 font-semibold text-lg text-red-500"
+                  [svgIcon]="'heroicons_solid:minus'"
+                ></mat-icon>
+              </button>
+            </div>
+
+            <div class="flex flex-col mt-4 mb-4">
+              <mat-radio-group
+                aria-label="Select an option"
+                formControlName="finish"
+                (change)="onGalvanizeChange(productGroup, $event)"
+              >
+                <mat-radio-button
+                  *ngFor="let finish of finishes"
+                  [value]="finish.id"
+                  class="mr-5"
+                  >{{ finish.name }}</mat-radio-button
+                >
+              </mat-radio-group>
+            </div>
+
+            <div class="flex flex-row justify-between items-center gap-8">
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Color</mat-label>
+                <mat-select formControlName="color">
+                  <mat-option
+                    *ngFor="let color of colors"
+                    [value]="color"
+                    [compareWith]="compareFn"
+                    >{{ color.color }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>ISQ Grade</mat-label>
+                <mat-select formControlName="isqGrade">
+                  <mat-option *ngFor="let grade of ISQ_GRADES" [value]="grade">{{
+                    grade
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Coating</mat-label>
+                <mat-select formControlName="coating">
+                  <mat-option *ngFor="let coating of COATINGS" [value]="coating">{{
+                    coating
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="flex flex-row justify-between items-center gap-8">
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Width (mm)</mat-label>
+                <mat-select formControlName="width">
+                  <mat-option *ngFor="let width of widths" [value]="width">{{
+                    width.width
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Gauge</mat-label>
+                <mat-select formControlName="gauge">
+                  <mat-option *ngFor="let gauge of gauges" [value]="gauge">{{
+                    gauge.gauge
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="flex flex-row justify-between items-center gap-8">
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Coil Number</mat-label>
+                <input matInput type="text" formControlName="coilNumber" />
+              </mat-form-field>
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Card Number</mat-label>
+                <input matInput type="text" formControlName="cardNumber" />
+              </mat-form-field>
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Weight (Kgs)</mat-label>
+                <input matInput type="number" formControlName="weightInKgsOnArrival" />
+              </mat-form-field>
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Landed Cost Per Kg</mat-label>
+                <input matInput type="number" formControlName="landedCostPerKg" />
+              </mat-form-field>
+            </div>
+
+            <mat-form-field
+              class="flex flex-col flex-auto"
+              *ngIf="grvForm.get('warehouse').value.name == 'consignment'"
+            >
+              <mat-label>Consignor</mat-label>
+              <mat-select formControlName="consignor">
+                <mat-option *ngFor="let consignor of consignors" [value]="consignor">{{
+                  consignor.name
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <div class="flex flex-row justify-between items-center mb-5">
+              <span class="text-sky-700 font-semibold text-lg tracking-wider"
+                >Click to add product</span
+              >
+              <button mat-icon-button (click)="addSteelCoil(i)" type="button">
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+              </button>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-4">
+      <button mat-flat-button type="button" (click)="cancel()" color="warn">Cancel</button>
+      <button
+        mat-flat-button
+        type="submit"
+        color="primary"
+        [disabled]="!grvForm.valid || grvForm.pristine"
+      >
+        Submit
+      </button>
+    </div>
+  </form>
+</div>

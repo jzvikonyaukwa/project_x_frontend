@@ -1,0 +1,198 @@
+<div class="w-full flex-auto " *ngIf="saleOrder$ | async as saleOrder">
+    <app-page-heading>
+        <ng-container titleSlot>
+            <div class="flex justify-between w-full ml-4">
+                <ng-container>
+                    <div class="text-white text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate">
+                        Sale Order ID: {{saleOrder.id}}
+                    </div>
+                </ng-container>
+            </div>
+        </ng-container>
+    </app-page-heading>
+
+    <div class="grid grid-cols-3 gap-4 mb-4 m-6">
+
+        <!-- Client -->
+        <div class="flex justify-between" *ngIf="saleOrder.quote.client as client">
+            <div class="flex flex-col bg-slate-50 shadow-md w-full p-5 rounded-2xl">
+                <div class="items-center rounded-2xl justify-between bg-[#80C3EC26] py-2 px-3 mb-2">
+                    <div class="flex items-center gap-2">
+                        <mat-icon class="icon-size-6 text-axe-blue">account_circle</mat-icon>
+                        <h2 class="text-3xl font-semibold text-axe-blue tracking-tight ">
+                            {{client.name }}
+                        </h2>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center mt-2 text-axe-dark-blue text-base font-medium">
+                    <div class="flex-col items-center gap-2">
+                        <div class="text-center mb-1">{{
+                            client.addresses[0]?.street }}
+                        </div>
+                        <div class="text-center mb-1">{{
+                            client.addresses[0]?.suburb }}
+                        </div>
+                    </div>
+                    <div class="text-center mb-1 text-axe-blue text-3xl" *ngIf="client.phones.length">{{
+                        client.phones[0]?.phone }}
+                    </div>
+                </div>
+
+                <div class="flex justify-center mt-auto">
+                    <button class="sm:inline-flex text-axe-blue bg-transparent">
+                        <mat-icon class="icon-size-5 text-axe-blue" [svgIcon]="'heroicons_solid:arrow-up-tray'"></mat-icon>
+                        <span class="ml-2">Email</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quote -->
+        <div class="flex justify-between w-full" *ngIf="saleOrder.quote as quote">
+            <div class="flex flex-col bg-slate-50 shadow-md w-full p-5 rounded-2xl" style="flex: 1;">
+                <div class="items-center rounded-2xl justify-between flex bg-[#80C3EC26] py-2 px-6 mb-4">
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-3xl font-semibold text-axe-blue tracking-tight leading-8">
+                            Quote
+                        </h2>
+                    </div>
+                    <button class="hidden sm:inline-flex ml-3 text-axe-blue bg-transparent" mat-flat-button
+                        [routerLink]="['/quotes/details', quote.id]">
+                        <mat-icon class="icon-size-5 text-axe-blue" [svgIcon]="'heroicons_solid:arrow-top-right-on-square'"></mat-icon>
+                        <span class="ml-2">VIEW</span>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 mb-2 ml-4">
+                    <span class="text-[#64748B] text-sm">ID:</span>
+                    <span class="font-medium tracking-tight text-base">{{quote.id}}</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 mb-2 ml-4">
+                    <span class="text-[#64748B] text-sm">Date Issued:</span>
+                    <span class="font-medium tracking-tight text-base">{{quote.dateIssued}}</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 mb-2 ml-4">
+                    <span class="text-[#64748B] text-sm">Last Modified:</span>
+                    <span class="font-medium tracking-tight text-base">{{quote.dateLastModified}}</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 mb-2 ml-4">
+                    <span class="text-[#64748B] text-sm">Date Accepted:</span>
+                    <span class="font-medium tracking-tight text-base">{{quote.dateAccepted}}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Price-->
+        <div class="flex justify-between w-full" *ngIf="saleOrder.quote.quotePrice as quotePrice">
+            <div class="flex flex-col bg-slate-50 shadow-md w-full p-5 rounded-2xl" style="flex: 1;">
+                <div class="items-center rounded-2xl justify-between flex bg-[#80C3EC26] py-2 px-6 mb-4">
+                    <div class="flex items-center gap-2">
+                        <mat-icon class="icon-size-6 text-axe-blue">account_circle</mat-icon>
+                        <h2 class="text-3xl font-semibold text-axe-blue tracking-tight leading-8">
+                            PRICE
+                        </h2>
+                    </div>
+                    <button class="hidden sm:inline-flex ml-3 text-axe-blue bg-transparent" mat-flat-button [routerLink]="['/quotes/details', ]">
+                        <span class="ml-2"></span>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 mb-2 ml-2">
+
+                    <span class="text-xl text-[#64748B]">PRICE</span>
+                    <span class="text-xl font-medium tracking-tight text-center">{{quotePrice.priceType
+                        |
+                        titlecase }}</span>
+
+                </div>
+                <div class="flex flex-col items-center mt-2 font-medium">
+                    <div class="flex-col items-center gap-2">
+                        <div class="text-2xl text-center mb-1 text-green-500">{{
+                            quotePrice.markUp | percent }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 mb-4 m-6">
+        <div class="bg-slate-50 rounded-2xl shadow-lg p-3 pb-5 ">
+            <div class="flex w-full justify-between items-center px-2 mb-2">
+                <span class="text-axe-blue text-lg font-semibold tracking-tight leading-6 truncate ">CUTTING
+                    LISTS SUMMARY</span>
+            </div>
+            <div>
+                <app-cutting-lists-summary-table></app-cutting-lists-summary-table>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 mb-4 m-6">
+        <div class="bg-slate-50 rounded-2xl shadow-lg p-3 pb-5 ">
+            <div class="flex w-full justify-between items-center px-2 mb-2">
+                <span class="text-axe-blue text-lg font-semibold tracking-tight leading-6 truncate ">OUT
+                    SOURCED PRODUCTS</span>
+            </div>
+            <div>
+                <app-outsourced-products-table [outsourcedProducts]="saleOrder.quote.outsourcedProducts"></app-outsourced-products-table>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-5 gap-8 m-6">
+        <div class="col-span-3 ">
+            <div class="mt-5 w-full" style="flex: 3; height: 400px;">
+                <div class="bg-slate-50 rounded-2xl shadow-lg p-3 pb-3 h-[90%]">
+                    <div class="flex w-full justify-between items-center px-2 mb-4">
+                        <span class="text-axe-blue text-lg font-semibold tracking-tight leading-6 truncate ">QUOTE'S
+                            CONSUMABLES</span>
+                        <div class="ml-auto mr-2">
+                            <button class="hidden sm:inline-flex bg-axe-blue px-4 text-white text-base font-medium rounded-md self-start"
+                                mat-stroked-button (click)="onBtExport()">
+                                <mat-icon class="icon-size-5 text-white" [svgIcon]="'heroicons_mini:arrow-up-on-square'"></mat-icon>
+                                <span class="ml-2 text-white">Export</span>
+                            </button>
+                        </div>
+                    </div>
+                    <app-consumables-on-quote-table [exportEmitter]="exportEmitter" [inSalesOrder]="true"
+                        [inputQuote]="saleOrder.quote"></app-consumables-on-quote-table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-span-2">
+            <div class="flex flex-col bg-slate-50 shadow-md w-full p-5 rounded-2xl ">
+                <div class="flex items-center rounded-2xl justify-between bg-[#80C3EC26] py-2 px-3 mb-2">
+                    <div class="flex items-center gap-2">
+                        <mat-icon class="icon-size-6 text-axe-blue">account_circle</mat-icon>
+                        <h2 class="text-3xl font-semibold text-axe-blue tracking-tight ">
+                            INVOICE
+                        </h2>
+                    </div>
+                    <button class="hidden sm:inline-flex ml-3 text-white bg-axe-blue" mat-raised-button (click)="createInvocie()">
+                        <mat-icon class="icon-size-5 text-axe-blue" [svgIcon]="'heroicons_solid:arrow-top-right-on-square'"></mat-icon>
+                        <span class="ml-2">CREATE INVOICE</span>
+                    </button>
+                </div>
+
+                <app-invoices-on-sale-order-table [saleOrder]="saleOrder"></app-invoices-on-sale-order-table>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 mb-4 m-6">
+        <div class="bg-slate-50 rounded-2xl shadow-lg p-3 pb-5 ">
+            <div class="flex w-full justify-between items-center px-2 mb-2">
+                <span class="text-axe-blue text-lg font-semibold tracking-tight leading-6 truncate ">
+                    ITEMS STORED IN INVENTORY</span>
+            </div>
+            <div>
+                <app-items-in-inventory></app-items-in-inventory>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,43 @@
+<div class="p-5">
+
+    <div *ngIf="serverErrorMessage" class="p-4 mb-4 border-l-4 border-red-600 bg-red-50 rounded">
+        <p class="text-red-700 font-semibold">
+            {{ serverErrorMessage }}
+        </p>
+    </div>
+
+
+
+    <div class="w-full flex items-center justify-between mb-5">
+        <span class="font-medium text-lg tracking-tighter">Create a new project</span>
+        <span class="cursor-pointer" (click)="onDialogClose()">
+            <mat-icon [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
+        </span>
+    </div>
+
+
+    <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+
+        <div class="flex flex-col items-start justify-start w-full mb-5">
+            <mat-form-field class="w-full text-lg">
+                <mat-label>Client</mat-label>
+                <mat-select formControlName="clientId">
+                    <mat-option *ngFor="let client of data.clients" [value]="client.id">{{
+                        client.name
+                        }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <mat-form-field class="flex flex-col flex-auto">
+            <mat-label>Project Name</mat-label>
+            <input matInput type="text" formControlName="name">
+        </mat-form-field>
+
+        <div class="flex items-center justify-between gap-8">
+            <button class="bg-[#64748B80] rounded-md text-center text-white w-48 p-[5px] text-base font-normal tracking-tighter"
+                (click)="onDialogClose()">Cancel</button>
+            <button class="bg-[#0071BC] rounded-md text-center text-white w-48 p-[5px] text-base font-normal tracking-tighter"
+                type="submit">Submit</button>
+        </div>
+    </form>
+</div>

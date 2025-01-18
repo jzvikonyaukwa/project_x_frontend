@@ -1,0 +1,41 @@
+.ag-theme-alpine {
+    --ag-borders: none;
+    --ag-card-radius: 16px;
+    --ag-border-radius: 16px;
+    --ag-row-border-color: transparent;
+  
+    ::ng-deep {
+      .ag-icon-menu {
+        background: transparent url("/assets/icons/ag-grid-filter-menu-icon.svg")
+          center/contain no-repeat;
+        color: transparent;
+        cursor: pointer;
+      }
+
+      .ag-root-wrapper {
+        border-radius: 10px;
+      }
+
+      .ag-header-cell:first-child {
+        padding-left: 44px;
+      }
+  
+      .ag-header-cell-label {
+        font-size: 11px;
+        font-weight: 600;
+        justify-content: flex-end;
+        gap: 2px;
+        flex-direction: row-reverse;
+      }
+  
+      .ag-row .ag-cell-value {
+        padding-left: 26px;
+        color: #464F60;
+
+        &:first-child {
+            padding-left: 52px;
+          }
+      }
+    }
+  }
+  

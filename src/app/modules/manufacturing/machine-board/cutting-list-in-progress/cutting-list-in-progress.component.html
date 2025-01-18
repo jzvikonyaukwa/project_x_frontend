@@ -1,0 +1,140 @@
+<!-- *ngIf="machinesLastEvent$ | async" -->
+<div class="p-5 pt-0 w-full in-progress-container">
+    <div class="coil-header rounded-t-xl flex items-center py-3 pb-0 justify-between bg-transparent">
+        <div class="text-[#0071BC] font-semibold text-lg flex items-center gap-1 mb-5">
+            Cutting List In Progress
+        </div>
+    </div>
+
+    <ng-container *ngIf="cuttingListInProgress$ | async as cuttingListInProgress; else no_in_progress_cl">
+
+        <div class="dropdown-box w-full min-w-[430px] max-w-[430px] bg-white rounded-2xl cursor-pointer shadow-md shadow-axe-light-blue"
+            (click)="onCuttingListClick(cuttingListInProgress)">
+            <div class="p-3 bg-white rounded-2xl">
+                <div class="coil-header rounded-t-xl flex items-center justify-between bg-white">
+                    <div class="text-axe-dark-blue font-semibold text-lg">
+                        {{cuttingListInProgress.clientName}} <span class="text-md font-normal">|</span>
+                        ID:
+                        {{cuttingListInProgress.productId}} <span class="text-md font-normal">|</span>
+                        {{cuttingListInProgress.planName | titlecase}}
+                    </div>
+                    <div class="flex items-center justify-center px-4 py-1 rounded-2xl w-28">
+                        <div (click)="$event.stopImmediatePropagation()"
+                            class="text-axe-dark-blue font-medium text-sm flex gap-1 cursor-pointer rounded-2xl px-3 py-0.5 hover:bg-[#EDEFF0]"
+                            [matMenuTriggerFor]="prioritySelectMenu">
+                            <div [ngSwitch]="cuttingListInProgress.priority">
+                                <mat-icon *ngSwitchCase="'high'" class="icon-size-4 text-[#F44C4C]"
+                                    [svgIcon]="'heroicons_solid:chevron-double-up'"></mat-icon>
+
+                                <mat-icon *ngSwitchCase="'low'" class="icon-size-4 text-[#64748B]"
+                                    [svgIcon]="'heroicons_solid:chevron-double-down'"></mat-icon>
+
+                                <mat-icon *ngSwitchCase="'medium'" class="icon-size-4 text-[#FFC700]" [svgIcon]="'heroicons_solid:bars-2'"></mat-icon>
+                            </div>
+                            {{cuttingListInProgress.priority | titlecase}}
+                        </div>
+                        <mat-menu class="rounded-2xl border border-axe-light-blue mt-1 px-4" #prioritySelectMenu="matMenu">
+                            <div class="flex items-center px-8 border-t-0 border-x-0 border-b border-[#64748B]/[20%] border-solid last:border-0"
+                                *ngFor="let option of priorityMenuOptions" (click)="onPriorityChange(cuttingListInProgress.cuttingList, option)">
+                                <mat-icon class="icon-size-4"
+                                    [ngClass]="option === 'Low' ? 'text-[#64748B]' : option === 'Medium' ? 'text-[#FFC700]' : 'text-[#F44C4C]'"
+                                    [svgIcon]="option === 'Low' ? 'heroicons_solid:chevron-double-down' : option === 'Medium' ? 'heroicons_solid:bars-2' : 'heroicons_solid:chevron-double-up'">
+                                </mat-icon>
+                                <button mat-menu-item class="text-axe-dark-blue font-medium text-sm">{{option}}</button>
+                            </div>
+                        </mat-menu>
+                    </div>
+                </div>
+                <hr class="my-4 h-px border-t-0 border-axe-dark-blue opacity-20 dark:opacity-50" />
+                <div class="w-full bg-white rounded-b-xl">
+                    <div class="flex justify-between items-center">
+                        <div class="flex flex-col gap-2 items-center">
+                            <div class="flex gap-2 items-center justify-center">
+                                <mat-icon [svgIcon]="'heroicons_outline:user'" class="text-sky-600 icon-size-5 hidden lg:block"></mat-icon>
+                                <span class="text-[#171C26] font-medium text-md tracking-wider">PROFILE</span>
+                            </div>
+                            <div class="text-[#464F60] text-base font-normal">
+                                {{cuttingListInProgress.profile | titlecase}}
+                            </div>
+                        </div>
+                        <div class="-ml-0.5 w-px h-6 bg-axe-dark-blue opacity-20"></div>
+                        <div class="flex flex-col gap-2 items-center">
+                            <div class="flex gap-2 items-center justify-center">
+                                <mat-icon [svgIcon]="'heroicons_outline:paint-brush'" class="text-sky-600 icon-size-5 hidden lg:block"></mat-icon>
+                                <span class="text-[#171C26] font-medium text-md tracking-wider">COLOR</span>
+                            </div>
+                            <div class="text-[#464F60] text-base font-normal">
+                                {{cuttingListInProgress.color}}
+                            </div>
+                        </div>
+                        <div class="-ml-0.5 w-px h-6 bg-axe-dark-blue opacity-20"></div>
+                        <div class="flex flex-col gap-2 items-center">
+                            <div class="flex gap-2 items-center justify-center">
+                                <mat-icon [svgIcon]="'heroicons_outline:speedometer'" class="text-sky-600 icon-size-5 hidden lg:block"></mat-icon>
+                                <span class="text-[#171C26] font-medium text-md tracking-wider">GAUGE</span>
+                            </div>
+                            <div class="text-[#464F60] text-base font-normal">
+                                {{cuttingListInProgress.gauge}}
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-4 h-px border-t-0 border-axe-dark-blue opacity-20 dark:opacity-50" />
+                    <div class="flex items-center justify-between">
+                        <div class="flex flex-col items-center">
+                            <span class="text-[#171C26] text-sm font-medium">Meters Completed:</span>
+                            <span class="text-[#464F60]">{{cuttingListInProgress.completedLength || 0}}</span>
+                        </div>
+                        <div class="-ml-0.5 w-px h-6 bg-axe-dark-blue opacity-20"></div>
+                        <div class="flex flex-col items-center">
+                            <span class="text-[#171C26] text-sm font-medium">Meters Required:</span>
+                            <span class="text-[#464F60]">{{cuttingListInProgress.scheduledLength || 0}}</span>
+                        </div>
+                        <div class="-ml-0.5 w-px h-6 bg-axe-dark-blue opacity-20"></div>
+                        <div class="flex flex-col items-center">
+                            <span class="text-[#171C26] text-sm font-medium">Total Meters:</span>
+                            <span class="text-[#464F60]">{{(cuttingListInProgress.scheduledLength || 0) + (cuttingListInProgress.completedLength ||
+                                0)}}</span>
+                        </div>
+                    </div>
+                    <hr class="my-4 h-px border-t-0 border-axe-dark-blue opacity-20 dark:opacity-50" />
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="text-[#171C26] text-sm font-semibold tracking-wider">Target
+                                Date
+                                :
+                                <span class="text-[#464F60] font-normal">{{cuttingListInProgress.targetDate
+                                    ?? 'None'}}</span></span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="text-[#171C26] text-sm font-semibold tracking-wider">Progress
+                                :
+                                <span class="text-[#464F60] font-normal">{{calculateProgress(cuttingListInProgress)}}
+                                    %</span></span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-2 cutting-list-progress-bar-container">
+
+                        <mat-progress-bar class="cutting-list-progress-bar mt-3 rounded-full bg-[#b0e0e6]" [color]="'warn'" [mode]="'determinate'"
+                            [value]="calculateProgress(cuttingListInProgress)"></mat-progress-bar>
+                    </div>
+
+                    <div class="flex items-center justify-end mt-5 w-full">
+                        <div class="flex items-center justify-center px-4 py-1 rounded-2xl w-28 bg-[#0071BC]/[80%]"
+                            [class.bg-[#00C838]]="cuttingListProgress?.cuttingList.status === 'completed'">
+                            <div class="text-white font-semibold text-base">
+                                {{cuttingListInProgress.productStatus | titlecase}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </ng-container>
+
+    <ng-template #no_in_progress_cl>
+        <div class="text-red-400 font-medium text-sm flex gap-1 rounded-2xl px-3 py-0.5">
+            NO CUTTING LIST IN PROGRESS
+        </div>
+    </ng-template>
+</div>

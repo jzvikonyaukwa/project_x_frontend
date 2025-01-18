@@ -1,0 +1,20 @@
+<div class="w-full h-full">
+    <!-- <div class="flex flex-col sm:flex-row bg-[#f5f7fb] items-center pb-2 justify-between">
+        <div class="py-6 px-14 font-semibold text-base text-[#0071BC] "> INVENTORY ITEMS
+        </div>
+    </div> -->
+
+    <div class="w-full mx-auto ">
+        <ag-grid-angular style="width: 100%; height: 100%" class="ag-theme-alpine" [pagination]="pagination" [paginationPageSize]="10"
+            [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [rowData]="rowData" [rowSelection]="'multiple'" [animateRows]="true"
+            [suppressPaginationPanel]="true" [getRowStyle]="lastRowBorder" (gridReady)="onGridReady($event)"></ag-grid-angular>
+        <div class="ag-grid-pagination bg-card h-11 flex justify-between items-center p-4 rounded-b-xl" *ngIf="rowData">
+            <div class="flex items-center justify-items-center">
+                <span class="text-xs font-medium">
+                    {{gridApi?.paginationGetCurrentPage() * +paginationPageSize +
+                    1}}-{{rowData?.length < (gridApi?.paginationGetCurrentPage() + 1) * +paginationPageSize ? rowData?.length :
+                        (gridApi?.paginationGetCurrentPage() + 1) * +paginationPageSize}} of {{rowData?.length}} </span>
+            </div>
+        </div>
+    </div>
+</div>

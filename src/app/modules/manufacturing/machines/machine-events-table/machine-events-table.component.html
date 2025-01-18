@@ -1,0 +1,16 @@
+<!-- flex flex-col p-6 m-8 mb-20 bg-accent w-full rounded-2xl shadow-xl -->
+<div class="flex flex-col bg-accent w-full rounded-2xl shadow-xl">
+
+    <div class="flex flex-col p-6 justify-center mb-2">
+        <div class="text-3xl text-center font-bold text-axe-light-blue mb-5">Machine History </div>
+
+        <!-- <div class="flex items-center my-2">
+            <div class="flex-auto ml-2 border-b-2"></div>
+        </div> -->
+
+        <ag-grid-angular style="width: 100%; height: 300px;" class="ag-theme-alpine" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef"
+            [rowData]="machinesEvents$ | async"></ag-grid-angular>
+
+    </div>
+
+</div>

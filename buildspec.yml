@@ -1,0 +1,38 @@
+version: 0.2
+
+env:
+  variables:
+    CACHE_CONTROL: '86400'
+    S3_BUCKET: '{{s3_bucket_url}}'
+    NODE_OPTIONS: '--max-old-space-size=4096'
+    BUILD_FOLDER: 'dist'
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+      - echo Installing source NPM dependencies...
+      - npm install -g @angular/cli
+      - npm install
+      - echo Installing amplify
+      - npm install -g @aws-amplify/cli
+      - pwd
+      - ls -la ./src
+      - ls -la ./src/app
+      - echo Completed installing dependencies
+  build:
+    commands:
+      - echo Build started
+      - amplify --version # Check Amplify CLI version
+      - ./src/pullAmplify.sh
+        - ls -la ./src
+      - ls -la ./src/app
+      - find . -name "aws-exports"
+      - echo Completed running the bash script
+      - ng build
+      - ls -l -F
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: 'dist*'

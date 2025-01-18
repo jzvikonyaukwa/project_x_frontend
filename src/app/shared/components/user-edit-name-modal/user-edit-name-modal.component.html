@@ -1,0 +1,32 @@
+<div class="flex flex-col w-120">
+    <div class="flex flex-row justify-between items-center mb-3">
+        <span class="text-lg font-bold">Edit Name</span>
+    </div>
+
+    <form [formGroup]="mainFormGroup" (ngSubmit)="onSave()" class="w-full">
+        <mat-dialog-content>
+            <!-- Accessing the form array 'names' directly -->
+            <ng-container formArrayName="name">
+                <!-- Iterating over the FormArray controls -->
+                <ng-container *ngFor="let group of mainFormGroup.controls['name'].controls; let i = index; let isFirst = first" [formGroupName]="i">
+                    <div *ngIf="!group.get('delete')?.value">
+                        <!-- Conditionally display horizontal rule -->
+                        <hr *ngIf="!isFirst" class="my-3">
+<!--                        <mat-form-field class="flex flex-col flex-auto">-->
+<!--                            <mat-label>Label</mat-label>-->
+<!--                            <input matInput formControlName="label">-->
+<!--                        </mat-form-field>-->
+                        <mat-form-field class="flex flex-col flex-auto">
+                            <mat-label>Name</mat-label>
+                            <input matInput formControlName="name">
+                        </mat-form-field>
+                    </div>
+                </ng-container>
+            </ng-container>
+        </mat-dialog-content>
+        <mat-dialog-actions align="end">
+            <button mat-flat-button class="bg-red-500 text-white">Cancel</button>
+            <button mat-flat-button type="submit" [disabled]="!mainFormGroup.valid || mainFormGroup.pristine" color="primary">Save</button>
+        </mat-dialog-actions>
+    </form>
+</div>

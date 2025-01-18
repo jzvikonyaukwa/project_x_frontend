@@ -1,0 +1,85 @@
+<div>
+  <div>
+    <div class="flex items-end justify-end cursor-pointer" (click)="onDialogClose()">
+      <mat-icon [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
+    </div>
+    <app-product-details
+      [productInformation]="productInformation"
+      [loadedCoil]="loadedCoil"
+    ></app-product-details>
+
+    <div class="flex flex-col flex-grow print:overflow-visible">
+      <div class="w-full h-full mx-auto mt-6">
+        <div class="h-full flex flex-col">
+          <fuse-alert
+            class="mt-8 mb-4"
+            *ngIf="showAlert"
+            [dismissible]="true"
+            [dismissed]="false"
+            [appearance]="'outline'"
+            [showIcon]="false"
+            [type]="alert.type"
+          >
+            {{ alert.message }}
+          </fuse-alert>
+
+          <div class="w-full flex items-center justify-between my-5">
+            <div class="flex items-center">
+              <div class="text-2xl font-semibold leading-tight mb-5 text-axe-blue ml-12">
+                {{ title }}
+              </div>
+            </div>
+            <div class="flex items-center" *ngIf="manufacture">
+              <div class="text-2xl font-semibold leading-tight mb-5 text-axe-blue mr-5">Date</div>
+              <mat-form-field appearance="outline">
+                <input matInput [matDatepicker]="picker" (dateChange)="onDateChange($event)" />
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <div class="flex items-center gap-4 mb-5">
+              <label for="toggle-grouping" class="flex items-center cursor-pointer">
+                <mat-button-toggle-group
+                  class="rounded-2xl border border-axe-light-blue mt-1 px-4"
+                  name="favoriteColor"
+                  aria-label="Favorite Color"
+                  (change)="onToggleChange($event)"
+                  [value]="selectedToggle"
+                >
+                  <mat-button-toggle class="text-gray-700 hover:bg-axe-light-blue" value="product"
+                    >Manufacture Product</mat-button-toggle
+                  >
+                  <mat-button-toggle
+                    class="text-gray-700 hover:bg-axe-light-blue"
+                    value="productParts"
+                    >Manufacture Product Parts</mat-button-toggle
+                  >
+                </mat-button-toggle-group>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="h-44 mb-10" *ngIf="selectedDate && selectedToggle === 'product'">
+        <app-manufacturing-product-table
+          [productInformation]="productInformation"
+          [loadedCoil]="loadedCoil"
+          [dateManufactured]="selectedDate"
+          (fetchProduct)="fetchProduct($event)"
+        ></app-manufacturing-product-table>
+      </div>
+
+      <div class="h-96 mb-10" *ngIf="selectedDate && selectedToggle === 'productParts'">
+        <app-manufacturing-aggregated-products-table
+          [productInformation]="productInformation"
+          [stockOnHandForProductType]="stockOnHandForProductType"
+          [loadedCoil]="loadedCoil"
+          [dateManufactured]="selectedDate"
+          (fetchProduct)="fetchProduct($event)"
+        ></app-manufacturing-aggregated-products-table>
+      </div>
+    </div>
+  </div>
+</div>

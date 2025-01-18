@@ -1,0 +1,179 @@
+<div class="p-7 w-full" *ngIf="cuttingListInformation">
+    <div class="bg-white rounded-lg shadow mb-7 p-10 lg:w-fit">
+        <p class="mb-8 text-xl font-bold">Cutting List Card</p>
+        <div class="flex gap-10">
+            <div
+                class="p-6 flex flex-col gap-3 border border-axe-blue rounded-xl w-full lg:w-[490px] shadow">
+                <div class="flex justify-between w-full text-axe-dark-blue">
+                    <p class="font-normal text-sm">Coil ID/Cast ID: </p>
+                    <p class="font-semibold text-base">{{cuttingListInformation.clientName}}</p>
+                </div>
+                <div class="flex justify-between w-full text-axe-dark-blue">
+                    <p class="font-normal text-sm">Date Quote Accepted: </p>
+                    <p class="font-semibold text-base">{{cuttingListInformation.quoteAcceptedDate |
+                        date:'dd/MM/yyyy'}}</p>
+                </div>
+                <div class="flex justify-between w-full text-axe-dark-blue">
+                    <p class="font-normal text-sm">Cutting List Status: </p>
+                    <p class="font-semibold text-base capitalize">{{cuttingListInformation.product.status}}
+                    </p>
+                </div>
+                <div class="flex justify-between w-full text-axe-dark-blue">
+                    <p class="font-normal text-sm">Date Work Began: </p>
+                    <p class="font-semibold text-base">{{cuttingListInformation.product.dateWorkBegan |
+                        date:'dd/MM/yyyy'}}</p>
+                </div>
+                <div class="flex justify-between w-full text-axe-dark-blue">
+                    <p class="font-normal text-sm">Date Work Completed: </p>
+                    <p class="font-semibold text-base">{{cuttingListInformation.product.dateWorkCompleted |
+                        date:'dd/MM/yyyy'}}</p>
+                </div>
+                <div class="flex justify-between w-full text-axe-dark-blue">
+                    <p class="font-normal text-sm">Target Date: </p>
+                    <p class="font-semibold text-base">{{cuttingListInformation.product.targetDate|
+                        date:'dd/MM/yyyy'}}
+                    </p>
+                </div>
+                <div class="flex justify-between w-full text-axe-dark-blue">
+                    <p class="font-normal text-sm">Rolls: </p>
+                    <p class="font-semibold text-base">1</p>
+                </div>
+            </div>
+
+            <div
+                class="p-6 flex flex-col gap-3 border border-axe-blue rounded-xl w-full lg:w-[490px] shadow">
+                <div class="flex justify-between w-full text-axe-dark-blue">
+                    <p class="font-normal text-sm">Color: </p>
+                    <p class="font-semibold text-base">{{cuttingListInformation.product.color.color}}</p>
+                </div>
+                <div class="flex justify-between w-full text-axe-dark-blue">
+                    <p class="font-normal text-sm">Gauge: </p>
+                    <p class="font-semibold text-base">{{cuttingListInformation.product.gauge.gauge}}</p>
+                </div>
+                <div class="flex justify-between w-full text-axe-dark-blue">
+                    <p class="font-normal text-sm">Stores Department: </p>
+                    <p class="font-semibold text-base">Trusses</p>
+                </div>
+                <div class="flex justify-between w-full text-axe-dark-blue">
+                    <p class="font-normal text-sm">Width: </p>
+                    <p class="font-semibold text-base">{{cuttingListInformation.product.width.width}} mm
+                    </p>
+                </div>
+                <div class="flex justify-between w-full text-axe-dark-blue">
+                    <p class="font-normal text-sm">Cost Per Meter: </p>
+                    <p class="font-semibold text-base">{{cuttingListInformation.product.productPrice.pricePerMeter|
+                        currency: USD}}
+                    </p>
+                </div>
+                <!-- <div class="flex justify-between w-full text-axe-dark-blue">
+                    <p class="font-normal text-sm">Estimate Metres On Arrival: </p>
+                    <p class="font-semibold text-base">
+                        {{steelCoilDetails.estMtrsOnArrival}}</p>
+                </div> -->
+                <!-- <div class="flex justify-between w-full text-axe-dark-blue">
+                    <p class="font-normal text-sm">Est Meters Used: </p>
+                    <p class="font-semibold text-base"> - {{steelCoilDetails.estMtrsOnArrival -
+                        steelCoilDetails.estMtrsRemaining | number : "1.1-2"}}</p>
+                </div>
+                <div class="flex justify-between w-full text-axe-dark-blue">
+                    <p class="font-normal text-sm">Running Balance: </p>
+                    <p class="font-semibold text-base">{{steelCoilDetails.estMtrsRemaining}}
+                    </p>
+                </div> -->
+            </div>
+
+            <!-- <div
+                class="p-6 flex flex-col gap-3 border border-axe-blue rounded-xl w-full lg:w-[490px] shadow">
+                <div class="flex justify-between w-full text-axe-dark-blue">
+                    <p class="font-normal text-sm">Wastage: </p>
+                    <p class="font-semibold text-base">{{totalWasted}}</p>
+                </div>
+
+                <div class="flex justify-between w-full text-axe-dark-blue">
+                    <p class="font-normal text-sm">Wastage %: </p>
+                    <p class="font-semibold text-base"> {{ totalWasted /
+                        steelCoilDetails.estMtrsOnArrival
+                        | number : "1.1-2"}} %
+                    </p>
+                </div>
+
+                <div class="flex justify-between w-full text-axe-dark-blue">
+                    <p class="font-normal text-sm">Wastage Cost </p>
+                    <p class="font-semibold text-base">{{totalWasted *
+                        steelCoilDetails.landedCostPerMtr |
+                        currency:USD}}</p>
+                </div>
+
+                <div class="flex justify-between w-full text-axe-dark-blue">
+                    <p class="font-normal text-sm">Coil Weight Per M: </p>
+                    <p class="font-semibold text-base">{{steelCoilDetails.estMtrsOnArrival /
+                        steelCoilDetails.weightInKgsOnArrival | number : "1.1-2"}} KGS</p>
+                </div>
+            </div> -->
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow mb-7 p-10 w-full">
+        <p class="mb-8 text-xl font-bold">Steel Cuts</p>
+        <ag-grid-angular style="width: 100%;" class="ag-theme-alpine" [rowData]="rowData"
+            [columnDefs]="columnDefs" [defaultColDef]="defaultColDef"
+            (paginationChanged)="onPaginationChanged()"
+            (firstDataRendered)="onFirstDataRendered($event)" (gridReady)="onGridReady($event)"
+            [readOnlyEdit]="true" [enableCellChangeFlash]="true" [getRowId]="getRowId"
+            pagination="true" [paginationPageSize]="paginationPageSize"
+            [getRowStyle]="lastRowBorder" [suppressPaginationPanel]="true"></ag-grid-angular>
+        <div
+            class="ag-grid-pagination bg-card h-11 flex justify-between items-center p-4 rounded-b-xl">
+
+            <div class="flex items-center justify-items-center">
+                <span class="text-xs font-medium">
+                    {{gridApi?.paginationGetCurrentPage() * +paginationPageSize +
+                    1}}-{{rowData?.length < (gridApi?.paginationGetCurrentPage() + 1) *
+                        +paginationPageSize ? rowData?.length : (gridApi?.paginationGetCurrentPage()
+                        + 1) * +paginationPageSize}} of {{rowData?.length}} </span>
+            </div>
+
+
+            <button *ngIf="cuttingListIsComplete"
+                class="flex items-center justify-end rounded-2xl bg-green-400" mat-flat-button
+                type="button" color="primary" [color]="'accent'" (click)="changeToCompleted()">MARK
+                COMPLETED</button>
+
+
+            <div class="flex gap-6">
+                <div class="flex items-center justify-items-center">
+                    <span class="text-xs font-medium">Rows per page: {{paginationPageSize}}</span>
+                    <select (change)="onPageSizeChanged()" id="page-size"
+                        class="w-5 bg-transparent">
+                        <option class="text-xs font-medium">10</option>
+                        <option class="text-xs font-medium">15</option>
+                        <option class="text-xs font-medium">20</option>
+                    </select>
+                </div>
+                <div class="flex items-center justify-items-center gap-2">
+                    <button (click)="onBtPrevious()"
+                        class="h-4 rounded border flex items-center justify-items-center"><mat-icon
+                            [class.text-zinc-500]="gridApi?.paginationGetCurrentPage() === 0"
+                            [class.text-slate-900]="gridApi?.paginationGetCurrentPage() !== 0"
+                            class="text-slate-900 fuse-vertical-navigation-item-arrow icon-size-4"
+                            [svgIcon]="'heroicons_solid:chevron-left'"></mat-icon></button>
+                    <div class="flex items-center justify-items-center text-xs font-medium">
+                        <span #lbCurrentPage class="value text-xs font-medium text-neutral-900"
+                            id="lbCurrentPage">-</span>/<span #lbTotalPages
+                            class="value text-xs font-medium text-slate-500"
+                            id="lbTotalPages">-</span>
+                    </div>
+                    <button (click)="onBtNext()"
+                        class="h-4 rounded border flex items-center justify-items-center"><mat-icon
+                            [class.text-zinc-500]="gridApi?.paginationGetCurrentPage() + 1 === gridApi?.paginationGetTotalPages()"
+                            [class.text-slate-900]="gridApi?.paginationGetCurrentPage() + 1 !== gridApi?.paginationGetTotalPages()"
+                            class="fuse-vertical-navigation-item-arrow icon-size-4"
+                            [svgIcon]="'heroicons_solid:chevron-right'"></mat-icon></button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>

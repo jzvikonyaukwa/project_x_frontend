@@ -1,0 +1,5 @@
+<div class="w-full" *ngIf="latestQuotes.length > 0">
+    <div class="text-xl font-normal tracking-tight leading-6 truncate text-center my-8">Recent Quotes Overview</div>
+    <ag-grid-angular style="width: 100%; height: 100%" class="ag-theme-alpine" [rowData]="latestQuotes"
+    (gridReady)="onGridReady($event)" [gridOptions]="gridOptions"></ag-grid-angular>
+</div>

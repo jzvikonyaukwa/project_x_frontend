@@ -1,0 +1,14 @@
+<div class="flex flex-col w-120 mb-5">
+    <div class="flex flex-row justify-between items-center mb-3">
+        <span class="text-lg font-bold">Add Client</span>
+    </div>
+    <div
+        class=" max-h-[32rem] border-2 border-sky-700 rounded-lg border-opacity-25 p-3 form_height overflow-auto">
+        <div *ngIf="serverErrorMessage" class="p-4 mb-4 border-l-4 border-red-600 bg-red-50 rounded">
+            <p class="text-red-700 font-semibold">
+                {{ serverErrorMessage }}
+            </p>
+        </div>
+        <app-user-form (onSubmitForm)="submit($event)"></app-user-form>
+    </div>
+</div>

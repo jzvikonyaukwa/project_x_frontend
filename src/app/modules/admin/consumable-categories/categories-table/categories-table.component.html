@@ -1,0 +1,4 @@
+<ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-quartz" [getRowStyle]="lastRowBorder" [pagination]="pagination"
+    [paginationPageSize]="paginationPageSize" [paginationPageSizeSelector]="paginationPageSizeSelector" [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef" [getRowId]="getRowId" [readOnlyEdit]="true" [copyHeadersToClipboard]="true" [rowData]="categories"
+    [animateRows]="true" (gridReady)="onGridReady($event)" (cellEditRequest)="onCellEditRequest($event)"></ag-grid-angular>

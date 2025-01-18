@@ -1,0 +1,9 @@
+<div>
+  <div>
+    <div class="flex items-end justify-end cursor-pointer" (click)="onDialogClose()">
+      <mat-icon [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
+    </div>
+    <app-cutting-list [productId]="productId" [manufacture]="manufacture" [loadedCoil]="loadedCoil"
+                      (cuttingListCompleted)="cuttingListCompleted($event)"></app-cutting-list>
+  </div>
+</div>

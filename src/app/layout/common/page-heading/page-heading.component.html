@@ -1,0 +1,15 @@
+<div class="from-primary-200 bg-axe-dark-blue">
+  <!--  max-w-screen-xl mx-auto -->
+  <div class="flex flex-col w-full px-6 sm:px-8">
+    <div class="flex flex-col sm:flex-row flex-auto sm:items-center min-w-0 my-5">
+      <div class="flex flex-auto items-center w-full">
+        <div class="flex flex-col w-full">
+          <ng-content select="[titleSlot]"></ng-content>
+        </div>
+      </div>
+      <div class="flex items-center mt-6 sm:mt-0 sm:ml-2 space-x-3">
+        <ng-content select="[actionSlot]"></ng-content>
+      </div>
+    </div>
+  </div>
+</div>

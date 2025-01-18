@@ -1,0 +1,92 @@
+<div class="flex flex-col flex-auto min-w-0">
+  <div class="bg-axe-dark-blue">
+    <div class="flex flex-col w-full px-6 sm:px-8">
+      <div class="flex flex-col sm:flex-row flex-auto sm:items-center min-w-0 my-8 sm:my-12">
+        <div class="flex flex-auto items-center min-w-0">
+          <div class="flex-0 w-16 h-16 rounded-full overflow-hidden">
+            <mat-icon class="icon-size-16" [svgIcon]="'heroicons_custom:machines'"></mat-icon>
+          </div>
+          <div class="flex flex-col min-w-0 ml-4">
+            <ng-container>
+              <div
+                class="text-white text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate"
+              >
+                Manufacturing Dashboard
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex-auto p-6 sm:px-8 bg-white">
+    <div class="date-range-container">
+      <!-- Date Range Selector -->
+      <div class="flex flex-wrap items-center gap-6 px-4 sm:flex-nowrap sm:px-6 lg:px-8">
+        <h1 class="text-base font-semibold leading-7 text-gray-900">Pick Time Frame</h1>
+        <div
+          class="order-last flex w-full gap-x-8 text-sm font-semibold leading-6 sm:order-none sm:w-auto sm:border-l sm:border-gray-200 sm:pl-6 sm:leading-7"
+        >
+          <button
+            (click)="selectTimeRange('week')"
+            [ngClass]="{
+              'text-indigo-600': selectedRange === 'week',
+              'text-gray-700': selectedRange !== 'week',
+              selected: selectedRange === 'week'
+            }"
+          >
+            Last 7 days
+          </button>
+          <button
+            (click)="selectTimeRange('month')"
+            [ngClass]="{
+              'text-indigo-600': selectedRange === 'month',
+              'text-gray-700': selectedRange !== 'month',
+              selected: selectedRange === 'month'
+            }"
+          >
+            Last 30 days
+          </button>
+          <button
+            (click)="selectTimeRange('year')"
+            [ngClass]="{
+              'text-indigo-600': selectedRange === 'year',
+              'text-gray-700': selectedRange !== 'year',
+              selected: selectedRange === 'year'
+            }"
+          >
+            Yea to Date
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <dl
+        class="mt-5 grid grid-cols-1 divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow md:grid-cols-3 md:divide-x md:divide-y-0"
+      >
+        <div *ngFor="let machineInfo of machinesInformationData" class="px-4 py-5 sm:p-6">
+          <dt class="text-base font-normal text-gray-900">{{ machineInfo.machineName }}</dt>
+          <dd class="mt-1 flex items-baseline justify-between md:block lg:flex">
+            <div class="flex items-baseline text-2xl font-semibold text-indigo-600">
+              {{ machineInfo.totalMetersCut | number : '1.2-2' }}
+              <span class="ml-2 text-sm font-medium text-gray-500">meters cut</span>
+            </div>
+          </dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="summary-container mt-8">
+      <app-manufacturing-summary-overview
+        [startDate]="formattedStartDate"
+        [endDate]="formattedEndDate"
+      ></app-manufacturing-summary-overview>
+    </div>
+
+    <div class="w-full mt-8" *ngFor="let machineInfo of machinesInformation">
+      <app-machine-overview [machineInfo]="machineInfo"></app-machine-overview>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,301 @@
+<div class="flex flex-col w-[65rem] max-h-192 overflow-y-auto">
+  <app-page-heading>
+    <ng-container titleSlot>
+      <div *ngIf="data.edit">
+        <div
+          class="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate text-white"
+        >
+          Edit Product Information
+        </div>
+      </div>
+      <div *ngIf="!data.edit">
+        <div
+          class="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate text-white"
+        >
+          Add Product Information
+        </div>
+      </div>
+    </ng-container>
+  </app-page-heading>
+
+  <div class="border-2 border-sky-700 rounded-lg border-opacity-25 p-5 mt-2">
+    <div class="grid grid-cols-3 mb-2">
+      <div class="col-start-3 col-span-1 mb-2" *ngIf="costPrice && sellPrice">
+        <div class="rounded-lg bg-blue-50 ring-1 shadow-xs ring-gray-900/5">
+          <dl class="flex flex-wrap pb-2">
+            <div class="flex-auto pt-6 pl-6">
+              <dt class="text-sm/6 font-semibold text-gray-900">Steel Cost Price</dt>
+              <dd class="mt-1 text-base font-semibold text-gray-900">
+                {{ costPrice | currency : 'USD' : 'symbol' : '1.2-2' }}
+              </dd>
+            </div>
+            <div class="flex-auto pt-6 pl-6">
+              <dt class="text-sm/6 font-semibold text-gray-900">Sell Price</dt>
+              <dd class="mt-1 text-base font-semibold text-gray-900">
+                {{ sellPrice | currency : 'USD' : 'symbol' : '1.2-2' }}
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="w-full">
+      <div class="grid grid-cols-3 gap-x-8 gap-y-2 mt-2 mb-5">
+        <div class="flex flex-col w-80">
+          <mat-label class="font-semibold mb-1">Product Type</mat-label>
+          <mat-form-field class="w-full">
+            <mat-select formControlName="productType" [compareWith]="compareFn">
+              <mat-option *ngFor="let productType of productTypes" [value]="productType">
+                {{ productType.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="flex flex-col w-80 pl-15" *ngIf="isRoofSheet">
+          <mat-label class="font-semibold">Select a Profile</mat-label>
+          <mat-radio-group aria-label="Select an option" formControlName="profile">
+            <mat-radio-button *ngFor="let profile of profiles" [value]="profile">
+              {{ profile.profile }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <div
+          class="flex flex-col w-80"
+          *ngIf="
+            (isRoofSheet || isColorSelectionEnabled(productType)) &&
+            productForm.controls['profile'].value !== null
+          "
+        >
+          <mat-label class="font-semibold">Finish</mat-label>
+          <mat-radio-group aria-label="Select a Finish" formControlName="finish" class="flex">
+            <mat-radio-button *ngFor="let finish of finishes" [value]="finish.id">
+              {{ finish.name }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <div
+          class="flex flex-col w-80"
+          *ngIf="
+            (isRoofSheet && usersColorsChoice.length > 0) || isColorSelectionEnabled(productType)
+          "
+        >
+          <mat-form-field class="w-full">
+            <mat-label>Color</mat-label>
+            <mat-select formControlName="color" [compareWith]="compareFn">
+              <mat-option *ngFor="let color of usersColorsChoice" [value]="color">
+                {{ color.color }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="productForm.controls['color']?.hasError('required')"
+              >Color is required</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="flex flex-col w-80" *ngIf="productType">
+          <mat-form-field class="w-full">
+            <mat-label class="font-semibold">Gauge</mat-label>
+            <mat-select formControlName="gauge" [compareWith]="compareFn">
+              <mat-option *ngFor="let gauge of gauges" [value]="gauge">
+                {{ gauge.gauge }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="gaugeControl?.hasError('required')">Gauge is required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="flex flex-col w-80" *ngIf="!isRoofSheet && productType">
+          <mat-form-field class="w-full">
+            <mat-label>Width (mm)</mat-label>
+            <mat-select formControlName="width" [compareWith]="compareFn">
+              <mat-option *ngFor="let width of widths" [value]="width">
+                {{ width.width }} mm
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="gaugeControl?.hasError('required')">Width is required</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!--       
+      <div class="flex flex-wrap md:flex-nowrap items-center gap-4 my-5" *ngIf="isRoofSheet">
+        <mat-form-field appearance="fill" class="w-full mb-4">
+          <mat-label>Target Date</mat-label>
+          <input matInput formControlName="targetDate" [matDatepicker]="picker" />
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        
+        <mat-form-field appearance="fill" class="w-full mb-4">
+          <mat-label>Cost Price</mat-label>
+          <input matInput formControlName="costPrice" readonly />
+          <span matSuffix>$</span>
+        </mat-form-field> -->
+
+      <!-- </div>  -->
+
+      <!-- Additional fields for NON-Roof Sheet ONLY (e.g., ridges, frames, etc.) -->
+      <!-- <div class="grid grid-cols-1 md:grid-cols-3 gap-6" *ngIf="!isRoofSheet && productType">
+        <div>
+          <mat-form-field class="w-full">
+            <mat-label>Cost Price</mat-label>
+            <input
+              matInput
+              [value]="productForm.get('costPrice')?.value | number : '1.2-2'"
+              type="number"
+              readonly
+            />
+            <span matSuffix>$</span>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="w-full">
+            <mat-label>Markup (%)</mat-label>
+            <input
+              matInput
+              [value]="(productForm.get('markUp')?.value - 1) * 100 | number : '1.0-2'"
+              type="text"
+              readonly
+            />
+            <span matSuffix>%</span>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="w-full">
+            <mat-label>Sell Price</mat-label>
+            <input
+              matInput
+              formControlName="sellPrice"
+              type="number"
+              [min]="productForm.get('costPrice')?.value || 0"
+              readonly
+            />
+            <span matSuffix>$</span>
+          </mat-form-field>
+        </div>
+      </div> -->
+
+      <!-- Dynamic array for Roof Sheets -->
+      <div
+        class="mb-4 px-10 border-2 border-axe-dark-blue rounded-lg border-opacity-25 p-5"
+        *ngIf="isRoofSheet"
+        formArrayName="aggregatedProducts"
+      >
+        <h1 class="text-center underline text-xl font-normal mb-2">Add Sheet Details</h1>
+        <div
+          *ngFor="let item of aggregatedProducts.controls; let i = index"
+          [formGroupName]="i"
+          class="flex items-center gap-4"
+        >
+          <mat-form-field class="flex flex-col flex-auto">
+            <mat-label>Length</mat-label>
+            <input matInput type="number" formControlName="length" placeholder="Length" />
+          </mat-form-field>
+
+          <mat-form-field class="flex flex-col flex-auto">
+            <mat-label>Quantity</mat-label>
+            <input matInput type="number" formControlName="quantity" placeholder="Quantity" />
+          </mat-form-field>
+
+          <button
+            type="button"
+            mat-icon-button
+            color="warn"
+            (click)="removeItem(i)"
+            class="h-10 w-10 flex items-center justify-center hover:bg-red-100 rounded-full"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        <button
+          type="button"
+          mat-stroked-button
+          (click)="addItem()"
+          class="mt-4 px-4 py-2 border border-sky-700 text-sky-700 rounded-md hover:bg-sky-50"
+        >
+          <mat-icon class="mr-2">add</mat-icon>
+          Add Row
+        </button>
+      </div>
+
+      <!-- Dynamic array for NON-Roof Sheets (e.g., frames, ridges, etc.) -->
+      <div
+        class="mb-4 px-10 border-2 border-axe-dark-blue rounded-lg border-opacity-25 p-5"
+        *ngIf="!isRoofSheet && productType"
+      >
+        <h1 class="text-center underline text-xl font-normal mb-2">Product Details</h1>
+        <div class="flex flex-wrap md:flex-nowrap justify-between gap-8 my-5">
+          <mat-form-field class="flex flex-col flex-auto">
+            <mat-label>Frame Name</mat-label>
+            <input matInput type="text" formControlName="frameName" placeholder="Frame Name" />
+          </mat-form-field>
+
+          <mat-form-field class="flex flex-col flex-auto">
+            <mat-label>Frame Type</mat-label>
+            <input matInput type="text" formControlName="frameType" placeholder="Frame Type" />
+          </mat-form-field>
+        </div>
+
+        <h1 class="text-center underline text-xl font-normal mb-2">Add Aggregated Products</h1>
+        <div formArrayName="aggregatedProducts" class="space-y-4">
+          <div
+            *ngFor="let item of aggregatedProducts.controls; let i = index"
+            [formGroupName]="i"
+            class="flex justify-center items-center gap-4"
+          >
+            <mat-form-field class="flex flex-col w-96">
+              <mat-label>Length</mat-label>
+              <input matInput type="number" formControlName="length" placeholder="Length" />
+            </mat-form-field>
+
+            <button
+              type="button"
+              mat-icon-button
+              color="warn"
+              (click)="removeItem(i)"
+              class="h-10 w-10 flex items-center justify-center hover:bg-red-100 rounded-full"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+        <button
+          type="button"
+          mat-stroked-button
+          (click)="addItem()"
+          class="mt-4 px-4 py-2 border border-sky-700 text-sky-700 rounded-md hover:bg-sky-50"
+        >
+          <mat-icon class="mr-2">add</mat-icon>
+          Add Row
+        </button>
+      </div>
+
+      <!-- Actions -->
+      <mat-dialog-actions class="flex justify-end gap-4">
+        <button
+          class="rounded-md w-48 bg-gray-400"
+          [color]="'accent'"
+          mat-flat-button
+          type="button"
+          (click)="cancel()"
+        >
+          Cancel
+        </button>
+        <button
+          class="bg-sky-700 rounded-md w-48"
+          mat-flat-button
+          type="submit"
+          color="primary"
+          [color]="'accent'"
+        >
+          Submit
+        </button>
+      </mat-dialog-actions>
+    </form>
+  </div>
+</div>

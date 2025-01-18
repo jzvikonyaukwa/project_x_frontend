@@ -1,0 +1,90 @@
+<div class="coil-header border rounded-t-xl flex items-center p-3 justify-between bg-warn-500">
+    <div class="text-white font-semibold text-lg" text-white>
+        NO COIL LOADED
+    </div>
+</div>
+<div class="w-full p-3 border-axe-dark-blue border bg-white rounded-b-xl">
+    <div class="flex justify-between items-center">
+        <div class="text-[#64748B] text-xs font-medium">
+            Card number: N/A
+        </div>
+        <div class="text-[#64748B] text-xs font-medium">
+            Not Loaded
+        </div>
+    </div>
+    <hr class="my-4 h-px border-t-0 border-axe-dark-blue opacity-20 dark:opacity-50" />
+    <div class="flex justify-between">
+        <div class="flex flex-col gap-2 items-start ">
+            <div class="flex gap-2 items-center justify-center">
+                <mat-icon [svgIcon]="'heroicons_outline:flag'"
+                    class="text-sky-600 icon-size-5"></mat-icon>
+                <span class="text-sky-600 font-medium text-sm tracking-wider">COLOR</span>
+            </div>
+            <div class="text-axe-dark-blue text-lg font-medium">
+                N/A
+            </div>
+        </div>
+        <div class="flex flex-col gap-2 items-start ">
+            <div class="flex gap-2 items-center justify-center">
+                <mat-icon [svgIcon]="'heroicons_outline:speedometer'"
+                    class="text-sky-600 icon-size-5"></mat-icon>
+                <span class="text-sky-600 font-medium text-sm tracking-wider">GAUGE</span>
+            </div>
+            <div class="text-axe-dark-blue text-lg font-medium">
+                N/A
+            </div>
+        </div>
+        <div class="flex flex-col gap-2 items-start ">
+            <div class="flex gap-2 items-center justify-center">
+                <mat-icon [svgIcon]="'heroicons_outline:square-2-stack'"
+                    class="text-sky-600 icon-size-5"></mat-icon>
+                <span class="text-sky-600 font-medium text-sm tracking-wider">COATING</span>
+            </div>
+            <div class="text-axe-dark-blue text-lg font-medium">
+                N/A
+            </div>
+        </div>
+        <div class="flex flex-col gap-2 items-start ">
+            <div class="flex gap-2 items-center justify-center">
+                <mat-icon [svgIcon]="'heroicons_outline:meters'"
+                    class="text-sky-600 icon-size-5"></mat-icon>
+                <span class="text-sky-600 font-medium text-sm tracking-wider">MS LEFT</span>
+            </div>
+            <div class="text-axe-dark-blue text-lg font-medium">
+                N/A
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-4 h-px border-t-0 border-axe-dark-blue opacity-20 dark:opacity-50" />
+
+    <div class="flex items-center justify-between">
+        <div class="flex flex-col items-baseline justify-evenly">
+            <div class="text-axe-dark-blue font-medium text-sm">
+                Cuts Made: N/A
+            </div>
+            <div class="text-axe-dark-blue font-medium text-sm">
+                Total Meters: N/A
+            </div>
+        </div>
+        <div>
+            <button [matMenuTriggerFor]="coilNotAvailableMenu"
+                class="bg-[#0071BC] opac w-22 py-2 px-4 text-white text-base font-medium rounded-md mr-2">Actions</button>
+            <button (click)="onChangeCoil()"
+                class="bg-[#0071BC] w-30 opac py-2 px-4 text-white text-base font-medium rounded-md">Change
+                Coil</button>
+            <ng-template #coilNotAvailable>
+                <button [matMenuTriggerFor]="coilNotAvailableMenu" [disabled]="isCoilChange"
+                    [class.opacity-50]="isCoilChange"
+                    class="bg-[#0071BC] w-36 py-2 px-4 text-white text-base font-medium rounded-md">Not
+                    Available</button>
+            </ng-template>
+            <mat-menu class="rounded-2xl border border-axe-light-blue mt-1 px-4"
+                #coilNotAvailableMenu="matMenu">
+                <button mat-menu-item
+                    class="text-axe-dark-blue font-medium text-sm border-t-0 border-x-0 border-b border-[#64748B]/[20%] border-solid">Order
+                    Coil</button>
+            </mat-menu>
+        </div>
+    </div>
+</div>

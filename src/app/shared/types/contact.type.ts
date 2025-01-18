@@ -1,0 +1,1 @@
+export type Contact = 'addresses' | 'phones' | 'emails' | 'name';

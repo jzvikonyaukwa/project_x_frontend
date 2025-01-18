@@ -1,0 +1,47 @@
+.ag-theme-alpine {
+    --ag-borders: none;
+    --ag-card-radius: 16px;
+    --ag-border-radius: 16px;
+    --ag-row-border-color: transparent;
+
+    ::ng-deep.ag-icon-menu {
+        background: transparent url("/assets/icons/ag-grid-filter-menu-icon.svg") center/contain no-repeat;
+        color: transparent;
+        cursor: pointer;
+    }
+
+    ::ng-deep.ag-header-row {
+        background-color: #F4F7FC;
+    }
+
+    ::ng-deep.ag-root-wrapper {
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+    }
+
+
+    ::ng-deep.ag-grid-header {
+        color: #002A46;
+
+        &:hover {
+            border-bottom: 2px solid #0071BC;
+        }
+
+        .ag-header-cell-comp-wrapper {
+            .ag-header-cell-label {
+                justify-content: flex-end;
+                gap: 2px;
+                flex-direction: row-reverse;
+            }
+        }
+
+    }
+
+    ::ng-deep.ag-row-selected {
+        .details-image {
+            filter: invert(0%);
+            -webkit-filter: invert(0%);
+        }
+    }
+
+}

@@ -1,0 +1,246 @@
+<div class="p-4 w-full" *ngIf="steelCoilDetails$ | async as steelCoilDetails">
+
+    <div class="bg-white rounded-lg shadow mb-7 p-10 ">
+        <div>
+            <div class="px-4 sm:px-0">
+                <h3 class="text-base font-semibold leading-7 text-gray-900">Steel Coil</h3>
+                <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Information and History</p>
+            </div>
+
+            <div class="grid grid-cols-3">
+                <div class="mt-6 border-t border-gray-100">
+                    <dl class="divide-y divide-gray-100">
+                        <div class="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
+                            <dt class="text-sm font-medium leading-6 text-gray-900">Coil Number</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{steelCoilDetails.coilNumber}}</dd>
+                        </div>
+                        <div class="bg-white px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
+                            <dt class="text-sm font-medium leading-6 text-gray-900">Coil Finish</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{steelCoilDetails.finish | titlecase}}</dd>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
+                            <dt class="text-sm font-medium leading-6 text-gray-900">Warehouse</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{steelCoilDetails.warehouse | titlecase}}</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <div class="mt-6 border-t border-gray-100">
+                    <dl class="divide-y divide-gray-100">
+                        <div class="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
+                            <dt class="text-sm font-medium leading-6 text-gray-900">Card Number</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{steelCoilDetails.cardNumber}}</dd>
+                        </div>
+                        <div class="bg-white px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
+                            <dt class="text-sm font-medium leading-6 text-gray-900">Coil Color</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{steelCoilDetails.color | titlecase}}</dd>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
+                            <dt class="text-sm font-medium leading-6 text-gray-900">GRV ID</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{steelCoilDetails.grvId}}</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <div class="mt-6 border-t border-gray-100">
+                    <dl class="divide-y divide-gray-100">
+                        <div class="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
+                            <dt class="text-sm font-medium leading-6 text-gray-900">Data Base ID</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{steelCoilDetails.steelCoilId}}</dd>
+                        </div>
+                        <div class="bg-white px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
+                            <dt class="text-sm font-medium leading-6 text-gray-900">Gauge</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{steelCoilDetails.gauge}}</dd>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-3">
+                            <dt class="text-sm font-medium leading-6 text-gray-900">Date Delivered</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ steelCoilDetails.dateReceived |
+                                date:'dd-MM-yyyy' }}</dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+
+            <dl
+                class="mt-5 grid grid-cols-1 divide-y divide-gray-200 overflow-hidden shadow rounded-lg bg-white md:grid-cols-3 md:divide-x md:divide-y-0">
+                <div class="px-4 py-5 sm:p-6">
+                    <dt class="text-base font-normal text-gray-900">Weight On Arrival</dt>
+                    <dd class="mt-1 flex items-baseline justify-between md:block lg:flex">
+                        <div class="flex items-baseline text-xl font-semibold text-axe-blue">
+                            {{steelCoilDetails.weightInKgsOnArrival}}
+                            <span class="ml-2 text-sm font-medium text-gray-500">KGS</span>
+                        </div>
+                    </dd>
+                </div>
+                <div class="px-4 py-5 sm:p-6">
+                    <dt class="text-base font-normal text-gray-900">Landed Cost</dt>
+                    <dd class="mt-1 flex items-baseline justify-between md:block lg:flex">
+                        <div class="flex items-baseline text-xl font-semibold text-axe-blue">
+                            {{steelCoilDetails.landedCostPerMtr |
+                            currency: USD}}
+                            <span class="ml-2 text-sm font-medium text-gray-500">from $2.00</span>
+                        </div>
+
+                        <div
+                            class="inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-green-100 text-green-800 md:mt-2 lg:mt-0">
+                            <svg class="-ml-1 mr-0.5 h-5 w-5 flex-shrink-0 self-center text-green-500" viewBox="0 0 20 20" fill="currentColor"
+                                aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            <span class="sr-only"> Increased by </span>
+                            2.02%
+                        </div>
+                    </dd>
+                </div>
+                <div class="px-4 py-5 sm:p-6">
+                    <dt class="text-base font-normal text-gray-900">Coil Weight Per Meter</dt>
+                    <dd class="mt-1 flex items-baseline justify-between md:block lg:flex">
+                        <div class="flex items-baseline text-xl font-semibold text-axe-blue">
+                            {{
+                            steelCoilDetails.weightInKgsOnArrival / steelCoilDetails.estMtrsOnArrival | number : "1.1-2"}}
+                            <span class="ml-2 text-sm font-medium text-gray-500">KGS</span>
+                        </div>
+                    </dd>
+                </div>
+            </dl>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow mb-7 p-10 ">
+        <div>
+            <div class="px-4 sm:px-0">
+                <h3 class="text-base font-semibold leading-7 text-gray-900">Inter Branch</h3>
+                <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Trasnfers</p>
+            </div>
+            <app-inter-branch-transfers-table [steelCoilId]="steelCoilId"></app-inter-branch-transfers-table>
+        </div>
+    </div>
+
+    <!-- <div class="flex flex-col bg-white rounded-lg shadow" *ngIf="coilsTransactions$ | async as coilsTransactions">
+        <div class="flex flex-col sm:flex-row bg-[#f5f7fb] items-center pb-2 justify-between">
+            <div class="py-6 px-14 font-semibold text-base text-[#0071BC] ">Coil Usage
+            </div>
+            <div class=" mr-4 ">
+                <button type="button"
+                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-axe-blue "
+                    (click)="exportToExcel()">Export to Excel</button>
+            </div>
+        </div>
+
+        <div class="h-200">
+            <ag-grid-angular style="width: 100%; height: 100%" class="ag-theme-alpine" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef"
+                [rowData]="coilsTransactions" [animateRows]="true" (gridReady)="onGridReady($event)" [paginationAutoPageSize]="true"
+                [pagination]="true" [pivotPanelShow]="pivotPanelShow"></ag-grid-angular>
+        </div>
+    </div> -->
+
+    <div class="bg-white rounded-lg shadow mb-7 p-10 ">
+        <div>
+            <div class="px-4 sm:px-0">
+                <h3 class="text-base font-semibold leading-7 text-gray-900">Products Constructed</h3>
+                <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Cuts and Stats</p>
+            </div>
+
+            <dl
+                class="mt-5 grid grid-cols-1 divide-y divide-gray-200 overflow-hidden shadow rounded-lg bg-white md:grid-cols-3 md:divide-x md:divide-y-0">
+                <div class="px-4 py-5 sm:p-6">
+                    <dt class="text-base font-normal text-gray-900">Steel Coil Estimated Metres On Arrival</dt>
+                    <dd class="mt-1 flex items-baseline justify-between md:block lg:flex">
+                        <div class="flex items-baseline text-xl font-semibold text-axe-blue">
+                            {{steelCoilDetails.estMtrsOnArrival}}
+                            <span class="ml-2 text-sm font-medium text-gray-500">M</span>
+                        </div>
+                    </dd>
+                </div>
+                <div class="px-4 py-5 sm:p-6">
+                    <dt class="text-base font-normal text-gray-900">Meters Used</dt>
+                    <dd class="mt-1 flex items-baseline justify-between md:block lg:flex">
+                        <div class="flex items-baseline text-xl font-semibold text-axe-blue">
+                            {{steelCoilDetails.estMtrsOnArrival -
+                            steelCoilDetails.estMtrsRemaining | number : "1.1-2"}}
+                            <span class="ml-2 text-sm font-medium text-gray-500">M</span>
+                        </div>
+                    </dd>
+                </div>
+                <div class="px-4 py-5 sm:p-6">
+                    <dt class="text-base font-normal text-gray-900">Remaining Balance:</dt>
+                    <dd class="mt-1 flex items-baseline justify-between md:block lg:flex">
+                        <div class="flex items-baseline text-xl font-semibold text-axe-blue">
+                            {{steelCoilDetails.estMtrsRemaining}}
+                            <span class="ml-2 text-sm font-medium text-gray-500">M</span>
+                        </div>
+                    </dd>
+                </div>
+            </dl>
+
+            <dl
+                class="mt-5 grid grid-cols-1 divide-y divide-gray-200 overflow-hidden shadow rounded-lg bg-white md:grid-cols-3 md:divide-y-0 md:divide-x">
+                <div class="px-4 py-5 sm:p-6">
+                    <dt class="text-base font-normal text-gray-900">Wastage</dt>
+                    <dd class="mt-1 flex items-baseline justify-between md:block lg:flex">
+                        <div class="flex items-baseline text-xl font-semibold text-axe-blue">
+                            {{totalWasted}}
+                            <span class="ml-2 text-sm font-medium text-gray-500">M</span>
+                        </div>
+                    </dd>
+                </div>
+                <div class="px-4 py-5 sm:p-6">
+                    <dt class="text-base font-normal text-gray-900">Wastage %</dt>
+                    <dd class="mt-1 flex items-baseline justify-between md:block lg:flex">
+                        <div class="flex items-baseline text-xl font-semibold text-axe-blue">
+                            {{ totalWasted /
+                            steelCoilDetails.estMtrsOnArrival
+                            | number : "1.1-2"}}
+                            <span class="ml-2 text-sm font-medium text-gray-500">up 2.00m</span>
+                        </div>
+
+                        <div
+                            class="inline-flex items-baseline rounded-full px-2.5 py-0.5 text-sm font-medium bg-green-100 text-green-800 md:mt-2 lg:mt-0">
+                            <svg class="-ml-1 mr-0.5 h-5 w-5 flex-shrink-0 self-center text-green-500" viewBox="0 0 20 20" fill="currentColor"
+                                aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            <span class="sr-only"> Increased by </span>
+                            2.02%
+                        </div>
+                    </dd>
+                </div>
+                <div class="px-4 py-5 sm:p-6">
+                    <dt class="text-base font-normal text-gray-900">Wastage Cost</dt>
+                    <dd class="mt-1 flex items-baseline justify-between md:block lg:flex">
+                        <div class="flex items-baseline text-xl font-semibold text-axe-blue">
+                            {{totalWasted *
+                            steelCoilDetails.landedCostPerMtr |
+                            currency:USD}}
+                            <span class="ml-2 text-sm font-medium text-gray-500">KGS</span>
+                        </div>
+                    </dd>
+                </div>
+            </dl>
+
+            <div class="mt-6 w-full pt-5 " *ngIf="coilsTransactions$ | async as coilsTransactions">
+                <div class="flex flex-col sm:flex-row items-center pb-2 justify-between">
+                    <div class="py-4 sm:px-0">
+                        <h3 class="text-1xl font-semibold leading-7 text-gray-900">Coil Usage</h3>
+                        <p class="mt-1 text-sm leading-6 text-gray-500">Deductions</p>
+                    </div>
+                    <div class="mr-1 -mt-3">
+                        <button type="button"
+                            class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-axe-blue"
+                            (click)="exportToExcel()">Export to Excel</button>
+                    </div>
+                </div>
+
+                <div class="h-screen">
+                    <ag-grid-angular style="width: 100%; height: 100%" class="ag-theme-alpine" [columnDefs]="columnDefs"
+                        [defaultColDef]="defaultColDef" [rowData]="coilsTransactions" [animateRows]="true" (gridReady)="onGridReady($event)"
+                        [paginationAutoPageSize]="true" [pagination]="true"></ag-grid-angular>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

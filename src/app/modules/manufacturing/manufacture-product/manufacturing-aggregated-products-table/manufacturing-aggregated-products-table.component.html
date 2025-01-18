@@ -1,0 +1,19 @@
+<!-- *ngIf="rowData && dateManufactured" -->
+<div class="h-full">
+  <ag-grid-angular
+    style="width: 100%; height: 100%"
+    class="ag-theme-quartz"
+    [rowData]="rowData"
+    [columnDefs]="colDefs"
+    (gridReady)="onGridReady($event)"
+  />
+  <div class="flex justify-center">
+    <button
+      type="button"
+      class="w-50 rounded-lg bg-axe-blue px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+      (click)="onBtExport()"
+    >
+      Export
+    </button>
+  </div>
+</div>

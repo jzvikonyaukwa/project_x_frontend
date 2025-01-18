@@ -1,0 +1,40 @@
+<ag-grid-angular
+        style="width: 100%"
+        class="ag-theme-alpine"
+        [pagination]="pagination"
+        [paginationPageSize]="10"
+        (paginationChanged)="onPaginationChanged()"
+        [columnDefs]="columnDefs"
+        [defaultColDef]="defaultColDef"
+        [rowData]="products"
+        [rowSelection]="'multiple'"
+        [animateRows]="true"
+        [suppressPaginationPanel]="true"
+        [getRowStyle]="lastRowBorder"
+        (gridReady)="onGridReady($event)"
+></ag-grid-angular>
+<div class="ag-grid-pagination bg-white h-11 flex justify-between items-center p-4 rounded-b-xl">
+        <div class="flex items-center justify-items-center">
+          <span class="text-xs font-medium">
+            {{gridApi?.paginationGetCurrentPage() * +paginationPageSize + 1}}-{{products?.length < (gridApi?.paginationGetCurrentPage() + 1) * +paginationPageSize ? products?.length : (gridApi?.paginationGetCurrentPage() + 1) * +paginationPageSize}} of {{products?.length}}
+          </span>
+        </div>
+
+        <div class="flex gap-6">
+          <div class="flex items-center justify-items-center">
+            <span class="text-xs font-medium">Rows per page: {{paginationPageSize}}</span>
+            <select (change)="onPageSizeChanged()" id="page-size" class="w-5 bg-transparent">
+              <option class="text-xs font-medium">10</option>
+              <option class="text-xs font-medium">15</option>
+              <option class="text-xs font-medium">20</option>
+            </select>
+          </div>
+          <div class="flex items-center justify-items-center gap-2">
+            <button (click)="onBtPrevious()" class="h-4 rounded border flex items-center justify-items-center"><mat-icon [class.text-zinc-500]="gridApi?.paginationGetCurrentPage() === 0" [class.text-slate-900]="gridApi?.paginationGetCurrentPage() !== 0" class="text-slate-900 fuse-vertical-navigation-item-arrow icon-size-4" [svgIcon]="'heroicons_solid:chevron-left'"></mat-icon></button>
+            <div class="flex items-center justify-items-center text-xs font-medium">
+              <span class="value text-xs font-medium text-neutral-900" id="lbCurrentPage">-</span>/<span class="value text-xs font-medium text-slate-500" id="lbTotalPages">-</span>
+            </div>
+            <button (click)="onBtNext()" class="h-4 rounded border flex items-center justify-items-center"><mat-icon [class.text-zinc-500]="gridApi?.paginationGetCurrentPage() + 1 === gridApi?.paginationGetTotalPages()" [class.text-slate-900]="gridApi?.paginationGetCurrentPage() + 1 !== gridApi?.paginationGetTotalPages()" class="fuse-vertical-navigation-item-arrow icon-size-4" [svgIcon]="'heroicons_solid:chevron-right'"></mat-icon></button>
+          </div>
+        </div>
+      </div>

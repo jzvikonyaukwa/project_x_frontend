@@ -1,0 +1,47 @@
+<div class="p-5">
+    <div class="w-full flex items-center justify-between mb-5">
+    <span class="font-medium text-lg tracking-tighter text-green-500">
+      Select a steel coil to be loaded in the machine {{data.machineId}}
+    </span>
+        <span class="cursor-pointer" (click)="onDialogClose()">
+      <mat-icon [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
+    </span>
+    </div>
+
+    <!-- Container for dropdowns -->
+    <div class="w-full mb-5 flex justify-end">
+        <!-- Gauge Dropdown -->
+        <mat-form-field class="dropdown-width mr-4">
+            <mat-select placeholder="Gauge" [(value)]="selectedGauge" (selectionChange)="onGaugeOrColorChange()">
+                <mat-option *ngFor="let gauge of gaugeOptions" [value]="gauge">{{gauge}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <!-- Color Dropdown -->
+        <mat-form-field class="dropdown-width">
+            <mat-select placeholder="Color" [(value)]="selectedColor" (selectionChange)="onGaugeOrColorChange()">
+                <mat-option *ngFor="let color of colorOptions" [value]="color">{{color}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <mat-form-field class="w-full mb-5">
+        <input matInput placeholder="Search..." [formControl]="searchControl">
+    </mat-form-field>
+
+    <div class="grid lg:grid-cols-3 md:grid-cols-2 auto-cols-auto gap-8">
+        <div *ngFor="let coil of filteredCoilsInStock$ | async">
+            <app-coil-card [coil]="coil" [isCoilChange]="true" [machineId]="data.machineId"
+                           (coilChangedEmitter)="newCoilLoaded(coil)">
+            </app-coil-card>
+        </div>
+    </div>
+
+    <ng-template #no_coil_loaded>
+    <span class="font-medium text-lg text-warn tracking-tighter">
+      THERE ARE NO COILS IN STOCK FOR THIS MACHINE {{data.machineId}}
+    </span>
+    </ng-template>
+
+    <button (click)="onDialogClose()">Close</button>
+</div>

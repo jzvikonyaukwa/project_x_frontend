@@ -1,0 +1,10 @@
+<form [formGroup]="consigmentForm" (ngSubmit)="onSubmit()">
+  <mat-form-field class="flex flex-col flex-auto">
+      <mat-label>Name</mat-label>
+      <input matInput type="text" formControlName="name">
+  </mat-form-field>
+  <mat-dialog-actions align="center">
+      <button class="rounded-md w-48 bg-gray-400" [color]="'accent'" mat-flat-button mat-flat-button type="button" mat-dialog-close>Cancel</button>
+      <button class="bg-sky-700 rounded-md w-48" mat-flat-button type="submit" color="primary" [color]="'accent'">Submit</button>
+  </mat-dialog-actions>
+</form>

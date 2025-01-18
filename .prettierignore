@@ -1,0 +1,7 @@
+# Ignore compiled files
+dist
+build
+node_modules
+
+# Ignore specific files
+*.min.js

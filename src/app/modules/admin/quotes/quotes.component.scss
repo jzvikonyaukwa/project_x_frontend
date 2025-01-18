@@ -1,0 +1,100 @@
+html,
+body {
+    height: 100%;
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
+}
+
+.ag-theme-alpine {
+    --ag-borders: none;
+    --ag-card-radius: 16px;
+    --ag-border-radius: 16px;
+    --ag-row-border-color: transparent;
+
+    ::ng-deep.ag-icon-menu {
+        background: transparent url("/assets/icons/ag-grid-filter-menu-icon.svg") center/contain no-repeat;
+        color: transparent;
+        cursor: pointer;
+    }
+
+    ::ng-deep.ag-grid-header {
+        color: #002A46;
+
+        &:hover {
+            border-bottom: 2px solid #0071BC;
+        }
+
+        .ag-header-cell-comp-wrapper {
+            .ag-header-cell-label {
+                justify-content: flex-end;
+                gap: 2px;
+                flex-direction: row-reverse;
+            }
+        }
+
+    }
+
+    ::ng-deep.ag-row-selected {
+        .details-image {
+            filter: invert(0%);
+            -webkit-filter: invert(0%);
+        }
+    }
+
+}
+
+.ag-root-wrapper {
+    border-top-right-radius: 16px;
+    border-top-left-radius: 16px;
+}
+
+.search-wrapper {
+    ::ng-deep {
+      .mat-mdc-text-field-wrapper {
+        background-color: #80c3ec1f !important;
+        border: 0.5px solid #0071bc !important;
+      }
+    }
+  }
+  
+  .items-center {
+    ::ng-deep {
+      .mat-mdc-text-field-wrapper {
+        border-radius: 15px !important;
+      }
+  
+      .filter-wrapper {
+        .mat-mdc-text-field-wrapper {
+          background: #0071bc !important;
+        }
+  
+        .mat-mdc-select-arrow, .mat-mdc-select-value-text {
+          color: white !important;
+          font-size: 14px;
+          font-weight: 600;
+        }
+  
+        .mat-mdc-select-placeholder {
+          color: white !important;
+          font-size: 14px;
+          font-weight: 600;
+          letter-spacing: 0.56px;
+        }
+      }
+  
+      .cdk-overlay-pane {
+        width: fit-content;
+      }
+    }
+  }
+  
+  ::ng-deep.select-wrapper {
+    .mat-mdc-option {
+      .mdc-list-item__primary-text {
+        white-space: nowrap !important;
+      }
+    }
+  }
+  

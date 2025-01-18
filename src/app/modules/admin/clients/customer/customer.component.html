@@ -1,0 +1,185 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-y-auto">
+    <app-page-heading>
+        <ng-container titleSlot>
+            <div class="mt-2">
+                <h2
+                    class="text-3xl md:text-4xl font-bold tracking-tight leading-7 sm:leading-10 truncate text-white">
+                    Client: {{ client?.name }}
+                </h2>
+            </div>
+        </ng-container>
+    </app-page-heading>
+
+    <fuse-card
+        class="w-full max-w-screen-xl bg-card shadow-xl rounded-2xl mx-auto mb-4 p-6 sm:p-8 lg:p-6 overflow-visible mt-20"
+        *ngIf="client">
+        <div class="rounded-md bg-red-50 p-4 mb-4" *ngIf="errorMessage">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium text-red-800">Error</h3>
+                    <div class="mt-2 text-sm text-red-700">
+                        <p>{{errorMessage}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col gap-6 w-full">
+            <div class="flex flex-col">
+                <div
+                    class="text-2xl font-semibold leading-tight text-primary flex items-center gap-2 justify-between">
+                    <div class="flex items-center gap-2">
+                        <mat-icon class="text-sky-700"
+                            [svgIcon]="'heroicons_outline:user'"></mat-icon>
+                        <span class="text-axe-dark-blue font-bold text-xl leading-5">{{ client.name
+                            }}</span>
+                        <div class="flex gap-2 items-center">
+                            <button mat-icon-button (click)="editCustomerName({ name: client.name })">
+                                <img class="icon-size-5" src="/assets/icons/edit-pen-icon.svg">
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="flex">
+                    <span
+                        class="ml-1 leading-5 text-slate-500 font-medium text-xs flex items-center gap-2">{{
+                        client.notes }}</span>
+                </div>
+            </div>
+            <div class="flex flex-row justify-between gap-4">
+                <div class="grow border-sky-600 border rounded-xl p-4 w-full">
+                    <div class="flex items-center bg-sky-500/30 rounded-xl p-4 justify-between">
+                        <div class="flex items-center gap-2">
+                            <img src="/assets/icons/map-pin.svg" class="icon-size-5">
+                            <div class="text-2xl font-semibold leading-tight text-axe-dark-blue">
+                                Addresses
+                            </div>
+                        </div>
+                        <button class="bg-sky-700 rounded-md" mat-icon-button
+                            (click)="editAddresses(client.addresses)">
+                            <mat-icon class="text-white" svgIcon="heroicons_solid:plus"></mat-icon>
+                        </button>
+                    </div>
+                    <div class="flex flex-col mt-5 border-b last:border-0 overflow-y-auto overflow-x-hidden max-h-48"
+                        *ngFor="let address of client.addresses">
+                        <div class="group flex items-center w-full boder-blueGray-500 pb-2">
+                            <div
+                                class="text-slate-500 text-sm font-medium w-full group-hover:text-axe-dark-blue">
+                                <span>{{ address.street }} </span>
+                                <span>{{ address.suburb }} </span>
+                                <span>{{ address.city }} </span>
+                                <span>{{ address.country }} </span>
+                            </div>
+
+                            <div class="flex gap-2 items-center">
+                                <button mat-icon-button (click)="editAddresses(client.addresses)">
+                                    <img class="icon-size-5" src="/assets/icons/edit-pen-icon.svg">
+                                </button>
+                                <button mat-icon-button (click)="deleteAddress(address)">
+                                    <img class="icon-size-5" src="/assets/icons/delete-icon.svg">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grow border-sky-600 border rounded-xl p-4 w-full">
+                    <div class="flex items-center bg-sky-500/30 rounded-xl p-4 justify-between">
+                        <div class="flex items-center gap-2">
+                            <img src="/assets/icons/map-pin.svg" class="icon-size-5">
+                            <div class="text-2xl font-semibold leading-tight text-axe-dark-blue">
+                                Phones
+                            </div>
+                        </div>
+                        <button class="bg-sky-700 rounded-md" mat-icon-button
+                            (click)="editPhones(client.phones)">
+                            <mat-icon class="text-white" svgIcon="heroicons_solid:plus"></mat-icon>
+                        </button>
+                    </div>
+                    <div class="flex flex-col mt-5 border-b last:border-0 overflow-y-auto overflow-x-hidden max-h-48"
+                        *ngFor="let phone of client.phones">
+                        <div class="group flex items-center w-full boder-blueGray-500 pb-2">
+                            <div
+                                class="text-slate-500 text-sm font-medium w-full group-hover:text-axe-dark-blue">
+                                <span>+{{ phone.phone }} </span>
+                            </div>
+
+                            <div class="flex gap-2 items-center">
+                                <button mat-icon-button (click)="editPhones(client.phones)">
+                                    <img class="icon-size-5" src="/assets/icons/edit-pen-icon.svg">
+                                </button>
+                                <button mat-icon-button (click)="deletePhone(phone)">
+                                    <img class="icon-size-5" src="/assets/icons/delete-icon.svg">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grow border-sky-600 border rounded-xl p-4 w-full">
+                    <div class="flex items-center bg-sky-500/30 rounded-xl p-4 justify-between">
+                        <div class="flex items-center gap-2">
+                            <img src="/assets/icons/map-pin.svg" class="icon-size-5">
+                            <div class="text-2xl font-semibold leading-tight text-axe-dark-blue">
+                                Emails
+                            </div>
+                        </div>
+                        <button class="bg-sky-700 rounded-md" mat-icon-button
+                            (click)="editEmails(client.emails)">
+                            <mat-icon class="text-white" svgIcon="heroicons_solid:plus"></mat-icon>
+                        </button>
+                    </div>
+                    <div class="flex flex-col mt-5 border-b last:border-0 overflow-y-auto overflow-x-hidden max-h-48"
+                        *ngFor="let email of client.emails">
+                        <div class="group flex items-center w-full boder-blueGray-500 pb-2">
+                            <div
+                                class="text-slate-500 text-sm font-medium w-full group-hover:text-axe-dark-blue">
+                                <span>{{ email.email }} </span>
+                            </div>
+
+                            <div class="flex gap-2 items-center">
+                                <button mat-icon-button (click)="editEmails(client.emails)">
+                                    <img class="icon-size-5" src="/assets/icons/edit-pen-icon.svg">
+                                </button>
+                                <button mat-icon-button (click)="deleteEmail(email)">
+                                    <img class="icon-size-5" src="/assets/icons/delete-icon.svg">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fuse-card>
+
+    <fuse-card class="flex-col w-full max-w-screen-xl overflow-visible mx-auto mt-4 mb-4 p-6 sm:p-8 lg:p-6">
+        <div class="text-axe-dark-blue font-bold text-xl leading-5 mb-4">
+            Quotes <span *ngIf="quotes && quotes.length !== 0 ">({{ quotes.length | number }})</span>
+        </div>
+        <div class="flex-auto -mt-px pt-4 sm:pt-6">
+            <div class="-mt-5">
+                <div class="w-full mx-auto">
+                    <app-clients-quote-list [quotes]="quotes"></app-clients-quote-list>
+                </div>
+            </div>
+        </div>
+    </fuse-card>
+
+    <fuse-card class="flex-col w-full max-w-screen-xl overflow-visible mx-auto mt-4 mb-4 p-6 sm:p-8 lg:p-6">
+        <div class="text-axe-dark-blue font-bold text-xl leading-5 mb-4">
+            Delivery Notes <span *ngIf="deliveryNotes && deliveryNotes.length !== 0 ">({{ deliveryNotes.length | number }})</span>
+        </div>
+        <div class="flex-auto -mt-px pt-4 sm:pt-6">
+            <div class="-mt-5">
+                <div class="w-full mx-auto">
+                    <app-clients-delivery-note-list [deliveryNotes]="deliveryNotes"></app-clients-delivery-note-list>
+                </div>
+            </div>
+        </div>
+    </fuse-card>
+</div>

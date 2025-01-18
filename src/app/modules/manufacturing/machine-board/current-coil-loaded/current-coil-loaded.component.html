@@ -1,0 +1,202 @@
+<fuse-alert
+  class="mt-8 mb-4"
+  *ngIf="showAlert"
+  [dismissible]="true"
+  [dismissed]="false"
+  [appearance]="'outline'"
+  [showIcon]="false"
+  [type]="alert.type"
+>
+  {{ alert.message }}
+</fuse-alert>
+<div *ngIf="machinesLastEvent$ | async as machineLatestEvent; else no_coil_loaded">
+  <div *ngIf="loadedCoil; else no_coil_loaded">
+    <div
+      class="border rounded-t-xl flex items-center p-3 justify-between {{
+        'bg-' + loadedCoil.cssColor
+      }} "
+    >
+      <div class="text-axe-dark-blue font-semibold text-lg">
+        Coil Id: {{ loadedCoil?.coilNumber }} :: Card Number {{ loadedCoil?.cardNumber }}
+      </div>
+      <div class="flex items-center justify-between px-4 py-1 bg-white rounded-2xl w-40">
+        <mat-icon
+          [svgIcon]="'heroicons_outline:paint-brush'"
+          class="text-axe-dark-blue icon-size-5"
+        ></mat-icon>
+        <div
+          title="{{ machineLastEvent?.steelCoil.steelSpecification.color.color }}"
+          class="text-axe-dark-blue font-semibold text-base text-ellipsis overflow-hidden whitespace-nowrap"
+        >
+          {{ loadedCoil?.color }}
+        </div>
+      </div>
+    </div>
+    <div class="w-full p-3 {{ 'border-' + loadedCoil.cssColor }} border bg-white rounded-b-xl">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center">
+          <div class="text-axe-dark-blue font-medium text-sm">
+            Card number: {{ loadedCoil.cardNumber }}
+          </div>
+
+          <div class="w-px h-3 bg-[#64748B] mx-3"></div>
+
+          <div class="text-axe-dark-blue font-medium text-sm">
+            Loaded Time:
+            {{ loadedCoil.loadedTime ? (loadedCoil.loadedTime | date : 'medium') : '0' }}
+          </div>
+
+          <div class="w-px h-3 bg-[#64748B] mx-3"></div>
+
+          <div class="text-axe-dark-blue font-medium text-sm">
+            Total Meters Remaining: {{ loadedCoil.metersRemaining ?? '0' }}
+          </div>
+        </div>
+      </div>
+      <div class="flex gap-12 mt-5">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="flex gap-2 items-center justify-center">
+            <mat-icon
+              [svgIcon]="'heroicons_outline:paint-brush'"
+              class="text-sky-600 icon-size-5"
+            ></mat-icon>
+            <span class="text-sky-600 font-semibold text-sm tracking-wider">WIDTH</span>
+          </div>
+          <div class="text-axe-dark-blue text-lg font-medium">
+            {{ loadedCoil.width }}
+          </div>
+        </div>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="flex gap-2 items-center justify-center">
+            <mat-icon
+              [svgIcon]="'heroicons_outline:paint-brush'"
+              class="text-sky-600 icon-size-5"
+            ></mat-icon>
+            <span class="text-sky-600 font-semibold text-sm tracking-wider">COLOR</span>
+          </div>
+          <div class="text-axe-dark-blue text-lg font-medium">
+            {{ loadedCoil.color }}
+          </div>
+        </div>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="flex gap-2 items-center justify-center">
+            <mat-icon
+              [svgIcon]="'heroicons_outline:speedometer'"
+              class="text-sky-600 icon-size-5"
+            ></mat-icon>
+            <span class="text-sky-600 font-semibold text-sm tracking-wider">GAUGE</span>
+          </div>
+          <div class="text-axe-dark-blue text-lg font-medium">
+            {{ machineLatestEvent?.steelCoil?.steelSpecification?.gauge?.gauge }}
+          </div>
+        </div>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="flex gap-2 items-center justify-center">
+            <mat-icon
+              [svgIcon]="'heroicons_outline:square-2-stack'"
+              class="text-sky-600 icon-size-5"
+            ></mat-icon>
+            <span class="text-sky-600 font-semibold text-sm tracking-wider">COATING</span>
+          </div>
+          <div class="text-axe-dark-blue text-lg font-medium">
+            {{ machineLatestEvent.steelCoil?.steelSpecification?.coating }}
+          </div>
+        </div>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="flex gap-2 items-center justify-center">
+            <mat-icon
+              [svgIcon]="'heroicons_outline:meters'"
+              class="text-sky-600 icon-size-5"
+            ></mat-icon>
+            <span class="text-sky-600 font-semibold text-sm tracking-wider">MS LEFT</span>
+          </div>
+          <div class="text-axe-dark-blue text-lg font-medium">
+            {{ machineLatestEvent.steelCoil?.estimatedMetersRemaining }}
+          </div>
+        </div>
+        <!--                 Status-->
+        <div class="flex flex-col gap-2 items-start">
+          <div class="flex gap-2 items-center justify-center">
+            <mat-icon
+              [svgIcon]="'heroicons_outline:paint-brush'"
+              class="text-sky-600 icon-size-5"
+            ></mat-icon>
+            <span class="text-sky-600 font-semibold text-sm tracking-wider">STATUS </span>
+          </div>
+          <div class="text-axe-dark-blue text-lg font-medium">
+            {{ machineLatestEvent.steelCoil?.status }}
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center justify-end">
+        <div class="flex gap-6">
+          <button
+            [matMenuTriggerFor]="coilNotAvailableMenu"
+            class="bg-white opac w-30 px-4 text-[#0071BC] border border-[#0071BC] text-base font-medium rounded-md"
+          >
+            Actions
+          </button>
+          <button
+            (click)="onChangeCoil()"
+            class="bg-[#0071BC] w-30 opac py-2 px-4 text-white text-base font-medium rounded-md"
+          >
+            Change Coil
+          </button>
+          <ng-template #coilNotAvailable>
+            <button
+              [matMenuTriggerFor]="coilNotAvailableMenu"
+              [disabled]="isCoilChange"
+              [class.opacity-50]="isCoilChange"
+              class="bg-[#0071BC] w-36 py-2 px-4 text-white text-base font-medium rounded-md"
+            >
+              Not Available
+            </button>
+          </ng-template>
+
+          <mat-menu
+            class="rounded-2xl border border-axe-light-blue mt-1 px-4"
+            #coilNotAvailableMenu="matMenu"
+          >
+            <button
+              (click)="onViewCoil(machineLatestEvent.steelCoil)"
+              mat-menu-item
+              class="text-axe-dark-blue font-medium text-sm border-t-0 border-x-0 border-b border-[#64748B]/[20%] border-solid"
+            >
+              View Coil
+            </button>
+            <button
+              (click)="onAddWastage()"
+              mat-menu-item
+              class="text-axe-dark-blue font-medium text-sm border-t-0 border-x-0 border-b border-[#64748B]/[20%] border-solid"
+            >
+              Add Wastage
+            </button>
+
+            <button
+              (click)="onAddProductToStock()"
+              mat-menu-item
+              class="text-axe-dark-blue font-medium text-sm border-t-0 border-x-0 border-b border-[#64748B]/[20%] border-solid"
+            >
+              Add Product to Stock
+            </button>
+            <button
+              (click)="onAddMissingMetres()"
+              mat-menu-item
+              class="text-axe-dark-blue font-medium text-sm border-t-0 border-x-0 border-b border-[#64748B]/[20%] border-solid"
+            >
+              Add Missing Metres
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #no_coil_loaded>
+  <app-no-coil
+    [title]="'NO COIL LOADED ON THE SYSTEM'"
+    [machineId]="machineId"
+    [productCategory]="productCategory"
+  ></app-no-coil>
+</ng-template>

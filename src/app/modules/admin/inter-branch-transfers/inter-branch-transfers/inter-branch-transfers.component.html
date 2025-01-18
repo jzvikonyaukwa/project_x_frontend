@@ -1,0 +1,27 @@
+<div class="flex flex-col flex-auto min-w-0 mb-10">
+    <app-page-heading>
+        <ng-container titleSlot>
+            <div class="flex justify-between w-full ml-4">
+                <ng-container>
+                    <div class="text-white text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate">
+                        Inter Branch Transfers
+                    </div>
+                </ng-container>
+            </div>
+        </ng-container>
+    </app-page-heading>
+    <!-- absolute right-7 -top-2 z-10 -->
+    <div class="flex flex-row justify-end w-full">
+        <div class="w-56 p-4 mr-4">
+            <!-- Search Component -->
+            <mat-form-field [formGroup]="formGroup" class="flex flex-col flex-auto relative">
+                <input placeholder="Search" class="pr-5" matInput formControlName="search" />
+                <mat-icon class="absolute right-3 icon-size-5 text-axe-blue" [svgIcon]="'heroicons_solid:magnifying-glass'"></mat-icon>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <app-steel-coils-inter-branch-transfers [searchValue]="formGroup.get('search')"></app-steel-coils-inter-branch-transfers>
+
+    <app-consumable-inter-branch-transfer [searchValue]="formGroup.get('search')"></app-consumable-inter-branch-transfer>
+</div>

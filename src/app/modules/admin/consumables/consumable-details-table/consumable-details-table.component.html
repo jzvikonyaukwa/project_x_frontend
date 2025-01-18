@@ -1,0 +1,23 @@
+<div>
+    <div class="flex w-full justify-between items-center px-2 my-5">
+        <span class="text-axe-blue text-lg font-semibold tracking-tight leading-6 truncate mt-1">
+            CONSUMABLES INFORMATAION</span>
+        <div>
+            <button class="hidden sm:inline-flex ml-3 bg-axe-dark-blue px-4 py-2 text-white text-base font-medium rounded-md" mat-stroked-button
+                (click)="onAddCategory()">
+                <mat-icon class="icon-size-5 text-white" [svgIcon]="'heroicons_solid:pencil-square'"></mat-icon>
+                <span class="ml-2 text-white">Edit Categories</span>
+            </button>
+            <button class="hidden sm:inline-flex ml-3 bg-axe-blue px-4 py-2 text-white text-base font-medium rounded-md" mat-stroked-button
+                (click)="onAddConsumale()">
+                <mat-icon class="icon-size-5 text-white" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                <span class="ml-2 text-white">Add Consumable</span>
+            </button>
+        </div>
+    </div>
+
+    <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine" [getRowStyle]="lastRowBorder" [pagination]="paginationActive"
+        [paginationPageSize]="paginationPageSize" [paginationPageSizeSelector]="paginationPageSizeSelector" [columnDefs]="columnDefs"
+        [sideBar]="sideBar" [defaultColDef]="defaultColDef" [rowData]="rowData" [animateRows]="true"
+        (gridReady)="onGridReady($event)"></ag-grid-angular>
+</div>

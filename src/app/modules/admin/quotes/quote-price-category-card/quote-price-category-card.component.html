@@ -1,0 +1,76 @@
+<div
+  class="bg-white shadow-md rounded-xl w-full flex flex-col items-center min-h-48 filter-info min-w-48"
+  *ngIf="quote"
+>
+  <div class="rounded-t-xl w-full flex items-center gap-3 p-4 bg-blue-100">
+    <mat-icon
+      class="icon-size-4 sm:icon-size-5 md:icon-size-6 text-blue-800 _text-[#00C838]"
+      [svgIcon]="'heroicons_outline:currency-dollar'"
+      aria-hidden="true"
+    ></mat-icon>
+    <!-- _text-[#00C838] -->
+    <!-- text-base sm:text-xl md:text-2xl font-semibold leading-tight text-center text-axe-blue -->
+    <div
+      class="text-sm font-semibold leading-tight text-center text-axe-blue sm:text-xl md:text-2xl"
+    >
+      Price Category
+    </div>
+  </div>
+
+  <div class="w-full flex flex-col gap-3 items-center justify-center mt-0 sm:mt-3 md:mt-5">
+    <div class="flex items-center space-x-2">
+      <span
+        class="font-semibold md:font-bold text-axe-blue text-base sm:text-lg md:text-xl"
+        *ngIf="priceCategoryPercentage >= 0"
+      >
+        {{ priceCategoryPercentage }}% Markup
+      </span>
+      <span
+        class="font-semibold md:font-bold text-orange-500 text-base sm:text-lg md:text-xl"
+        *ngIf="priceCategoryPercentage < 0 && priceCategoryPercentage != -100"
+      >
+        {{ priceCategoryPercentage * -1 }}% Discount
+      </span>
+      <span
+        class="font-semibold md:font-bold text-red-500 text-base sm:text-lg md:text-xl"
+        *ngIf="priceCategoryPercentage == -100"
+      >
+        FREE
+      </span>
+      &nbsp;|<span
+        class="text-base sm:text-lg md:text-xl font-semibold md:font-bold text-blue-80 leading-tight text-center"
+        >{{ priceCategory | titlecase }}</span
+      >
+    </div>
+  </div>
+
+  <div class="w-full flex items-center justify-center mt-2 mb-3">
+    <form [formGroup]="fg">
+      <input type="hidden" formControlName="markup" />
+      <div class="w-full flex items-center justify-center">
+        <mat-radio-group aria-label="Price Category" formControlName="priceType">
+          <mat-radio-button
+            *ngFor="let priceCategory of priceCategories"
+            [value]="priceCategory"
+            color="primary"
+            >{{ priceCategory | titlecase }}</mat-radio-button
+          >
+        </mat-radio-group>
+      </div>
+      <div
+        class="w-full flex items-center justify-center"
+        [class.hidden]="priceCategory !== 'custom'"
+      >
+        <mat-form-field>
+          <input matInput type="text" maxlength="6" formControlName="markupPercentage" /><span
+            class="font-semibold md:font-bold"
+            >%</span
+          >
+          <mat-error *ngIf="!fg.get('markupPercentage').valid">
+            Please enter a valid markup.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+</div>

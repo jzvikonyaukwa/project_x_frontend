@@ -1,0 +1,48 @@
+<div class="w-full flex-auto">
+  <app-page-heading>
+    <ng-container titleSlot>
+      <div class="w-full flex justify-between ml-4">
+        <ng-container>
+          <div class="truncate md:text-5xl text-2xl leading-7 md:leading-snug text-white font-semibold tracking-tight">
+            Axes Sales Orders
+          </div>
+        </ng-container>
+        <div class="flex items-center ml-1.5" *ngIf="saleOrderOverview && saleOrderOverview.length > 0">
+          <mat-icon class="icon-size-5 text-sky-500 hidden sm:block" [svgIcon]="'heroicons_solid:bell'"></mat-icon>
+          <div class="leading-6 truncate text-sky-500 hidden sm:block">
+            You have {{saleOrderOverview.length | number}} orders
+          </div>          
+        </div>        
+      </div>
+    </ng-container>
+  </app-page-heading>
+
+  <div class="w-full max-w-screen-xl mx-auto py-10">
+    <div class="flex flex-col flex-auto sm:col-span-2 md:col-span-4 p-6 gap-4 shadow rounded-2xl overflow-visible bg-white">
+      <div class="flex items-center gap-4">
+        <div class="w-full search-wrapper min-w-[150px] max-w-[460px] rounded-md">
+          <mat-form-field class="flex flex-col flex-auto relative ">
+            <input placeholder="Search by Client name or order id" class="pr-5" matInput [(ngModel)]="search" (ngModelChange)="filterSaleOrders($event)" />
+            <mat-icon class="absolute right-3 icon-size-5 text-axe-blue" [svgIcon]="'heroicons_solid:magnifying-glass'"></mat-icon>
+          </mat-form-field>
+        </div>
+        <div class="filter-wrapper">
+          <mat-form-field class="flex flex-col w-40">
+            <mat-select placeholder="Statuses" floatlLabel="never" [(value)]="selectedStatus" (selectionChange)="filterSaleOrders($event)"
+              panelClass="select-wrapper">
+              <mat-option [value]="status.value" *ngFor="let status of statuses; trackBy: statusTrackBy">
+                {{ status.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 _lg:grid-cols-4 gap-4" *ngIf="(filteredSaleOrders && filteredSaleOrders.length > 0); else no_content">
+        <app-sale-order-summary [saleOrder]="saleOrder" 
+        *ngFor="let saleOrder of filteredSaleOrders; trackBy: salesOrderOverviewTrackBy"></app-sale-order-summary>
+      </div>
+      <ng-template #no_content>No sales orders to show</ng-template>
+    </div>
+  </div>
+</div>

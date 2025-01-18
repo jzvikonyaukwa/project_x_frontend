@@ -1,0 +1,74 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <app-page-heading>
+        <ng-container titleSlot>
+            <div class="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate text-white">
+                Add Quote
+            </div>
+        </ng-container>
+    </app-page-heading>
+    <div class="flex items-center justify-center h-full -mt-10 ">
+        <fuse-card class="w-2/3 p-5 mt-8 mb-4">
+            <div class="flex flex-col flex-auto">
+                <div class="border-2 border-sky-700 rounded-lg border-opacity-25 p-5">
+                    <ng-container actionSlot>
+                        <div class="flex justify-end mb-4">
+                            <a class="bg-axe-blue rounded-md mr-2" mat-flat-button [color]="'accent'" (click)="addClient()">
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                                <span class="ml-2 font-medium text-sm">Add Client</span>
+                            </a>
+
+                            <a class="bg-green-500 rounded-md" mat-flat-button [color]="'accent'" (click)="addProject()">
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                                <span class="ml-2 font-medium text-sm">Add Project</span>
+                            </a>
+                        </div>
+                    </ng-container>
+                    <form [formGroup]="quoteForm" (ngSubmit)="onSubmit()" class="w-full">
+                        <div class="flex justify-between gap-8 ">
+                            <mat-form-field class="w-full text-lg">
+                                <mat-label>Client</mat-label>
+                                <mat-select formControlName="clientId">
+                                    <mat-option *ngFor="let client of clients$ | async" [value]="client.id">{{
+                                        client.name
+                                        }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field class="w-full text-lg" *ngIf="this.quoteForm.get('clientId').value != null">
+                                <mat-label>Project</mat-label>
+                                <mat-select formControlName="projectId">
+                                    <mat-option *ngFor="let project of clientsProjects" [value]="project.id">{{
+                                        project.name
+                                        }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field class="w-full text-lg">
+                                <mat-label>Date Issued</mat-label>
+                                <input matInput formControlName="dateIssued" [matDatepicker]="picker" />
+                                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="flex flex-col mt-4">
+                            <label class="text-lg font-medium pb-2">Custom Price</label>
+                            <div class="price-category-selection">
+                                <label class="text-lg font-medium mr-2 capitalize" *ngFor="let pc of priceCategoryOptions">
+                                    <input type="radio" formControlName="quotePrice" [value]="pc" value="basic"> {{pc}}
+                                </label>
+                            </div>
+                        </div>
+
+                        <mat-dialog-actions class="flex justify-end gap-4">
+                            <button class="rounded-md w-48 bg-gray-400" [color]="'accent'" mat-flat-button mat-flat-button type="button"
+                                (click)="cancel()">Cancel</button>
+                            <button class="bg-sky-700 rounded-md w-48" mat-flat-button type="submit" color="primary"
+                                [color]="'accent'">Submit</button>
+                        </mat-dialog-actions>
+                    </form>
+                </div>
+            </div>
+        </fuse-card>
+    </div>
+</div>

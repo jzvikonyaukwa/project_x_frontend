@@ -1,0 +1,15 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <app-page-heading>
+        <ng-container titleSlot>
+            <div class="text-white text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate">
+                {{data?.edit ? 'Edit GRV' : 'Add GRV'}}
+            </div>
+        </ng-container>
+    </app-page-heading>
+    <!-- px-10 py-10 pb-4 max-w-screen-xl mx-auto-->
+    <fuse-card class="w-full overflow-auto  p-5 mb-4" [ngClass]="{'max-h-120': data?.edit}">
+        <div class="flex flex-col flex-auto">
+            <app-grv-form [editGrv]="data?.rowData"></app-grv-form>
+        </div>
+    </fuse-card>
+</div>

@@ -1,0 +1,101 @@
+<fuse-alert class="mt-8 mb-4"
+            *ngIf="showAlert"
+            [dismissible]="false"
+            [dismissed]="false"
+            [appearance]="'outline'"
+            [showIcon]="false"
+            [type]="alert.type">
+    {{ alert.message }}
+</fuse-alert>
+
+<form [formGroup]="deliveryNoteForm"
+      (ngSubmit)="onSubmit()"
+      novalidate
+      style="display: flex; flex-direction: column; height: 100%;">
+
+    <div mat-dialog-content
+         class="flex flex-col mat-typography p-4"
+         style="flex: 1; overflow: auto;">
+        <!-- Main heading -->
+        <h2 class="text-3xl font-bold text-axe-dark-blue mb-4">Create Delivery Note</h2>
+        <p class="mb-5 text-gray-600">
+            Please fill out the required fields (<span class="text-red-600">*</span>) and select the inventories you want to deliver.
+        </p>
+
+        <!-- Delivery Information Section -->
+        <fieldset class="border border-gray-200 p-4 mb-6 rounded-md">
+            <legend class="text-xl text-axe-blue mb-2 font-semibold">Delivery Information</legend>
+            <div class="form-fields flex flex-wrap gap-6">
+                <!-- Date Created -->
+                <mat-form-field appearance="fill" class="form-field flex-1 min-w-[200px]" [floatLabel]="'always'">
+                    <mat-label>Date Created <span class="text-red-600">*</span></mat-label>
+                    <input matInput [matDatepicker]="picker1" formControlName="dateCreated" placeholder="Select creation date">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                    <mat-hint>Select the date this delivery note was created.</mat-hint>
+                    <mat-error *ngIf="deliveryNoteForm.get('dateCreated').hasError('required')">
+                        Date Created is required.
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Date Delivered -->
+                <mat-form-field appearance="fill" class="form-field flex-1 min-w-[200px]" [floatLabel]="'always'">
+                    <mat-label>Date Delivered <span class="text-red-600">*</span></mat-label>
+                    <input matInput [matDatepicker]="picker2" formControlName="dateDelivered" placeholder="Select delivery date">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                    <mat-hint>The date items will be or have been delivered.</mat-hint>
+                    <mat-error *ngIf="deliveryNoteForm.get('dateDelivered').hasError('required')">
+                        Date Delivered is required.
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Delivery Address -->
+                <mat-form-field appearance="fill" class="form-field flex-1 min-w-[200px]" [floatLabel]="'always'">
+                    <mat-label>Delivery Address <span class="text-red-600">*</span></mat-label>
+                    <input matInput formControlName="deliveryAddress" placeholder="Enter full delivery address">
+                    <mat-hint>Provide a detailed address for delivery.</mat-hint>
+                    <mat-error *ngIf="deliveryNoteForm.get('deliveryAddress').hasError('required')">
+                        Delivery Address is required.
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </fieldset>
+
+        <!-- Inventory Selection Section -->
+        <div class="mb-4">
+            <h3 class="text-xl text-axe-blue mb-2 font-semibold">Select Inventories to Deliver</h3>
+            <p class="mb-4 text-gray-600">
+                Check the boxes next to the inventories you wish to include in this delivery note.
+            </p>
+
+            <div *ngIf="rowData" style="min-height: 200px;">
+                <ag-grid-angular
+                        style="width: 100%; height: 200px;"
+                        class="ag-theme-quartz"
+                        [pagination]="pagination"
+                        [paginationPageSize]="paginationPageSize"
+                        [paginationPageSizeSelector]="paginationPageSizeSelector"
+                        (selectionChanged)="onSelectionChanged($event)"
+                        [columnDefs]="columnDefs"
+                        [defaultColDef]="defaultColDef"
+                        [rowSelection]="rowSelection"
+                        [suppressRowClickSelection]="true"
+                        [rowData]="rowData"
+                        (gridReady)="onGridReady($event)">
+                </ag-grid-angular>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions at the bottom -->
+    <div mat-dialog-actions class="flex justify-end gap-10 p-4">
+        <button mat-stroked-button  type="button" (click)="onNoClick()" class="text-axe-dark-blue font-medium w-40">
+            Cancel
+        </button>
+        <button mat-raised-button type="submit" [disabled]="!deliveryNoteForm.valid" color="primary" class="text-white font-medium w-40">
+            Create
+        </button>
+    </div>
+
+</form>

@@ -1,0 +1,28 @@
+<div>
+    <div class="flex flex-col sm:flex-row items-center pb-2 justify-center">
+        <div class="text-3xl font-light tracking-tight leading-6 truncate text-center">Quotes Summary</div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+        <div class="flex justify-center items-center mx-auto mt-12">
+            <app-pie-chart [data]="quoteCoilsPieChartData" [title]="'Steel Coils Total (Meters)'" [units]="'m'"></app-pie-chart>
+        </div>
+
+        <div class="flex justify-center items-center mx-auto mt-12 ">
+            <app-pie-chart [data]="quotesStatusPieChartData" [title]="'Quote Status Summary'"></app-pie-chart>
+        </div>
+    </div>
+
+
+    <div class="flex flex-row w-full justify-center -mt-10">
+        <ag-charts [options]="lineChartOptions" class="w-full my-5  overflow-hidden"></ag-charts>
+    </div>
+
+    <div class="flex flex-row justify-center mt-10">
+        <ag-charts [options]="barChartOptions" class="w-full my-5  overflow-hidden"></ag-charts>
+    </div>
+
+    <div class="mt-10">
+        <app-recent-quotes [latestQuotes]="latestQuotes"></app-recent-quotes>
+    </div>
+</div>

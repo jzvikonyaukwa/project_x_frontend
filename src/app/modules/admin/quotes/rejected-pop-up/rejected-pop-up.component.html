@@ -1,0 +1,31 @@
+<div class="flex flex-col w-120 mb-5">
+    <div class="flex flex-row justify-between items-center mb-3">
+        <span class="text-lg font-bold">Select the Reason</span>
+    </div>
+    <div
+        class=" max-h-[32rem] border-2 border-sky-700 rounded-lg border-opacity-25 p-3 form_height overflow-auto">
+        <form [formGroup]="rejectedReasonForm" (ngSubmit)="onSubmit()" class="w-full">
+
+            <mat-form-field class="w-full">
+                <mat-label>Reason</mat-label>
+                <mat-select formControlName="reason">
+                    <mat-option [value]="reason"
+                        *ngFor="let reason of rejectedReasons">{{reason.reason}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="w-full">
+                <mat-label>Date Issued</mat-label>
+                <input matInput formControlName="date" [matDatepicker]="picker" />
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-dialog-actions class="flex justify-end gap-4">
+                <button class="rounded-md w-48 bg-gray-400" [color]="'accent'" mat-flat-button
+                    mat-flat-button type="button" (click)="cancel()">Cancel</button>
+                <button class="bg-sky-700 rounded-md w-48" mat-flat-button type="submit"
+                    color="primary" [color]="'accent'">Submit</button>
+            </mat-dialog-actions>
+        </form>
+    </div>
+</div>

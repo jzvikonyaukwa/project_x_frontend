@@ -1,0 +1,51 @@
+<div class="p-5">
+    <div class="w-full flex items-center justify-between mb-5">
+        <span class="font-medium text-lg tracking-tighter">Enter Meters</span>
+        <span class="cursor-pointer" (click)="onDialogClose()">
+            <mat-icon [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
+        </span>
+    </div>
+
+    <form [formGroup]="mtrsForm" (ngSubmit)="onSubmit(mtrsForm)">
+
+        <div class="flex flex-col items-start justify-start w-full mb-5" *ngIf="data.steel; else elseBlock">
+            <label for="wastage-input" class="text-[#64748B] text-base font-normal tracking-tighter mb-1">Enter Meters to
+                be transferred</label>
+            <mat-form-field id="mtrs-input" class="w-full mt-4 sm:mt-0 mb-1" [subscriptSizing]="'dynamic'">
+                <input formControlName="mtrs" type="number" matInput min="0" />
+            </mat-form-field>
+            <span class="text-[#A5B1C3] tracking-tighter text-xs font-medium">Currently
+                -100 meters is left</span>
+        </div>
+
+        <ng-template #elseBlock>
+            <div class="flex flex-col items-start justify-start w-full mb-5">
+                <label for="wastage-input" class="text-[#64748B] text-base font-normal tracking-tighter mb-1">Enter amount to transfer
+                    be transferred</label>
+                <mat-form-field id="mtrs-input" class="w-full mt-4 sm:mt-0 mb-1" [subscriptSizing]="'dynamic'">
+                    <input formControlName="mtrs" type="number" matInput />
+                </mat-form-field>
+                <span class="text-[#A5B1C3] tracking-tighter text-xs font-medium">Currently
+                    -100 meters is left</span>
+            </div>
+        </ng-template>
+
+
+        <div class="flex flex-col items-start justify-start w-full mb-5">
+            <label for="wastage-input" class="text-[#64748B] text-base font-normal tracking-tighter mb-1">
+                Date</label>
+            <mat-form-field class="w-full text-lg">
+
+                <input matInput formControlName="date" [matDatepicker]="picker" />
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div class="flex items-center justify-between gap-8">
+            <button class="bg-[#64748B80] rounded-md text-center text-white w-48 p-[5px] text-base font-normal tracking-tighter"
+                (click)="onDialogClose()">Cancel</button>
+            <button class="bg-[#0071BC] rounded-md text-center text-white w-48 p-[5px] text-base font-normal tracking-tighter"
+                type="submit">Submit</button>
+        </div>
+    </form>
+</div>

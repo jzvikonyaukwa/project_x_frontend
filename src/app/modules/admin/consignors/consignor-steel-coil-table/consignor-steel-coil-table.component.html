@@ -1,0 +1,49 @@
+<div class="w-full h-full">
+  <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine"
+      [pagination]="pagination" [suppressPaginationPanel]="true" [getRowStyle]="lastRowBorder"
+      [paginationPageSize]="paginationPageSize" (paginationChanged)="onPaginationChanged()"
+      [columnDefs]="steelCoilColDefs" [defaultColDef]="defaultColDef" [enableRangeSelection]="true"
+      [copyHeadersToClipboard]="true" [rowData]="consignorSteelCoils" [animateRows]="true"
+      (gridReady)="onGridReady($event)"></ag-grid-angular>
+  <div *ngIf="pagination"
+      class="ag-grid-pagination bg-card h-11 flex justify-between items-center p-4 rounded-b-xl">
+      <div class="flex items-center justify-items-center">
+          <span class="text-xs font-medium">
+              {{gridApi?.paginationGetCurrentPage() * +paginationPageSize + 1}}-{{gridApi?.getDisplayedRowCount()
+              < (gridApi?.paginationGetCurrentPage() + 1) * +paginationPageSize ? gridApi?.getDisplayedRowCount()
+                  : (gridApi?.paginationGetCurrentPage() + 1) * +paginationPageSize}} of
+                  {{gridApi?.getDisplayedRowCount()}} </span>
+      </div>
+
+      <div class="flex gap-6">
+          <div class="flex items-center justify-items-center">
+              <span class="text-xs font-medium">Rows per page: {{paginationPageSize}}</span>
+              <select (change)="onPageSizeChanged()" id="page-size" class="w-5 bg-transparent">
+                  <option class="text-xs font-medium">10</option>
+                  <option class="text-xs font-medium">25</option>
+                  <option class="text-xs font-medium">50</option>
+              </select>
+          </div>
+          <div class="flex items-center justify-items-center gap-2">
+              <button (click)="onBtPrevious()"
+                  class="h-4 rounded border flex items-center justify-items-center"><mat-icon
+                      [class.text-zinc-500]="gridApi?.paginationGetCurrentPage() === 0"
+                      [class.text-slate-900]="gridApi?.paginationGetCurrentPage() !== 0"
+                      class="text-slate-900 fuse-vertical-navigation-item-arrow icon-size-4"
+                      [svgIcon]="'heroicons_solid:chevron-left'"></mat-icon></button>
+              <div class="flex items-center justify-items-center text-xs font-medium">
+                  <span class="value text-xs font-medium text-neutral-900"
+                      id="lbCurrentPage1">-</span>/<span
+                      class="value text-xs font-medium text-slate-500" id="lbTotalPages1">-</span>
+              </div>
+              <button (click)="onBtNext()"
+                  class="h-4 rounded border flex items-center justify-items-center"><mat-icon
+                      [class.text-zinc-500]="gridApi?.paginationGetCurrentPage() + 1 === gridApi?.paginationGetTotalPages()"
+                      [class.text-slate-900]="gridApi?.paginationGetCurrentPage() + 1 !== gridApi?.paginationGetTotalPages()"
+                      class="fuse-vertical-navigation-item-arrow icon-size-4"
+                      [svgIcon]="'heroicons_solid:chevron-right'"></mat-icon>
+              </button>
+          </div>
+      </div>
+  </div>
+</div>

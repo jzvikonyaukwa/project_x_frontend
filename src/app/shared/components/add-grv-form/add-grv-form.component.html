@@ -1,0 +1,134 @@
+<div class="flex flex-col w-180">
+  <div class="flex flex-row justify-between items-center mb-3">
+    <span class="text-lg font-bold">Add GRV</span>
+  </div>
+  <div class="border-2 border-sky-700 rounded-lg border-opacity-25 p-3">
+    <form [formGroup]="grvForm" (ngSubmit)="onSubmit()" class="w-full">
+      <mat-dialog-content>
+
+        <mat-form-field class="flex flex-col flex-auto">
+          <mat-label>Date Received</mat-label>
+          <input matInput formControlName="dateReceived" [matDatepicker]="picker" />
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="flex flex-col flex-auto">
+          <mat-label>Comments</mat-label>
+          <input matInput formControlName="comments" />
+        </mat-form-field>
+
+        <mat-form-field class="flex flex-col flex-auto">
+          <mat-label>Supplier Grv Code</mat-label>
+          <input matInput formControlName="supplierGrvCode" />
+        </mat-form-field>
+
+        <mat-form-field class="flex flex-col flex-auto">
+          <mat-label>Supplier</mat-label>
+          <mat-select formControlName="supplierId">
+            <mat-option *ngFor="let supplier of suppliers$ | async" [value]="supplier.id">{{ supplier.name
+              }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="flex flex-col flex-auto">
+          <mat-label>Grv Paid Status</mat-label>
+          <mat-select formControlName="paid">
+            <mat-option [value]="true">Yes</mat-option>
+            <mat-option [value]="false">No</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="flex flex-row justify-between items-center">
+          <span class="font-bold">Add Product</span>
+          <button mat-icon-button (click)="addSteelCoil()">
+            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+          </button>
+        </div>
+
+        <div formArrayName="steelCoils" class="form-group pl-4 pr-4 mb-4">
+          <ng-container *ngFor="
+        let productGroup of steelCoils.controls;
+        let i = index;
+        let isFirst = first
+      ">
+            <div class="float-right">
+              <button mat-icon-button color="warn" (click)="steelCoils.controls.splice(i)">
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:minus'"></mat-icon>
+              </button>
+            </div>
+            <hr *ngIf="!isFirst" />
+            <h2 class="font-bold mb-2">Product {{ i + 1 }}:</h2>
+            <ng-container [formGroup]="productGroup">
+              <div class="flex flex-col mt-4 mb-4">
+                <mat-radio-group aria-label="Select an option" formControlName="finish" (change)="onGalvanizeChange(productGroup, $event)">
+                  <mat-radio-button *ngFor="let finish of finishes$ | async" [value]="finish">{{
+                    finish.name
+                    }}</mat-radio-button>
+                </mat-radio-group>
+              </div>
+              <mat-form-field class="flex flex-col flex-auto" *ngIf="
+            productGroup.controls['finish'].value.name === 'chromadek'
+          ">
+                <mat-label>Color</mat-label>
+                <mat-select formControlName="color">
+                  <mat-option *ngFor="let color of colors$ | async" [value]="color">{{
+                    color.color
+                    }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>ISQ Grade</mat-label>
+                <mat-select formControlName="isqGrade">
+                  <mat-option *ngFor="let grade of ISQ_GRADES" [value]="grade">{{
+                    grade
+                    }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Width</mat-label>
+                <input matInput type="number" min="0" formControlName="width" />
+              </mat-form-field>
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Coating</mat-label>
+                <mat-select formControlName="coating">
+                  <mat-option *ngFor="let coating of COATINGS" [value]="coating">{{
+                    coating
+                    }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Gauge</mat-label>
+                <mat-select formControlName="gauge">
+                  <mat-option *ngFor="let gauge of gauages$ | async" [value]="gauge">{{
+                    gauge.gauge
+                    }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Coil Id</mat-label>
+                <input matInput type="text" formControlName="coilId" />
+              </mat-form-field>
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Card Number</mat-label>
+                <input matInput type="text" formControlName="cardNumber" />
+              </mat-form-field>
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Weight (Kgs)</mat-label>
+                <input matInput type="number" min="0" formControlName="weightInKgsOnArrival" />
+              </mat-form-field>
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Cost Per Kg</mat-label>
+                <input matInput type="number" min="0" formControlName="costPerKg" />
+              </mat-form-field>
+            </ng-container>
+          </ng-container>
+        </div>
+      </mat-dialog-content>
+      <mat-dialog-actions align="center">
+        <button class="rounded-md w-48 bg-gray-400" [color]="'accent'" mat-flat-button mat-flat-button type="button" mat-dialog-close>Cancel</button>
+        <button class="bg-sky-700 rounded-md w-48" mat-flat-button type="submit" color="primary" [color]="'accent'">Submit</button>
+      </mat-dialog-actions>
+    </form>
+  </div>
+</div>

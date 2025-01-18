@@ -1,0 +1,57 @@
+<div class="flex flex-col w-120">
+    <div class="flex flex-row justify-between items-center mb-3">
+        <span class="text-lg font-bold">Add Addresses</span>
+        <button mat-icon-button (click)="addGroup()">
+            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+        </button>
+    </div>
+
+    <form [formGroup]="mainFormGroup" (ngSubmit)="onSave()" class="w-full">
+        <mat-dialog-content>
+            <ng-container formArrayName="addresses">
+                <ng-container
+                    *ngFor="let group of mainFormGroup.controls['addresses'].controls; let index = index; let isFirst = first"
+                    [formGroup]="group">
+                    <ng-container *ngIf="!group.controls['delete'].value">
+                        <hr *ngIf="!isFirst" class="my-3" />
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-md font-bold">Address: {{
+                                group.controls['label'].value ? group.controls['label'].value :
+                                'N/A' }}</span>
+                            <button mat-icon-button type="button" color="warn"
+                                (click)="onDelete(index)">
+                                <mat-icon class="icon-size-5"
+                                    [svgIcon]="'heroicons_solid:minus'"></mat-icon>
+                            </button>
+                        </div>
+                        <mat-form-field class="flex flex-col flex-auto">
+                            <mat-label>Label</mat-label>
+                            <input matInput type="text" formControlName="label">
+                        </mat-form-field>
+                        <mat-form-field class="flex flex-col flex-auto">
+                            <mat-label>Street</mat-label>
+                            <input matInput type="text" formControlName="street">
+                        </mat-form-field>
+                        <mat-form-field class="flex flex-col flex-auto">
+                            <mat-label>Suburb</mat-label>
+                            <input matInput type="text" formControlName="suburb">
+                        </mat-form-field>
+                        <mat-form-field class="flex flex-col flex-auto">
+                            <mat-label>City</mat-label>
+                            <input matInput type="text" formControlName="city">
+                        </mat-form-field>
+                        <mat-form-field class="flex flex-col flex-auto">
+                            <mat-label>Country</mat-label>
+                            <input matInput type="text" formControlName="country">
+                        </mat-form-field>
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+        </mat-dialog-content>
+        <mat-dialog-actions align="end">
+            <button class="bg-red-500 text-white" mat-flat-button type="button"
+                mat-dialog-close>Cancel</button>
+            <button mat-flat-button type="submit" color="primary">Submit</button>
+        </mat-dialog-actions>
+    </form>
+</div>

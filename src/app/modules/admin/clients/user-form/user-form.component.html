@@ -1,0 +1,108 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field class="flex flex-col flex-auto">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" formControlName="name">
+    </mat-form-field>
+    <mat-form-field class="flex flex-col flex-auto">
+        <mat-label>Notes</mat-label>
+        <input matInput type="text" formControlName="notes">
+    </mat-form-field>
+    <div formArrayName="addresses" class="mb-4">
+        <div class="flex flex-row justify-between items-center">
+            <span class="font-bold">Add Addresses</span>
+            <button mat-icon-button (click)="addAddressGroup()">
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+            </button>
+        </div>
+        <ng-container *ngFor="let formGroup of form.controls['addresses'].controls; let index = index">
+            <fuse-card [formGroup]="formGroup" class="flex flex-col mt-3 mb-4 p-4">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-md font-bold">Address: {{ formGroup.controls['label'].value ? formGroup.controls['label'].value : 'N/A'
+                        }}</span>
+                    <button mat-icon-button color="warn" (click)="form.controls['addresses'].removeAt(index)">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:minus'"></mat-icon>
+                    </button>
+                </div>
+                <mat-form-field class="flex flex-col flex-auto">
+                    <mat-label>Label</mat-label>
+                    <input matInput type="text" formControlName="label">
+                </mat-form-field>
+                <mat-form-field class="flex flex-col flex-auto">
+                    <mat-label>Street</mat-label>
+                    <input matInput type="text" formControlName="street">
+                </mat-form-field>
+                <mat-form-field class="flex flex-col flex-auto">
+                    <mat-label>Suburb</mat-label>
+                    <input matInput type="text" formControlName="suburb">
+                </mat-form-field>
+                <mat-form-field class="flex flex-col flex-auto">
+                    <mat-label>City</mat-label>
+                    <input matInput type="text" formControlName="city">
+                </mat-form-field>
+                <mat-form-field class="flex flex-col flex-auto">
+                    <mat-label>Country</mat-label>
+                    <input matInput type="text" formControlName="country">
+                </mat-form-field>
+            </fuse-card>
+        </ng-container>
+    </div>
+    <div formArrayName="phones" class="mb-4">
+        <div class="flex flex-row justify-between items-center">
+            <span class="font-bold">Add Phones</span>
+            <button mat-icon-button (click)="addPhoneGroup()">
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+            </button>
+        </div>
+        <ng-container *ngFor="let formGroup of form.controls['phones'].controls; let index = index">
+            <fuse-card [formGroup]="formGroup" class="flex flex-col mt-3 mb-4 p-4">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-md font-bold">Phone: {{ formGroup.controls['label'].value ? formGroup.controls['label'].value : 'N/A' }}</span>
+                    <button mat-icon-button color="warn" (click)="form.controls['phones'].removeAt(index)">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:minus'"></mat-icon>
+                    </button>
+                </div>
+                <mat-form-field class="flex flex-col flex-auto">
+                    <mat-label>Label</mat-label>
+                    <input matInput type="text" formControlName="label">
+                </mat-form-field>
+                <mat-form-field class="flex flex-col flex-auto">
+                    <mat-label>Phone</mat-label>
+                    <input matInput type="text" formControlName="phone">
+                </mat-form-field>
+            </fuse-card>
+        </ng-container>
+    </div>
+    <div formArrayName="emails" class="mb-4">
+        <div class="flex flex-row justify-between items-center">
+            <span class="font-bold">Add Emails</span>
+            <button mat-icon-button (click)="addEmailGroup()">
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+            </button>
+        </div>
+        <ng-container *ngFor="let formGroup of form.controls['emails'].controls; let index = index">
+            <fuse-card [formGroup]="formGroup" class="flex flex-col mt-3 mb-4 p-4">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-md font-bold">Email: {{ formGroup.controls['label'].value ? formGroup.controls['label'].value : 'N/A' }}</span>
+                    <button mat-icon-button color="warn" (click)="form.controls['emails'].removeAt(index)">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:minus'"></mat-icon>
+                    </button>
+                </div>
+                <mat-form-field class="flex flex-col flex-auto">
+                    <mat-label>Label</mat-label>
+                    <input matInput type="text" formControlName="label">
+                </mat-form-field>
+                <mat-form-field class="flex flex-col flex-auto">
+                    <mat-label>Email</mat-label>
+                    <input matInput type="email" formControlName="email">
+                </mat-form-field>
+            </fuse-card>
+        </ng-container>
+    </div>
+    <mat-dialog-actions align="center">
+        <button class="rounded-md w-48 bg-gray-400" [color]="'accent'" mat-flat-button mat-flat-button type="button" mat-dialog-close>Cancel</button>
+        <button class="bg-sky-700 rounded-md w-48" mat-flat-button type="submit" color="primary" [color]="'accent'">Submit</button>
+    </mat-dialog-actions>
+    <!-- <div class="flex justify-end">
+        <button mat-flat-button type="submit" color="primary">Submit</button>
+    </div> -->
+</form>

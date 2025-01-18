@@ -1,0 +1,70 @@
+<div class="flex flex-col flex-auto min-w-0">
+  <app-page-heading>
+    <ng-container titleSlot>
+      <div class="flex justify-between w-full ml-4">
+        <ng-container>
+          <div class="text-white text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate">
+            Machines
+          </div>
+        </ng-container>
+        <div class="flex items-center">
+          <mat-icon class="icon-size-5 text-sky-500" [svgIcon]="'heroicons_solid:cube-transparent'"></mat-icon>
+          <div class="ml-1.5 leading-6 truncate text-sky-500">
+            You have 3 machines
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </app-page-heading>
+
+  <div class="flex-auto">
+    <div class="w-full max-w-screen-xl mx-auto">
+      <div class="absolute flex flex-col min-w-0 overflow-y-auto" cdkScrollable>
+        <div class="flex flex-col flex-auto items-center p-6 sm:p-10">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-4 md:mt-8">
+            <ng-container *ngFor="let product of machinesInformation">
+              <div>
+                <a class="flex flex-col items-start w-56 p-6 shadow bg-card min-h-64 rounded-lg hover:shadow-xl transition-shadow duration-150 ease-in-out"
+                  [routerLink]="['coil-board', product.categoryId]" [ngClass]="
+                      product.categoryId === 1 ? 'bg-axe-light-blue' :
+                      product.categoryId === 2 ? 'bg-teal-500' :
+                      product.categoryId === 3 ? 'bg-orange-500' :
+                      product.categoryId === 4 ? 'bg-lime-500' :
+                      'bg-axe-red'">
+                  <div class="flex items-center justify-center p-4 rounded-full bg-primary-50 text-primary-700 dark:bg-primary dark:text-on-primary">
+                    <mat-icon class="text-current" [svgIcon]="product.icon"></mat-icon>
+                  </div>
+
+                  <div class="mt-5 text-lg font-medium leading-5" [ngClass]="
+                      product.categoryId === 1 ? 'text-axe-dark-blue' :
+                      product.categoryId === 2 ? 'text-axe-dark-blue' :
+                      product.categoryId === 3 ? 'text-axe-dark-blue' :
+                      product.categoryId === 4 ? 'text-axe-dark-blue' :
+                      'bg-axe-red'">
+                    {{ product.product }}
+                  </div>
+
+                  <div class="mt-0.5 line-clamp-2 " [ngClass]="
+                      product.categoryId === 1 ? 'text-gray-500' :
+                      product.categoryId === 2 ? 'text-gray-500' :
+                      product.categoryId === 3 ? 'text-gray-500' :
+                      product.categoryId === 4 ? 'text-gray-500' :
+                      'bg-axe-red'">
+                    {{ product.description }}
+                  </div>
+
+                  <div class="flex items-center mt-4 text-md font-md">
+                    <div class="text-zinc-900">Last Used:</div>
+                    <div class="ml-1 text-zinc-900">
+                      {{ formatDateAsRelative(product.lastActivity) }}
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

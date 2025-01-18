@@ -1,0 +1,63 @@
+<div class="flex flex-col w-120 max-h-150 mb-5">
+  <div class="flex flex-row justify-between items-center mb-3">
+    <span class="text-lg font-bold">{{data ? "Update Consumable Details":"Add Consumable Details to System"}}</span>
+  </div>
+  <div class=" max-h-[32rem] border-2 border-sky-700 rounded-lg border-opacity-25 p-3 form_height overflow-auto">
+    <form [formGroup]="consumableForm" (ngSubmit)="onSubmit()">
+
+      <mat-form-field class="flex flex-col flex-auto">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" formControlName="name">
+      </mat-form-field>
+
+      <mat-form-field class="flex flex-col flex-auto">
+        <mat-label>Serial Number</mat-label>
+        <input matInput type="text" formControlName="serialNumber">
+      </mat-form-field>
+
+
+      <mat-form-field class="w-full" *ngIf="consumableCategories$ | async as categories">
+        <mat-label>Category</mat-label>
+        <mat-select formControlName="category" [compareWith]="compareFn">
+
+          <mat-option *ngFor="let category of  categories" [value]="category">{{ category.name |
+            uppercase
+            }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="flex flex-col flex-auto">
+        <mat-label>UOM</mat-label>
+        <input matInput type="text" formControlName="uom">
+      </mat-form-field>
+
+      <mat-form-field class="w-full" *ngIf="consumableSources$ | async as sources">
+        <mat-label>Source Country</mat-label>
+        <mat-select formControlName="sourceCountry" [compareWith]="compareFn">
+          <mat-option *ngFor="let source of  sources " [value]="source">{{ source.country |
+            uppercase
+            }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="flex flex-col flex-auto">
+        <mat-label>Min Alert QTY OWNED</mat-label>
+        <input matInput type="number" min="0" formControlName="minQtyAlertOwned">
+      </mat-form-field>
+
+      <mat-form-field class="flex flex-col flex-auto">
+        <mat-label>MIN ALERT QTY CONSIGNMENT</mat-label>
+        <input matInput type="number" min="0" formControlName="minQtyAlertConsignment">
+      </mat-form-field>
+
+
+
+
+      <mat-dialog-actions align="center">
+        <button class="rounded-md w-48 bg-gray-400" [color]="'accent'" mat-flat-button mat-flat-button type="button" mat-dialog-close>Cancel</button>
+        <button class="bg-sky-700 rounded-md w-48" mat-flat-button type="submit" color="primary" [color]="'accent'">Submit</button>
+      </mat-dialog-actions>
+
+    </form>
+  </div>
+</div>

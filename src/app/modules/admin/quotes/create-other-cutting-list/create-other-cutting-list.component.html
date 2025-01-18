@@ -1,0 +1,90 @@
+<div class="flex flex-col w-[65rem] max-h-128 overflow-y-auto">
+
+    <app-page-heading>
+        <ng-container titleSlot>
+            <div class="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate text-white">
+                {{data.edit ? 'Edit Cutting List Information' : 'Add Cutting List Information'}}
+            </div>
+        </ng-container>
+    </app-page-heading>
+
+
+    <div class="border-2 border-sky-700 rounded-lg border-opacity-25 p-5">
+        <form [formGroup]="cuttingListForm" (ngSubmit)="onSubmit()" class="w-full">
+
+            <div class="flex justify-start mt-2 mb-5 gap-4">
+                <div class="flex flex-col">
+                    <mat-label class="font-semibold">Select Plan Name</mat-label>
+                    <mat-radio-group aria-label="Select an option" formControlName="planName">
+                        <mat-radio-button *ngFor="let planName of PLAN_NAMES" [value]="planName">{{ planName |
+                            uppercase
+                            }}</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </div>
+            <div class="flex justify-between gap-8 my-5">
+                <mat-form-field class="w-full">
+                    <mat-label>Gauge</mat-label>
+                    <mat-select formControlName="gauge" [compareWith]="compareFn">
+                        <mat-option *ngFor="let gauge of  gauges" [value]="gauge">{{ gauge.gauge }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="w-full">
+                    <mat-label>Width (mm)</mat-label>
+                    <mat-select formControlName="width" [compareWith]="compareFn">
+                        <mat-option *ngFor="let width of  widths" [value]="width">{{ width.width
+                            }} mm</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="flex flex-row justify-between items-center">
+                <span class="font-bold text-primary">Add Product</span>
+                <button mat-icon-button type="button" (click)="addManufacturedProduct()">
+                    <mat-icon class="icon-size-7" color="primary" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                </button>
+            </div>
+
+            <div formArrayName="manufacturedProducts" class="form-group pl-4 pr-4 mb-4 ">
+                <ng-container *ngFor="
+                                let product of manufacturedProducts.controls;
+                                let i = index;
+                                let isFirst = first
+                              ">
+
+                    <ng-container [formGroup]="product">
+                        <div class="flex items-center justify-between gap-8 my-5">
+                            <h5 class="text-lg font-bold"> {{i+1}}</h5>
+
+
+                            <mat-form-field class="flex flex-col flex-auto">
+                                <mat-label>Frame Type</mat-label>
+                                <input matInput type="text" formControlName="frameType" />
+                            </mat-form-field>
+
+                            <mat-form-field class="flex flex-col flex-auto">
+                                <mat-label>Frame Name</mat-label>
+                                <input matInput type="text" formControlName="frameName" />
+                            </mat-form-field>
+
+                            <mat-form-field class="flex flex-col flex-auto">
+                                <mat-label>Total Length</mat-label>
+                                <input matInput type="text" formControlName="totalLength" />
+                            </mat-form-field>
+
+                            <button mat-icon-button color="warn" (click)="deleteManufacturedProduct(i)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </ng-container>
+                </ng-container>
+            </div>
+            <mat-dialog-actions class="flex justify-end gap-4">
+                <button class="rounded-md w-48 bg-gray-400" [color]="'accent'" mat-flat-button type="button" (click)="cancel()">Cancel</button>
+                <button class="bg-sky-700 rounded-md w-48" mat-flat-button type="submit" color="primary" [color]="'accent'">Submit</button>
+            </mat-dialog-actions>
+
+        </form>
+    </div>
+
+</div>

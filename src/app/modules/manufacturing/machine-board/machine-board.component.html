@@ -1,0 +1,19 @@
+<div class="flex flex-col flex-auto min-w-0 h-fit">
+  <app-page-heading>
+    <ng-container titleSlot>
+      <div class="flex justify-between w-full ml-4">
+        <ng-container>
+          <div
+            class="text-white text-3xl font-semibold tracking-tight leading-7 capitalize md:leading-snug truncate"
+            *ngIf="machine$ | async as machine">
+            {{machine.name}}
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+  </app-page-heading>
+
+  <div class="mx-8 mt-8">
+    <app-manufacturing-board [productCategory]="productCategory"></app-manufacturing-board>
+  </div>
+</div>

@@ -1,0 +1,54 @@
+
+
+.date-range-selector {
+  padding: 16px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.date-picker-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+.button-group {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.time-range-button {
+  padding: 8px 16px;
+  border-radius: 24px; /* Rounded corners */
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: none;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+.time-range-button:hover {
+  background-color: #3f51b5; /* Darker shade on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-form-field-infix {
+  padding: 0 12px;
+}
+
+.mat-datepicker-toggle {
+  margin-right: 8px;
+}
+
+.summary-container {
+  margin-top: 32px; /* Add space above manufacturing summary */
+}

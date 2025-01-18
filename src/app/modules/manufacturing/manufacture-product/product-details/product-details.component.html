@@ -1,0 +1,145 @@
+<div class="mx-10" *ngIf="productInformation">
+  <div class="flex items-center justify-between mb-8">
+    <div class="text-axe-blue text-lg font-semibold tracking-wider">
+      <span class="text-black font-medium text-base">Client:</span>
+      {{ productInformation.clientName }}
+    </div>
+
+    <div class="w-px h-3 bg-[#64748B] mx-3"></div>
+
+    <div class="text-axe-blue text-lg font-semibold tracking-wider">
+      <span class="text-black font-medium text-base">Project:</span>
+      {{ productInformation.projectName }}
+    </div>
+
+    <div class="w-px h-3 bg-[#64748B] mx-3"></div>
+
+    <div class="text-axe-blue text-lg font-semibold tracking-wider">
+      <span class="text-black font-medium text-base">Quote Status:</span>
+      {{ productInformation.quoteStatus | titlecase }}
+    </div>
+
+    <div class="w-px h-3 bg-[#64748B] mx-3"></div>
+
+    <div class="text-axe-blue text-lg font-semibold tracking-wider">
+      <span class="text-black font-medium text-base">Quote Accepted:</span>
+      {{ productInformation.quoteAcceptedDate | date : 'dd.MM.yyyy' }}
+    </div>
+
+    <div class="ml-auto mr-2">
+      <button
+        class="hidden sm:inline-flex bg-axe-blue px-4 text-white text-base font-medium rounded-md self-start"
+        mat-stroked-button
+        (click)="onBtExport()"
+      >
+        <mat-icon
+          class="icon-size-5 text-white"
+          [svgIcon]="'heroicons_mini:arrow-up-on-square'"
+        ></mat-icon>
+        <span class="ml-2 text-white">Export</span>
+      </button>
+    </div>
+  </div>
+  <!-- [ngClass]="cuttingBgColor" -->
+  <div class="coil-header border rounded-t-xl flex items-center p-3 justify-between">
+    <div class="text-axe-dark-blue font-semibold text-lg">Product Manufacturing Details</div>
+    <div class="text-axe-dark-blue font-semibold text-lg">
+      Product ID: {{ productInformation.product.id }}
+    </div>
+  </div>
+  <!-- [ngClass]="cuttingBorderColor" -->
+  <div class="w-full p-6 border bg-white rounded-b-xl">
+    <div class="flex gap-12">
+      <div class="flex flex-col gap-2 items-start">
+        <div class="flex gap-2 items-center justify-center">
+          <span class="text-axe-blue font-semibold text-sm tracking-wider">Product ID</span>
+        </div>
+        <div class="text-axe-dark-blue text-lg font-medium">
+          {{ productInformation.product.id }}
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2 items-start">
+        <div class="flex gap-2 items-center justify-center">
+          <mat-icon
+            [svgIcon]="'heroicons_outline:paint-brush'"
+            class="text-sky-600 icon-size-5"
+          ></mat-icon>
+          <span class="text-axe-blue font-semibold text-sm tracking-wider">COLOR</span>
+        </div>
+        <div class="text-axe-dark-blue text-lg font-medium">
+          {{ productInformation.product.color.color }}
+        </div>
+      </div>
+      <div class="flex flex-col gap-2 items-start">
+        <div class="flex gap-2 items-center justify-center">
+          <mat-icon
+            [svgIcon]="'heroicons_outline:speedometer'"
+            class="text-sky-600 icon-size-5"
+          ></mat-icon>
+          <span class="text-axe-blue font-semibold text-sm tracking-wider">GAUGE</span>
+        </div>
+        <div class="text-axe-dark-blue text-lg font-medium">
+          {{ productInformation.product.gauge.gauge }}
+        </div>
+      </div>
+      <div class="flex flex-col gap-2 items-start" *ngIf="productInformation.product?.profile">
+        <div class="flex gap-2 items-center justify-center">
+          <mat-icon
+            [svgIcon]="'heroicons_outline:square-2-stack'"
+            class="text-sky-600 icon-size-5"
+          ></mat-icon>
+          <span class="text-axe-blue font-semibold text-sm tracking-wider">PROFILE</span>
+        </div>
+        <div class="text-axe-dark-blue text-lg font-medium">
+          {{ productInformation.product.profile?.profile }}
+        </div>
+      </div>
+      <div class="flex flex-col gap-2 items-start">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="flex gap-2 items-center justify-center">
+            <span class="text-axe-blue font-semibold text-sm tracking-wider">STATUS</span>
+          </div>
+          <div [ngClass]="getStatusClass()">
+            {{ productInformation.product.status | titlecase }}
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2 items-start">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="flex gap-2 items-center justify-center">
+            <span class="text-axe-blue font-semibold text-sm tracking-wider">PLAN NAME</span>
+          </div>
+          <div class="text-axe-dark-blue text-lg font-medium">
+            {{ productInformation.product.planName | titlecase }}
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2 items-start" *ngIf="loadedCoil">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="flex gap-2 items-center justify-center">
+            <span class="text-axe-blue font-semibold text-sm tracking-wider">STEEL COIL ID</span>
+          </div>
+          <div class="text-green-400 text-lg font-medium">
+            {{ loadedCoil?.coilNumber }}
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2 items-start" *ngIf="loadedCoil">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="flex gap-2 items-center justify-center">
+            <span class="text-axe-blue font-semibold text-sm tracking-wider"
+              >STEEL COIL MTRS REMAINING</span
+            >
+          </div>
+          <div [ngClass]="getMtrsRemainingClass()" class="text-lg font-medium" *ngIf="loadedCoil">
+            {{ loadedCoil?.estMtrsRemaining }} m
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

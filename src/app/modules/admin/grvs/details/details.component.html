@@ -1,0 +1,150 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-y-auto" *ngIf="grvDetails">
+  <app-page-heading>
+    <ng-container titleSlot>
+      <div class="mt-2">
+        <h2
+          class="text-3xl md:text-4xl font-bold tracking-tight leading-7 sm:leading-10 truncate text-white"
+        >
+          GRV Details
+        </h2>
+      </div>
+    </ng-container>
+
+    <div actionSlot class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+      <button
+        mat-stroked-button
+        class="mr-2 bg-axe-grey"
+        (click)="downloadAsPDF(grvDetails, grvDetails.id)"
+      >
+        <mat-icon class="icon-size-5 mr-2" [svgIcon]="'mat_outline:picture_as_pdf'"></mat-icon>
+        Export to PDF
+      </button>
+    </div>
+  </app-page-heading>
+
+  <div class="flex items-center justify-center">
+    <div class="inline-block p-6 sm:p-10 text-left print:p-0 mt-10">
+      <div
+        #grvInfo
+        class="max-w-200 w-screen p-16 rounded-2xl shadow bg-card print:w-auto print:rounded-none print:shadow-none print:bg-transparent"
+      >
+        <div class="flex items-start justify-between">
+          <div class="grid grid-cols-2 gap-x-4 gap-y-1">
+            <div class="text-4xl tracking-tight text-secondary">GRV</div>
+            <div class="text-4xl mb-2"># {{ grvDetails.id }}</div>
+
+            <div class="font-medium tracking-tight text-secondary">GRV DATE</div>
+            <div class="font-medium">
+              {{ grvDetails.dateReceived | date : 'dd/MM/yyyy' }}
+            </div>
+
+            <div class="font-medium tracking-tight text-secondary">TOTAL DUE</div>
+            <div class="font-medium">{{ totals.totalPrice | currency }}</div>
+            <div class="font-medium tracking-tight text-secondary">PAID</div>
+            <div
+              [ngClass]="{
+                'font-medium': true,
+                'text-green-500': grvDetails.paid,
+                'text-red-500': !grvDetails.paid
+              }"
+            >
+              {{ grvDetails.paid ? 'Yes' : 'No' }}
+            </div>
+          </div>
+          <div
+            class="grid auto-cols-max grid-flow-col gap-x-8 -mr-16 py-6 px-8 rounded-l-2xl bg-axe-light-blue"
+          >
+            <div class="place-self-center w-24">
+              <img class="w-24" src="assets/images/logo/axe.jpeg" />
+            </div>
+            <div class="pl-10 border-l text-md">
+              <div class="font-medium">AXE BUILD PRIVATE LIMITED</div>
+              <div>31 Asbestos Road Kelvin West</div>
+              <div>Bulawayo, Zimbabwe</div>
+              <div>BP#2003132251</div>
+              <div>+263292482349</div>
+              <div>axebuild09&#64;gmail.com</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-md"></div>
+
+        <div *ngIf="grvDetails.steelCoils?.length" class="grid grid-cols-11 mt-12">
+          <div class="col-span-6 font-medium text-md text-secondary">STEEL COILS</div>
+          <div class="col-span-2 font-medium text-md text-center text-secondary">UNIT PRICE</div>
+          <div class="font-medium text-md text-center text-secondary">MTRS</div>
+          <div class="col-span-3 font-medium text-md text-center text-secondary">TOTAL</div>
+
+          <div class="col-span-12 my-4 border-b"></div>
+
+          <ng-container *ngFor="let steelCoil of grvDetails.steelCoils">
+            <div class="col-span-12 gap-x-1 grid grid-cols-11 ng-star-inserted">
+              <div class="col-span-6">
+                <div class="text-lg font-medium">{{ steelCoil.coilNumber }}</div>
+                <div class="mt-2 text-md text-secondary">Coil Number</div>
+              </div>
+              <div class="col-span-2 self-center text-center">
+                {{ steelCoil.landedCostPerMtr | currency : 'USD' }}
+              </div>
+              <div class="self-center text-center">{{ steelCoil.estimatedMetersRemaining }}</div>
+              <div class="col-span-3 self-center text-center">
+                {{ calculateSteelCoilTotal(steelCoil) | currency : 'USD' }}
+              </div>
+              <div class="col-span-12 my-4 border-b"></div>
+            </div>
+          </ng-container>
+        </div>
+
+        <div *ngIf="grvDetails.consumablesOnGrv?.length" class="grid grid-cols-11 gap-x-1 mt-12">
+          <div class="col-span-6 font-medium text-md text-secondary">CONSUMABLES</div>
+          <div class="col-span-2 font-medium text-md text-center text-secondary">UNIT PRICE</div>
+          <div class="font-medium text-md text-center text-secondary">MTRS</div>
+          <div class="col-span-3 font-medium text-md text-center text-secondary">TOTAL</div>
+
+          <div class="col-span-12 my-4 border-b"></div>
+
+          <ng-container *ngFor="let consumable of grvDetails.consumablesOnGrv">
+            <div class="col-span-12 gap-x-1 grid grid-cols-11 ng-star-inserted">
+              <div class="col-span-7">
+                <div class="text-lg font-medium">{{ consumable.consumable.name }}</div>
+                <div class="mt-2 text-md text-secondary">Consumable Name</div>
+              </div>
+              <div class="self-center text-center">
+                {{ consumable.landedPrice | currency : 'USD' }}
+              </div>
+              <div class="self-center text-center">{{ consumable.qtyOrdered }}</div>
+              <div class="col-span-3 self-center text-center">
+                {{ calculateConsumableTotal(consumable) | currency : 'USD' }}
+              </div>
+              <div class="col-span-12 my-4 border-b"></div>
+            </div>
+          </ng-container>
+        </div>
+
+        <div class="col-span-12 mt-16"></div>
+
+        <div class="flex w-full justify-between items-center my-3 py-3 border-b">
+          <div class="col-span-9 self-center font-medium tracking-tight text-secondary">
+            SUBTOTAL
+          </div>
+          <div class="col-span-2 text-right text-lg mr-6">
+            {{ totals.subTotal | currency : 'USD' }}
+          </div>
+        </div>
+        <div class="flex w-full justify-between items-center my-3 py-3 border-b">
+          <div class="col-span-9 self-center font-medium tracking-tight text-secondary">TAX</div>
+          <div class="col-span-2 text-right text-lg mr-6">
+            {{ totals.taxedPrice | currency : 'USD' }}
+          </div>
+        </div>
+        <div class="flex w-full justify-between items-center my-3 py-3">
+          <div class="col-span-9 self-center font-medium tracking-tight text-secondary">TOTAL</div>
+          <div class="col-span-2 text-right text-lg mr-6">
+            {{ totals.totalPrice | currency : 'USD' }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

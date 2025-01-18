@@ -1,0 +1,37 @@
+<div class="flex items-center justify-between w-full gap-10">
+  <div class="mt-5 w-full">
+    <div class="bg-white rounded-2xl shadow-lg p-3 pb-3 h-[90%]">
+      <h1
+        class="text-axe-blue text-center text-2xl font-normal tracking-tight leading-6 truncate mt-5"
+      >
+        Consumables
+      </h1>
+      <div class="px-5">
+        <app-stats-component
+          [totalCost]="consumableCostStats"
+          [totalSellingPrice]="consumableSellingPriceStats"
+          [percentageProfit]="consumableProfitStats"
+        ></app-stats-component>
+      </div>
+      <div class="flex w-full justify-between items-center px-2 mt-10 mb-4">
+        <span class="text-axe-blue text-lg font-semibold tracking-tight leading-6 truncate">
+          CONSUMABLES ON QUOTE TABLE
+        </span>
+        <button
+          class="hidden sm:inline-flex ml-3 bg-axe-blue px-4 text-white text-base font-medium rounded-md"
+          mat-stroked-button
+          (click)="onAddConsumable()"
+        >
+          <mat-icon class="icon-size-5 text-white" [svgIcon]="'heroicons_solid:plus'"> </mat-icon>
+          <span class="ml-2 text-white">Edit Consumables</span>
+        </button>
+      </div>
+
+      <app-consumables-on-quote-table
+        [quote]="quote"
+        (onLineItemDeleted)="onConsumableDeleted($event)"
+      >
+      </app-consumables-on-quote-table>
+    </div>
+  </div>
+</div>

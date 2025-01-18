@@ -1,0 +1,227 @@
+<div *ngIf="productInformation" class="mx-10">
+  <div class="flex items-center justify-between mb-8">
+    <div class="text-axe-blue text-lg font-semibold tracking-wider">
+      <span class="text-black font-medium text-base">Client:</span>
+      {{ productInformation.clientName }}
+    </div>
+
+    <div class="w-px h-3 bg-[#64748B] mx-3"></div>
+
+    <div class="text-axe-blue text-lg font-semibold tracking-wider">
+      <span class="text-black font-medium text-base">Project:</span>
+      {{ productInformation.projectName }}
+    </div>
+
+    <div class="w-px h-3 bg-[#64748B] mx-3"></div>
+
+    <div class="text-axe-blue text-lg font-semibold tracking-wider">
+      <span class="text-black font-medium text-base">Quote Status:</span>
+      {{ productInformation.quoteStatus | titlecase }}
+    </div>
+
+    <div class="w-px h-3 bg-[#64748B] mx-3"></div>
+
+    <div class="text-axe-blue text-lg font-semibold tracking-wider">
+      <span class="text-black font-medium text-base">Quote Accepted:</span>
+      {{ productInformation.quoteAcceptedDate | date : 'dd.MM.yyyy' }}
+    </div>
+
+    <div class="ml-auto mr-2">
+      <button
+        class="hidden sm:inline-flex bg-axe-blue px-4 text-white text-base font-medium rounded-md self-start"
+        mat-stroked-button
+        (click)="onBtExport()"
+      >
+        <mat-icon
+          class="icon-size-5 text-white"
+          [svgIcon]="'heroicons_mini:arrow-up-on-square'"
+        ></mat-icon>
+        <span class="ml-2 text-white">Export</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="pb-0">
+    <div
+      class="coil-header border rounded-t-xl flex items-center p-3 justify-between"
+      [ngClass]="cuttingBgColor"
+    >
+      <div class="text-axe-dark-blue font-semibold text-lg">Product Manufacturing Details</div>
+      <div class="text-axe-dark-blue font-semibold text-lg">
+        Product ID: {{ productInformation.product.id }}
+      </div>
+    </div>
+    <div class="w-full p-6 border bg-white rounded-b-xl" [ngClass]="cuttingBorderColor">
+      <div class="flex gap-12">
+        <div class="flex flex-col gap-2 items-start">
+          <div class="flex gap-2 items-center justify-center">
+            <span class="text-axe-blue font-semibold text-sm tracking-wider">Product ID</span>
+          </div>
+          <div class="text-axe-dark-blue text-lg font-medium">
+            {{ productInformation.product.id }}
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2 items-start">
+          <div class="flex gap-2 items-center justify-center">
+            <mat-icon
+              [svgIcon]="'heroicons_outline:paint-brush'"
+              class="text-sky-600 icon-size-5"
+            ></mat-icon>
+            <span class="text-axe-blue font-semibold text-sm tracking-wider">COLOR</span>
+          </div>
+          <div class="text-axe-dark-blue text-lg font-medium">
+            {{ productInformation.product.color.color }}
+          </div>
+        </div>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="flex gap-2 items-center justify-center">
+            <mat-icon
+              [svgIcon]="'heroicons_outline:speedometer'"
+              class="text-sky-600 icon-size-5"
+            ></mat-icon>
+            <span class="text-axe-blue font-semibold text-sm tracking-wider">GAUGE</span>
+          </div>
+          <div class="text-axe-dark-blue text-lg font-medium">
+            {{ productInformation.product.gauge.gauge }}
+          </div>
+        </div>
+        <div class="flex flex-col gap-2 items-start" *ngIf="productInformation.product?.profile">
+          <div class="flex gap-2 items-center justify-center">
+            <mat-icon
+              [svgIcon]="'heroicons_outline:square-2-stack'"
+              class="text-sky-600 icon-size-5"
+            ></mat-icon>
+            <span class="text-axe-blue font-semibold text-sm tracking-wider">PROFILE</span>
+          </div>
+          <div class="text-axe-dark-blue text-lg font-medium">
+            {{ productInformation.product.profile?.profile }}
+          </div>
+        </div>
+        <div class="flex flex-col gap-2 items-start">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="flex gap-2 items-center justify-center">
+              <span class="text-axe-blue font-semibold text-sm tracking-wider">STATUS</span>
+            </div>
+            <div [ngClass]="getStatusClass()">
+              {{ productInformation.product.status | titlecase }}
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2 items-start">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="flex gap-2 items-center justify-center">
+              <span class="text-axe-blue font-semibold text-sm tracking-wider">PLAN NAME</span>
+            </div>
+            <div class="text-axe-dark-blue text-lg font-medium">
+              {{ productInformation.product.planName | titlecase }}
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2 items-start" *ngIf="loadedCoil">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="flex gap-2 items-center justify-center">
+              <span class="text-axe-blue font-semibold text-sm tracking-wider">STEEL COIL ID</span>
+            </div>
+            <div class="text-green-400 text-lg font-medium">
+              {{ loadedCoil?.coilNumber }}
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2 items-start" *ngIf="loadedCoil">
+          <div class="flex flex-col gap-2 items-start">
+            <div class="flex gap-2 items-center justify-center">
+              <span class="text-axe-blue font-semibold text-sm tracking-wider"
+                >STEEL COIL MTRS REMAINING</span
+              >
+            </div>
+            <div [ngClass]="getMtrsRemainingClass()" class="text-lg font-medium" *ngIf="loadedCoil">
+              {{ loadedCoil?.estMtrsRemaining }} m
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col flex-grow print:overflow-visible">
+      <div class="w-full h-full mx-auto mt-6">
+        <div class="h-full flex flex-col">
+          <fuse-alert
+            class="mt-8 mb-4"
+            *ngIf="showAlert"
+            [dismissible]="true"
+            [dismissed]="false"
+            [appearance]="'outline'"
+            [showIcon]="false"
+            [type]="alert.type"
+          >
+            {{ alert.message }}
+          </fuse-alert>
+
+          <div class="w-full flex items-center justify-between my-5">
+            <div class="flex items-center">
+              <div class="text-2xl font-semibold leading-tight mb-5 text-axe-blue">
+                {{ selectedToggle }}
+              </div>
+            </div>
+            <div class="flex items-center" *ngIf="manufacture">
+              <div class="text-2xl font-semibold leading-tight mb-5 text-axe-blue mr-5">Date</div>
+              <mat-form-field appearance="outline">
+                <input matInput [matDatepicker]="picker" (dateChange)="onDateChange($event)" />
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <div class="flex items-center gap-4 mb-5">
+              <label for="toggle-grouping" class="flex items-center cursor-pointer">
+                <mat-button-toggle-group
+                  class="rounded-2xl border border-axe-light-blue mt-1 px-4"
+                  name="favoriteColor"
+                  aria-label="Favorite Color"
+                  (change)="onToggleChange($event)"
+                  [value]="selectedToggle"
+                >
+                  <mat-button-toggle class="text-gray-700 hover:bg-axe-light-blue" value="product"
+                    >Manufacture Product</mat-button-toggle
+                  >
+                  <mat-button-toggle
+                    class="text-gray-700 hover:bg-axe-light-blue"
+                    value="productParts"
+                    >Manufacture Product Parts</mat-button-toggle
+                  >
+                </mat-button-toggle-group>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="h-160 mb-10" *ngIf="selectedDate && manufacture ==='true'">
+        <app-products-table
+          [loadedCoil]="loadedCoil"
+          [selectedToggle]="selectedToggle"
+          [manufacture]="manufacture"
+          [selectedDate]="selectedDate"
+          [steelCoilId]="loadedCoil?.steelCoilId"
+          (initiateDisplayAlert)="initiateDisplayAlert($event)"
+        ></app-products-table>
+      </div>
+      <div class="h-160 mb-10" *ngIf="manufacture ==false">
+        <app-products-table
+          [loadedCoil]="loadedCoil"
+          [selectedToggle]="selectedToggle"
+          [manufacture]="manufacture"
+          [selectedDate]="selectedDate"
+          [steelCoilId]="loadedCoil?.steelCoilId"
+          (initiateDisplayAlert)="initiateDisplayAlert($event)"
+        ></app-products-table>
+      </div>
+
+      <app-manufactured-button (errorOccurred)="handleError($event)"> </app-manufactured-button>
+    </div>
+  </div>
+</div>

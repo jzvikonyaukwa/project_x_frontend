@@ -1,0 +1,16 @@
+<div class="flex items-center justify-between pb-2 mb-2">
+    <div class="text-xl font-medium tracking-tight leading-6 truncate">{{ machineInfo?.name }}</div>
+    <label for="toggle-grouping" class="flex items-center cursor-pointer">
+        <mat-button-toggle-group class="rounded-2xl border border-axe-light-blue mt-1 px-4" name="favoriteColor" aria-label="Favorite Color"
+            (change)="onToggleChange($event)" [value]="selectedToggle">
+            <mat-button-toggle class="text-gray-700 hover:bg-axe-light-blue" value="thisMonth">This Month</mat-button-toggle>
+            <mat-button-toggle class="text-gray-700 hover:bg-axe-light-blue" value="Week">Week</mat-button-toggle>
+            <mat-button-toggle class="text-gray-700 hover:bg-axe-light-blue" value="Month">Month</mat-button-toggle>
+            <mat-button-toggle class="text-gray-700 hover:bg-axe-light-blue" value="Year">Year</mat-button-toggle>
+        </mat-button-toggle-group>
+    </label>
+</div>
+<!-- <ag-charts-angular style="height: 100%" [options]="options" *ngIf="options"></ag-charts-angular> -->
+
+
+2024-W2824

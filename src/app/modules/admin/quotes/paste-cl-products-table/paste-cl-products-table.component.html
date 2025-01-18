@@ -1,0 +1,37 @@
+<div class="flex flex-col w-[80rem] max-h-140 overflow-y-auto">
+    <div class="flex flex-col items-center justify-center ">
+
+        <div class="py-5 px-5 h-100 w-full mx-auto">
+            <ag-grid-angular style="width: 100%; height: 100%;" class="ag-theme-alpine " [columnDefs]="columnDefs" [defaultColDef]="defaultColDef"
+                [rowSelection]="rowSelection" [processDataFromClipboard]="processDataFromClipboard" [rowData]="rowData"
+                (gridReady)="onGridReady($event)" [ngClass]="{'border-2 border-green-500': !invalidData}"></ag-grid-angular>
+        </div>
+
+        <div class="m-5">
+            <fuse-alert class="mt-8 mb-4" *ngIf="showAlert" [dismissible]="true" [dismissed]="false" [appearance]="'outline'" [showIcon]="false"
+                [type]="alert.type">
+                {{ alert.message }}
+            </fuse-alert>
+        </div>
+
+        <div class="mb-5">
+            <div class="font-semibold text-lg text-axe-dark-blue text-center mb-3">Number of pasted lines = {{numberOfLines}}</div>
+            <div class="font-semibold text-lg text-axe-dark-blue text-center mb-3">Data valid = {{!invalidData}}</div>
+            <div class="flex items-center ml-6">
+                <button class="hidden sm:inline-flex bg-orange-500" mat-stroked-button (click)="reset()">
+                    <mat-icon class="icon-size-5 text-white" [svgIcon]="'heroicons_solid:document-chart-bar'"></mat-icon>
+                    <span class="ml-2 text-white">Reset</span>
+                </button>
+                <button class="hidden sm:inline-flex ml-3 bg-red-500" mat-stroked-button (click)="cancel()">
+                    <mat-icon class="icon-size-5 text-white" [svgIcon]="'heroicons_solid:document-chart-bar'"></mat-icon>
+                    <span class="ml-2 text-white">Cancel</span>
+                </button>
+                <button class="hidden sm:inline-flex ml-3 bg-green-500" mat-stroked-button (click)="onSubmit()" [disabled]="invalidData"
+                    [ngClass]="{'bg-gray-300': invalidData, 'bg-green-500': !invalidData}">
+                    <mat-icon class="icon-size-5 text-white" [svgIcon]="'heroicons_solid:cog-8-tooth'"></mat-icon>
+                    <span class="ml-2 text-white">Submit</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

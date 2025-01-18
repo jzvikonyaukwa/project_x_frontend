@@ -1,0 +1,142 @@
+<div *ngIf="(machinesLastEvent) as eventDetails; else noCoilLoaded">
+    <ng-container>
+        <ng-container>
+            <div class="flex flex-col h-fit text-axe-dark-blue  shadow-xl rounded-2xl overflow-hidden bg-card"
+                [ngClass]="'bg-' + eventDetails.steelCoil.steelSpecification.color.cssColor ">
+
+                <div class="flex justify-between p-5">
+                    <div class="text-3xl font-bold ">Coil Loaded in Machine</div>
+                    <div class="text-3xl font-bold ">ID
+                        {{eventDetails.steelCoil.id}}
+                    </div>
+                </div>
+
+                <div class=" flex items-center ">
+                    <div class=" flex-auto ml-2 border-b-2"></div>
+                </div>
+
+                <div class="flex justify-between p-5">
+                    <div class="flex flex-col ">
+                        <div class="mr-4 text-lg font-medium tracking-tight  leading-6 truncate capitalize">
+                            {{ eventDetails.steelCoil.cardNumber }}
+                        </div>
+                        <div class="text-axe-dark-blue font-medium">Card Number</div>
+                    </div>
+
+                    <div class="flex flex-col ">
+                        <div class="mr-4 text-lg font-medium tracking-tight  leading-6 truncate capitalize">
+                            {{eventDetails.steelCoil.steelSpecification.finish.name}}
+                        </div>
+                        <div class="text-axe-dark-blue font-medium">Finish</div>
+                    </div>
+
+                    <div class="flex flex-col ">
+                        <div class="mr-4 text-lg font-medium tracking-tight  leading-6 truncate capitalize">
+                            {{eventDetails.steelCoil.steelSpecification.color.color}}
+                        </div>
+                        <div class="text-axe-dark-blue font-medium">Color</div>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <div class="mr-4 text-lg font-medium tracking-tight  leading-6 truncate capitalize">
+                            {{ eventDetails.steelCoil.steelSpecification.gauge.gauge }}
+                        </div>
+                        <div class="text-axe-dark-blue font-medium">Gauge</div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between p-5">
+                    <div class="flex flex-col ">
+                        <div class="mr-4 text-lg font-medium tracking-tight  leading-6 truncate capitalize">
+                            {{ eventDetails.steelCoil.steelSpecification.coating }}
+                        </div>
+                        <div class="text-axe-dark-blue font-medium">Coating</div>
+                    </div>
+
+                    <div class="flex flex-col ">
+                        <div class="-mr-4 text-lg font-medium tracking-tight  leading-6 truncate capitalize">
+                            {{ eventDetails.steelCoil.weightInKgsRemaining }}
+                        </div>
+                        <div class="text-axe-dark-blue font-medium">Kgs Left</div>
+                    </div>
+
+                    <!-- <div class="flex flex-col">
+                        <div class="mr-4 text-lg font-medium tracking-tight  leading-6 truncate capitalize">
+                            {{ eventDetails.steelCoil.steelSpecification.gauge.gauge }}
+                        </div>
+                        <div class="text-axe-dark-blue font-medium">Gauge</div>
+                    </div> -->
+
+                    <div class="flex flex-col ">
+                        <div class="text-lg font-medium tracking-tight  leading-6 truncate capitalize">
+                            {{ eventDetails.steelCoil.estimatedMetersRemaining }}
+                        </div>
+                        <div class="text-axe-dark-blue font-medium">Meters Left</div>
+                    </div>
+                </div>
+
+                <div class="w-full h-1 mt-5 mb-3 border-t-2"></div>
+
+                <div class="flex justify-between p-6 mb-2">
+
+                    <div class="flex items-center leading-5 text-md text-axe-dark-blue">
+                        <mat-icon class="icon-size-5 text-axe-light-blue" [svgIcon]="'heroicons_solid:clock'"></mat-icon>
+
+                        <div class="ml-1.5">
+                            Loaded: {{ eventDetails.loadedTime | date:'yyyy-MM-dd'}} {{ eventDetails.loadedTime | date:'HH:mm:ss'}}
+                        </div>
+                    </div>
+
+                    <div class="flex items-center leading-5 text-md text-axe-dark-blue">
+                        <mat-icon class="icon-size-5 text-axe-light-blue" [svgIcon]="'heroicons_solid:clock'"></mat-icon>
+
+                        <div class="ml-1.5">
+                            Cuts Made: {{ eventDetails.cutsMade }}
+                        </div>
+                    </div>
+                    <div class="flex items-center leading-5 text-md text-axe-dark-blue">
+                        <mat-icon class="icon-size-5 text-axe-light-blue" [svgIcon]="'heroicons_solid:clock'"></mat-icon>
+                        <div class="ml-1.5">Total Meters: {{ eventDetails.totalMetersCut}}</div>
+                    </div>
+
+                </div>
+
+                <div class="flex justify-between px-6 py-4 bg-gray-50 dark:bg-transparent">
+                    <a mat-stroked-button [routerLink]="['/steel-coil', eventDetails.steelCoil.id]">
+                        <span class="inline-flex items-center">
+                            <ng-container>
+                                <span>View Coil</span>
+                            </ng-container>
+                            <mat-icon class="ml-1.5 icon-size-5" [svgIcon]="'heroicons_solid:arrow-sm-up'"></mat-icon>
+                        </span>
+                    </a>
+
+                    <a mat-stroked-button [routerLink]="'load-coil'">
+                        <span class="inline-flex items-center">
+                            <ng-container>
+                                <span>Change Coil</span>
+                            </ng-container>
+                            <mat-icon class="ml-1.5 icon-size-5" [svgIcon]="'heroicons_solid:arrow-sm-right'"></mat-icon>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </ng-container>
+    </ng-container>
+</div>
+<ng-template #noCoilLoaded>
+    <div class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent">
+        <mat-icon class="icon-size-24" [svgIcon]="'heroicons_outline:document-search'"></mat-icon>
+        <div class="mt-6 text-2xl font-semibold tracking-tight text-secondary">
+            There is no coil loaded in this machine currently!
+        </div>
+        <a mat-stroked-button [routerLink]="'load-coil'" class="mt-5">
+            <span class="inline-flex items-center">
+                <ng-container>
+                    <span>Change Coil</span>
+                </ng-container>
+                <mat-icon class="ml-1.5 icon-size-5" [svgIcon]="'heroicons_solid:arrow-sm-right'"></mat-icon>
+            </span>
+        </a>
+    </div>
+</ng-template>

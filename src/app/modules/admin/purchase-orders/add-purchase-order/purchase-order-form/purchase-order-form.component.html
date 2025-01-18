@@ -1,0 +1,224 @@
+<div class="w-full">
+  <form [formGroup]="purchaseOrderForm" novalidate (ngSubmit)="onSubmit()">
+    <div class="flex flex-row justify-between items-center gap-8">
+      <mat-form-field class="flex flex-col flex-auto">
+        <mat-label>Supplier</mat-label>
+        <mat-select formControlName="supplierId">
+          <mat-option *ngFor="let supplier of suppliers$ | async" [value]="supplier.supplierId">{{
+            supplier.supplierName
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="flex flex-col flex-auto">
+        <mat-label>Comments</mat-label>
+        <input matInput formControlName="comments" />
+      </mat-form-field>
+    </div>
+
+    <div class="flex flex-row justify-between items-center gap-8">
+      <mat-form-field class="flex flex-col flex-auto">
+        <mat-label>Date Ordered</mat-label>
+        <input matInput formControlName="dateIssued" [max]="currentTime" [matDatepicker]="picker" />
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="flex flex-col flex-auto">
+        <mat-label>Expected Delivery Date</mat-label>
+        <input
+          matInput
+          formControlName="expectedDeliveryDate"
+          [min]="currentTime"
+          [matDatepicker]="picker1"
+        />
+        <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field class="flex flex-col flex-auto">
+      <mat-label>Paid Status</mat-label>
+      <mat-select formControlName="paid">
+        <mat-option [value]="true">Yes</mat-option>
+        <mat-option [value]="false">No</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-dialog-actions class="flex justify-start my-2 gap-1">
+      <button
+        class="rounded-md w-40 bg-gray-400"
+        [color]="'accent'"
+        mat-flat-button
+        mat-flat-button
+        type="button"
+        (click)="addSteelCoilToOrder()"
+      >
+        Add Steel Coil
+      </button>
+      <button
+        class="bg-sky-700 rounded-md w-40"
+        mat-flat-button
+        type="button"
+        color="primary"
+        [color]="'accent'"
+        (click)="addConsumableToOrder()"
+      >
+        Add Consumable
+      </button>
+    </mat-dialog-actions>
+
+    <div formArrayName="productPurchases" class="form-group pl-4 pr-4 mb-4">
+      <ng-container
+        *ngFor="let productGroup of productPurchases.controls; let i = index; let isFirst = first"
+      >
+        <div class="p-4 border-2 border-sky-700 rounded-lg border-opacity-25 mb-5">
+          <hr *ngIf="!isFirst" />
+          <div class="flex justify-between items-center mb-2">
+            <h2 class="font-bold mb-2">Product {{ i + 1 }}:</h2>
+            <button mat-icon-button type="button" color="warn" (click)="onDeleteSteelCoil(index)">
+              <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:minus'"></mat-icon>
+            </button>
+          </div>
+
+          <ng-container [formGroup]="productGroup">
+            <!-- <div class="flex flex-col mt-4 mb-4">
+              <mat-radio-group
+                aria-label="Select an option"
+                formControlName="finish"
+                (change)="onGalvanizeChange(productGroup, $event)"
+              >
+                <mat-radio-button *ngFor="let finish of finishes" [value]="finish">{{
+                  finish.name | titlecase
+                }}</mat-radio-button>
+              </mat-radio-group>
+            </div> -->
+            <div class="flex mt-4 mb-4 gap-4">
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Color</mat-label>
+                <mat-select formControlName="color" [compareWith]="compareFn">
+                  <mat-option *ngFor="let color of colors" [value]="color">{{
+                    color.color
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Gauge</mat-label>
+                <mat-select formControlName="gauge" [compareWith]="compareFn">
+                  <mat-option *ngFor="let gauge of gauges" [value]="gauge">{{
+                    gauge.gauge | number : '1.2-2'
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Width (mm)</mat-label>
+                <mat-select formControlName="width" [compareWith]="compareFn">
+                  <mat-option *ngFor="let width of widths" [value]="width">{{
+                    width.width | number : '1.0-0'
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>ISQ Grade</mat-label>
+                <mat-select formControlName="isqGrade">
+                  <mat-option *ngFor="let grade of ISQ_GRADES" [value]="grade">{{
+                    grade
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Coating</mat-label>
+                <mat-select formControlName="coating">
+                  <mat-option *ngFor="let coating of COATINGS" [value]="coating">{{
+                    coating
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="flex mt-4 mb-4 gap-4">
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Purchase Cost Per Kg</mat-label>
+                <input matInput type="number" min="0" formControlName="purchaseCostPerKg" />
+              </mat-form-field>
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Weight Ordered</mat-label>
+                <input matInput type="number" min="0" formControlName="weightOrdered" />
+              </mat-form-field>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+
+    <div formArrayName="consumablesOnPurchaseOrder" class="form-group pl-4 pr-4 mb-4">
+      <ng-container
+        *ngFor="
+          let productGroup of consumablesOnPurchaseOrder.controls;
+          let i = index;
+          let isFirst = first
+        "
+      >
+        <div class="p-4 border-2 border-sky-700 rounded-lg border-opacity-25 mb-5">
+          <hr *ngIf="!isFirst" />
+          <div class="flex justify-between items-center mb-2">
+            <h2 class="font-bold mb-2">Product {{ i + 1 }}:</h2>
+            <button mat-icon-button type="button" color="warn" (click)="onDelete(index)">
+              <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:minus'"></mat-icon>
+            </button>
+          </div>
+          <ng-container [formGroup]="productGroup">
+            <div class="flex mt-4 mb-4 gap-4">
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Consumable</mat-label>
+                <mat-select formControlName="consumableId">
+                  <mat-option *ngFor="let consumable of consumables" [value]="consumable.id">{{
+                    consumable.name
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Qty on Order</mat-label>
+                <input matInput type="number" min="0" formControlName="qty" />
+              </mat-form-field>
+
+              <mat-form-field class="flex flex-col flex-auto">
+                <mat-label>Cost Per Unit</mat-label>
+                <input matInput type="number" min="0" formControlName="costPerUnit" />
+              </mat-form-field>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+
+    <mat-dialog-actions class="flex justify-end gap-4">
+      <button
+        class="rounded-md w-48 bg-orange-400"
+        mat-flat-button
+        color="accent"
+        type="button"
+        (click)="cancel()"
+      >
+        Cancel
+      </button>
+      <button
+        class="rounded-md w-48"
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [ngClass]="{
+          'bg-green-600 text-gray-900 cursor-not-allowed opacity-50':
+            !purchaseOrderForm.valid || purchaseOrderForm.pristine || isBusy,
+          'bg-green-400 text-white hover:bg-green-700':
+            purchaseOrderForm.valid && !purchaseOrderForm.pristine && !isBusy
+        }"
+        [disabled]="!purchaseOrderForm.valid || purchaseOrderForm.pristine || isBusy"
+      >
+        Submit
+      </button>
+    </mat-dialog-actions>
+  </form>
+</div>

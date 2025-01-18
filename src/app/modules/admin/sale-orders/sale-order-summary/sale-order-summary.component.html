@@ -1,0 +1,56 @@
+<div class="w-full min-w-[280px] max-w-[460px] rounded-2xl border border-[#0272BD] p-4 cursor-pointer transition duration-300 hover:bg-blue-100 hover:shadow-md"
+    (click)="navigateToOrder(saleOrder.saleOrderId)" *ngIf="saleOrder">
+
+    <div class="w-full flex items-center justify-between">
+        <div class="text-lg font-semibold text-sky-700">
+            Order ID: {{saleOrder.saleOrderId}}
+        </div>
+        <div class="flex items-center gap-3"> 
+            <div class="rounded-2xl py-1 px-4 text-sm"
+                [class.bg-[#FFA826]]="saleOrder.status === 'scheduled'">
+                {{ saleOrder.salesOrderStatus | titlecase }}
+            </div>
+            <button class="flex items-center justify-center w-7 h-7 rounded-md bg-axe-blue">
+                <mat-icon class="text-white icon-size-4" svgIcon="details-icon"></mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <hr class="my-3 h-px border-t-0 border-axe-dark-blue opacity-20 dark:opacity-50">
+
+    <div class="w-full flex items-center justify-between">
+        <div class=" w-full flex items-center">
+            <span class="text-md font-medium">CLIENT:</span>
+            <span
+                class="ml-2 text-sm text-[#464F60 font-normal">{{ saleOrder.clientName }}</span>
+        </div>
+    </div>
+
+    <hr class="my-3 h-px border-t-0 border-axe-dark-blue opacity-20 dark:opacity-50">
+
+    <div class="flex items-baseline">
+        <span class="text-md font-medium">Number of cutting list:</span>
+        <span class="ml-2 text-sm font-normal text-[#464F60]">{{ cuttingListCount | number }}</span>
+    </div>
+
+    <hr class="my-3 h-px border-t-0 border-axe-dark-blue opacity-20 dark:opacity-50" />
+
+    <div class="flex flex-col justify-center gap-3 sales-order-footer">
+
+        <div class="flex items-center">
+            <span class="text-sm font-semibold">TARGET DATE:</span>
+            <span
+                class="text-[#464F60] font-normal text-sm ml-2">{{ saleOrder.targetDate | date:'dd-MMM-yyyy' }}</span>
+        </div>
+
+        <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
+
+        <div class="w-full flex items-center justify-between">
+            <span class="text-sm font-normal">Cutting List <span
+                    class="font-semibold">{{ cuttingListCompletedPercentage }}%</span> Complete</span>
+            <div class="border border-axe-blue text-axe-blue text-sm rounded-2xl py-1 px-4">
+                {{ stockReservationStatus }}
+            </div>
+        </div>
+    </div>
+</div>

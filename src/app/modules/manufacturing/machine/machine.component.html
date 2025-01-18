@@ -1,0 +1,55 @@
+<div class="flex flex-col flex-auto min-w-0" *ngIf="machine$ | async as machine">
+
+  <app-page-heading>
+    <ng-container titleSlot>
+      <div class="flex justify-between w-full ml-4">
+        <ng-container>
+          <div class="text-white text-2xl md:text-5xl font-semibold tracking-tight leading-7 capitalize md:leading-snug truncate">
+            {{ machine.name }}
+          </div>
+        </ng-container>
+        <div class="items-center flex-col">
+          <div class="flex items-center">
+            <mat-icon class="icon-size-5 text-sky-500" [svgIcon]="'heroicons_solid:bell'"></mat-icon>
+            <div class="ml-1.5 leading-6 truncate text-sky-500">
+              You have 119 Clients on record
+            </div>
+          </div>
+          <!-- [routerLink]="['coil-board', machineId]" -->
+          <button [routerLink]="['coil-board']" class="bg-[#0071BC] w-36 py-2 px-4 mt-3 text-white text-base font-medium rounded-md">
+            <a>Go to Board</a>
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </app-page-heading>
+
+  <div class="flex flex-col m-8">
+    <div class="flex w-full max-w-screen-xl justify-around my-10 mx-auto">
+      <div class="w-2/5 " *ngIf="(currentCuttingList$ | async) as cuttingList">
+        <app-in-progress-cutting-list-summary [currentCuttingList]="cuttingList"></app-in-progress-cutting-list-summary>
+      </div>
+
+      <div class="w-2/5">
+        <div *ngIf="(machinesLastEvent$ | async) as eventDetails">
+          <app-coil-in-use [machinesLastEvent]="eventDetails"></app-coil-in-use>
+        </div>
+      </div>
+    </div>
+    <div class="flex w-full max-w-screen-xl justify-around my-10 mx-auto" *ngIf="cuttingListInProgress && coilSpecification">
+      <div class="w-full"
+        *ngIf="cuttingListInProgress.color === coilSpecification.color.color && +(cuttingListInProgress.gauge) ===  coilSpecification.gauge.gauge">
+        <div
+          class="text-2xl mb-10 md:text-5xl text-center font-semibold tracking-tight leading-7 capitalize md:leading-snug truncate text-{{coilSpecification.color.cssColor}} ">
+          Color & Gauge Match
+        </div>
+        <app-cutting-list [productId]="cuttingListInProgress.cuttingList.id"></app-cutting-list>
+      </div>
+    </div>
+
+    <div class="flex w-full max-w-screen-xl justify-around my-10 mx-auto">
+      <app-machines-sheduled-cutting-lists></app-machines-sheduled-cutting-lists>
+      <!-- <app-recommended-order></app-recommended-order> -->
+    </div>
+  </div>
+</div>

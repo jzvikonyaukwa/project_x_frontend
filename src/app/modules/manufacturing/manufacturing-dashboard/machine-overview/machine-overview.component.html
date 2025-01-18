@@ -1,0 +1,5 @@
+<div class="flex flex-col p-6 mt-8 bg-card shadow rounded-2xl overflow-hidden">
+    <app-machines-transactions-chart [machineInfo]="machineInfo"></app-machines-transactions-chart>
+    <div class="my-4 text-xl text-center font-bold leading-6 truncate">Scheduled Cutting Lists</div>
+    <app-alternative-product-list-table [cuttingLists]="cuttingLists" *ngIf="cuttingLists"></app-alternative-product-list-table>
+</div>

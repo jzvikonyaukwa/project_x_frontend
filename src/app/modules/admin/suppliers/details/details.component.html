@@ -1,0 +1,163 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-y-auto" *ngIf="supplier">
+    <app-page-heading>
+        <ng-container titleSlot>
+            <div class="mt-2">
+                <h2
+                    class="text-3xl md:text-4xl font-bold tracking-tight leading-7 sm:leading-10 truncate text-white">
+                    Supplier: {{ supplier.name }}
+                </h2>
+            </div>
+        </ng-container>
+    </app-page-heading>
+
+    <fuse-card class="w-full max-w-screen-xl mx-auto mb-4 p-6 sm:p-8 lg:p-6 overflow-visible mt-20">
+        <div class="flex flex-col gap-6 w-full">
+            <div class="flex flex-col">
+                <div
+                    class="text-2xl font-semibold leading-tight text-primary flex items-center gap-2 justify-between">
+                    <div class="flex items-center gap-2">
+                        <mat-icon class="text-sky-700"
+                            [svgIcon]="'heroicons_outline:user'"></mat-icon>
+                        <span class="text-axe-dark-blue font-bold text-xl leading-5">{{
+                            supplier.name }}</span>
+                    </div>
+                </div>
+                <div class="flex">
+                    <span
+                        class="ml-1 leading-5 text-slate-500 font-medium text-xs flex items-center gap-2">{{
+                        supplier.notes }}</span>
+                </div>
+            </div>
+            <div class="flex flex-row justify-between gap-4">
+                <div class="grow border-sky-600 border rounded-xl p-4 w-full">
+                    <div class="flex items-center bg-sky-500/30 rounded-xl p-4 justify-between">
+                        <div class="flex items-center gap-2">
+                            <img src="/assets/icons/map-pin.svg" class="icon-size-5">
+                            <div
+                                class="text-2xl font-semibold leading-tight text-primary text-axe-dark-blue">
+                                Addresses
+                            </div>
+                        </div>
+                        <button class="bg-sky-700 rounded-md" mat-icon-button
+                            (click)="editAddresses(supplier.addresses)">
+                            <mat-icon class="text-white" svgIcon="heroicons_solid:plus"></mat-icon>
+                        </button>
+                    </div>
+                    <div class="flex flex-col mt-5 border-b last:border-0 overflow-y-auto overflow-x-hidden max-h-48"
+                        *ngFor="let address of supplier.addresses">
+                        <div class="group flex items-center w-full boder-blueGray-500 pb-2">
+                            <div
+                                class="text-slate-500 text-sm font-medium w-full group-hover:text-axe-dark-blue">
+                                <span>{{ address.street }} </span>
+                                <span>{{ address.suburb }} </span>
+                                <span>{{ address.city }} </span>
+                                <span>{{ address.country }} </span>
+                            </div>
+
+                            <div class="flex gap-2 items-center">
+                                <button mat-icon-button (click)="editAddresses(supplier.addresses)">
+                                    <img class="icon-size-5" src="/assets/icons/edit-pen-icon.svg">
+                                </button>
+                                <button mat-icon-button (click)="deleteAddress(address)">
+                                    <img class="icon-size-5" src="/assets/icons/delete-icon.svg">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grow border-sky-600 border rounded-xl p-4 w-full">
+                    <div class="flex items-center bg-sky-500/30 rounded-xl p-4 justify-between">
+                        <div class="flex items-center gap-2">
+                            <img src="/assets/icons/map-pin.svg" class="icon-size-5">
+                            <div class="text-2xl font-semibold leading-tight text-axe-dark-blue">
+                                Phones
+                            </div>
+                        </div>
+                        <button class="bg-sky-700 rounded-md" mat-icon-button
+                            (click)="editPhones(supplier.phones)">
+                            <mat-icon class="text-white" svgIcon="heroicons_solid:plus"></mat-icon>
+                        </button>
+                    </div>
+                    <div class="flex flex-col mt-5 border-b last:border-0 overflow-y-auto overflow-x-hidden max-h-48"
+                        *ngFor="let phone of supplier.phones">
+                        <div class="group flex items-center w-full boder-blueGray-500 pb-2">
+                            <div
+                                class="text-slate-500 text-sm font-medium w-full group-hover:text-axe-dark-blue">
+                                <span>+{{ phone.phone }} </span>
+                            </div>
+
+                            <div class="flex gap-2 items-center">
+                                <button mat-icon-button (click)="editPhones(supplier.phones)">
+                                    <img class="icon-size-5" src="/assets/icons/edit-pen-icon.svg">
+                                </button>
+                                <button mat-icon-button (click)="deletePhone(phone)">
+                                    <img class="icon-size-5" src="/assets/icons/delete-icon.svg">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grow border-sky-600 border rounded-xl p-4 w-full">
+                    <div class="flex items-center bg-sky-500/30 rounded-xl p-4 justify-between">
+                        <div class="flex items-center gap-2">
+                            <img src="/assets/icons/map-pin.svg" class="icon-size-5">
+                            <div class="text-2xl font-semibold leading-tight text-axe-dark-blue">
+                                Emails
+                            </div>
+                        </div>
+                        <button class="bg-sky-700 rounded-md" mat-icon-button
+                            (click)="editEmails(supplier.emails)">
+                            <mat-icon class="text-white" svgIcon="heroicons_solid:plus"></mat-icon>
+                        </button>
+                    </div>
+                    <div class="flex flex-col mt-5 border-b last:border-0 overflow-y-auto overflow-x-hidden max-h-48"
+                        *ngFor="let email of supplier.emails">
+                        <div class="group flex items-center w-full boder-blueGray-500 pb-2">
+                            <div
+                                class="text-slate-500 text-sm font-medium w-full group-hover:text-axe-dark-blue">
+                                <span>{{ email.email }} </span>
+                            </div>
+
+                            <div class="flex gap-2 items-center">
+                                <button mat-icon-button (click)="editEmails(supplier.emails)">
+                                    <img class="icon-size-5" src="/assets/icons/edit-pen-icon.svg">
+                                </button>
+                                <button mat-icon-button (click)="deleteEmail(email)">
+                                    <img class="icon-size-5" src="/assets/icons/delete-icon.svg">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fuse-card>
+
+    <fuse-card
+        class="flex-col w-full max-w-screen-xl overflow-visible mx-auto mt-4 mb-4 p-6 sm:p-8 lg:p-6">
+        <div class="text-axe-dark-blue font-bold text-xl leading-5 mb-4">
+            Supplied Products
+        </div>
+        <div class="flex-auto -mt-px pt-4 sm:pt-6">
+            <div class="-mt-5">
+                <div class="w-full mx-auto">
+                    <app-suppliers-products [products]="products$ | async"></app-suppliers-products>
+                </div>
+            </div>
+        </div>
+    </fuse-card>
+
+    <fuse-card
+        class="flex-col w-full max-w-screen-xl overflow-visible mx-auto mt-4 mb-4 p-6 sm:p-8 lg:p-6">
+        <div class="text-axe-dark-blue font-bold text-xl leading-5 mb-4">
+            GRVs
+        </div>
+        <div class="flex-auto -mt-px pt-4 sm:pt-6">
+            <div class="-mt-5">
+                <div class="w-full mx-auto">
+                    <app-suppliers-grvs [grvs]="grvs$ | async"></app-suppliers-grvs>
+                </div>
+            </div>
+        </div>
+    </fuse-card>
+</div>

@@ -1,0 +1,7 @@
+<div class="w-full h-full" *ngIf="saleOrder$ | async">
+    <ag-grid-angular style="width: 100%; height: 100%; overflow: auto;" class="ag-theme-alpine"
+        [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [enableRangeSelection]="true"
+        [copyHeadersToClipboard]="true" [rowData]="rowData" [animateRows]="true"
+        (cellEditRequest)="onCellEditRequest($event)" [readOnlyEdit]="true" [getRowId]="getRowId"
+        (gridReady)="onGridReady($event)"></ag-grid-angular>
+</div>

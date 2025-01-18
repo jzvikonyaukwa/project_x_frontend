@@ -1,0 +1,25 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-axefrontend-dev-104104-authRole",
+      "UnauthRoleArn": "arn:aws:iam::582967007563:role/amplify-axefrontend-dev-104104-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::582967007563:role/amplify-axefrontend-dev-104104-authRole",
+      "Region": "eu-west-1",
+      "DeploymentBucketName": "amplify-axefrontend-dev-104104-deployment",
+      "UnauthRoleName": "amplify-axefrontend-dev-104104-unauthRole",
+      "StackName": "amplify-axefrontend-dev-104104",
+      "StackId": "arn:aws:cloudformation:eu-west-1:582967007563:stack/amplify-axefrontend-dev-104104/11306d80-f6ea-11ed-b0da-06a8fad5b5d9",
+      "AmplifyAppId": "d35qean59rhaow"
+    },
+    "categories": {
+      "auth": {
+        "axefrontend9cb1b269": {
+          "userPoolId": "eu-west-1_DGaLBAgeF",
+          "userPoolName": "axe-manufacturing-app-user-pool",
+          "webClientId": "5p6pi28upatt6n8fsev5v65ln1",
+          "nativeClientId": "5p6pi28upatt6n8fsev5v65ln1"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,109 @@
+<div class="flex flex-col flex-auto bg-card m-20 shadow rounded-2xl overflow-hidden" *ngIf="purchaseOrder">
+
+    <div class="p-10">
+        <div class="px-4 sm:px-0">
+            <h3 class="text-base font-semibold leading-7 text-gray-900">Purchase Order</h3>
+            <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Details and delivered quantities.</p>
+        </div>
+        <div class="mt-6">
+            <dl class="grid grid-cols-1 sm:grid-cols-3">
+                <div class="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
+                    <dt class="text-md font-medium leading-6 text-gray-900">Purchase Order ID</dt>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{{purchaseOrder.id}}</dd>
+                </div>
+                <div class="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
+                    <dt class="text-md font-medium leading-6 text-gray-900">Date Issued</dt>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{{purchaseOrder.dateIssued}}</dd>
+                </div>
+                <div class="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
+                    <dt class="text-md font-medium leading-6 text-gray-900">Status:</dt>
+                    <dd class="mt-1 leading-6 sm:mt-2" [ngClass]="{
+                            'text-gray-700': purchaseOrder.status !== 'completed' && purchaseOrder.status !== 'pending',
+                            'text-green-500': purchaseOrder.status === 'completed',
+                            'text-orange-400': purchaseOrder.status === 'pending',
+                            'text-red-500': purchaseOrder.status === 'canceled',
+                        }">
+                        {{purchaseOrder.status | titlecase}}
+                    </dd>
+                </div>
+
+            </dl>
+        </div>
+
+        <div class="my-6">
+            <dl class="grid grid-cols-1 sm:grid-cols-3" *ngFor="let grv of purchaseOrder.grvs">
+                <div class="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
+                    <dt class="text-md font-medium leading-6 text-gray-900">GRV ID</dt>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{{grv.id}}</dd>
+                </div>
+                <div class="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
+                    <dt class="text-md font-medium leading-6 text-gray-900">GRV DATE</dt>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{{grv.dateReceived}}</dd>
+                </div>
+                <div class="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">
+                    <dt class="text-md font-medium leading-6 text-gray-900">Suppliers Code</dt>
+                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-2">{{grv.supplierGRVCode}}</dd>
+                </div>
+            </dl>
+        </div>
+
+        <div class="overflow-x-auto">
+            <div class="w-full bg-transparent">
+
+                <div class="flex flex-col my-5 pb-3">
+                    <div class="gap-x-1 grid grid-cols-12">
+                        <div class="col-span-3 font-medium text-md text-secondary">TYPE</div>
+                        <div class="col-span-1 font-medium text-md text-right text-secondary">UOM</div>
+                        <div class="col-span-2 font-medium text-md text-right text-secondary">QTY ORDERED</div>
+                        <div class="col-span-2 font-medium text-md text-right text-secondary">QTY RECEIVED</div>
+                        <div class="col-span-2 font-medium text-md text-right text-secondary">STATUS</div>
+                        <div class="col-span-2 font-medium text-md text-right text-secondary">CHANGE STATUS</div>
+                        <div class="col-span-12 my-4 border-b"></div>
+                    </div>
+                    <div class="gap-x-1 grid grid-cols-12" *ngFor="let productInTable of tableData">
+
+                        <div class="col-span-3">
+                            <div class="text-lg font-medium">{{productInTable.type}}</div>
+                        </div>
+
+                        <div class="col-span-1 self-center text-right">
+                            {{productInTable.uom}}
+                        </div>
+
+                        <div class="col-span-2 self-center text-right">
+                            {{ productInTable.qtyOrdered }}
+                        </div>
+                        <div class="col-span-2 self-center text-right">
+                            {{productInTable.qtyReceived}}
+                        </div>
+                        <div class="col-span-2 self-center text-right">
+                            {{productInTable.status | titlecase}}
+                        </div>
+
+                        <div class="col-span-2 self-center text-right">
+                            <button [ngClass]="getButtonClass(productInTable.status)" class="py-1 px-5 rounded-2xl" [matMenuTriggerFor]="menu">
+                                <div class="flex">
+                                    <span>{{productInTable.status | titlecase}}</span>
+                                    <mat-icon>expand_more</mat-icon>
+                                </div>
+                            </button>
+                            <mat-menu #menu="matMenu" class="rounded-2xl border border-axe-light-blue mt-1 px-4">
+                                <button mat-menu-item *ngFor="let status of productStatuses"
+                                    (click)="menuItemClicked(status, productInTable.productOnPurchaseOrderId)" class="text-axe-dark-blue font-medium text-sm border-t-0 border-x-0 border-b
+                                         border-[#64748B]/[20%] border-solid">{{
+                                    status | titlecase}}</button>
+                            </mat-menu>
+                        </div>
+                        <div class="col-span-12 my-4 border-b"></div>
+                    </div>
+
+                    <div class="flex justify-center" *ngIf="checkProductsOnPurchaseOrdersStatus()">
+                        <button class=" rounded-2xl bg-green-400 mt-5 px-4 py-2 text-white " type=" button"
+                            (click)="changePurchaseOrderStatus('completed')">MARK
+                            PURCHASE ORDER AS
+                            COMPLETED</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

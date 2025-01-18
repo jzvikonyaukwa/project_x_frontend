@@ -1,0 +1,155 @@
+<div class="flex flex-col flex-auto w-full" *ngIf="quote">
+  <app-page-heading>
+    <ng-container titleSlot>
+      <div class="flex justify-between w-full ml-4">
+        <ng-container>
+          <div
+            class="text-white text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate"
+          >
+            Quote {{ quote.id }}
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+  </app-page-heading>
+
+  <div class="mt-0 mx-5 mb-5">
+    <fuse-alert
+      class="mt-8 mb-4"
+      *ngIf="showAlert"
+      [dismissible]="true"
+      [dismissed]="false"
+      [appearance]="'outline'"
+      [showIcon]="false"
+      [type]="alert.type"
+    >
+      {{ alert.message }}
+    </fuse-alert>
+  </div>
+
+  <div class="flex flex-wrap w-full p-6">
+    <div class="grid grid-cols-2 gap-5 w-full">
+
+      <div>
+        <div class="bg-slate-50 shadow-md p-4 rounded-2xl">
+          <div
+            class="items-center justify-between flex bg-blue-100 _bg-[#80C3EC26] py-2 px-6 mb-2 border-dashed-red0"
+          >
+            <div class="flex items-center gap-1">
+              <div
+                class="hidden sm:block text-sm sm:text-base md:text-lg font-semibold text-axe-dark-blue tracking-tight leading-8 mr-2"
+              >
+                Quote {{ quote.id }}
+              </div>
+              <div *ngIf="!isBusy">
+                <app-quote-status
+                  [quote]="quote"
+                  (onRejectQuote)="onRejectQuote($event)"
+                  (onRequestQuoteApproval)="onRequestQuoteApproval($event)"
+                  (onApproveQuote)="onApproveQuote($event)"
+                  (onAcceptQuote)="onAcceptQuote($event)"
+                  [disabled]="!hasLineItems"
+                >
+                </app-quote-status>
+              </div>
+            </div>
+            <button
+              class="hidden sm:inline-flex ml-3 text-axe-blue bg-transparent"
+              mat-flat-button
+              [routerLink]="['/quotes/details', quote.id]"
+              *ngIf="canExportQuote"
+            >
+              <mat-icon
+                class="icon-size-5 text-axe-blue"
+                [svgIcon]="'heroicons_solid:arrow-up-tray'"
+              >
+              </mat-icon>
+              <span class="ml-2">Export</span>
+            </button>
+          </div>
+          <div class="flex items-center justify-between gap-2 mx-2 mb-2">
+            <div
+              class="flex flex-col items-center justify-center rounded-2xl gap-2 border border-axe-blue bg-[#80C3EC26] min-h-20 p-2 w-full"
+            >
+              <span class="text-[#64748B] text-md mr-1">Date Issued:</span>
+              <span class="font-medium tracking-tight text-base">{{ quote.dateIssued }}</span>
+            </div>
+            <div
+              class="flex flex-col items-center justify-center rounded-2xl gap-2 border border-axe-blue bg-[#80C3EC26] min-h-20 p-2 w-full"
+            >
+              <span class="text-[#64748B] text-md mr-1">Date Modified:</span>
+              <span class="font-medium tracking-tight text-base">{{ quote.dateLastModified }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-6 w-full mt-6 h-full">
+          <div class="w-full h-full">
+            <app-quote-price-category-card
+              [quote]="quote"
+              (onQuotePriceChanged)="onQuotePriceChanged($event)"
+            >
+            </app-quote-price-category-card>
+          </div>
+
+          <div class="w-full h-full">
+            <app-quote-client [project]="quote?.project"></app-quote-client>
+          </div>
+        </div>
+      </div>
+      <div class="w-full h-full">
+        <app-quote-totals [totalValues]="totalValues"></app-quote-totals>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-wrap w-full p-6">
+    <div class="w-full">
+      <div class="flex flex-col">
+        <app-consumables-on-quote
+          [quote]="quote"
+          (quoteUpdate)="onQuoteUpdate()"
+        ></app-consumables-on-quote>
+
+        <div class="mt-20">
+          <div class="bg-slate-50 rounded-2xl shadow-lg p-3 pb-5">
+            <div class="flex w-full justify-between items-center px-2 mb-2">
+              <span class="text-axe-blue text-lg font-semibold tracking-tight leading-6 truncate">
+                PRODUCTS SUMMARY
+              </span>
+              <button
+                class="hidden sm:inline-flex ml-3 bg-orange-400 px-4 text-white text-base font-medium rounded-md"
+                mat-stroked-button
+                [matMenuTriggerFor]="coilNotAvailableMenu"
+              >
+                <mat-icon class="icon-size-5 text-white" [svgIcon]="'heroicons_solid:plus'">
+                </mat-icon>
+                <span class="ml-2 text-white">Add Product</span>
+              </button>
+
+              <mat-menu
+                class="rounded-2xl border border-axe-light-blue mt-1 px-4"
+                #coilNotAvailableMenu="matMenu"
+              >
+                <button
+                  mat-menu-item
+                  (click)="addProduct()"
+                  class="text-axe-dark-blue font-medium text-sm border-t-0 border-x-0 border-b border-[#64748B]/[20%] border-solid"
+                >
+                  Add Product
+                </button>
+                <button
+                  mat-menu-item
+                  (click)="pasteFramecad()"
+                  class="text-axe-dark-blue font-medium text-sm"
+                >
+                  Paste Data
+                </button>
+              </mat-menu>
+            </div>
+            <app-products-on-quote-summary [quote]="quote"></app-products-on-quote-summary>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

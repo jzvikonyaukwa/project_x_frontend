@@ -1,0 +1,45 @@
+<fuse-alert class="mt-8 mb-4" *ngIf="showAlert" [dismissible]="false" [dismissed]="false" [appearance]="'outline'" [showIcon]="false" [type]="alert.type">
+    {{ alert.message }}
+</fuse-alert>
+
+<div mat-dialog-content class="flex flex-col h-5/6">
+    <div class="text-2xl mb-5 text-axe-dark-blue">Create Credit Note</div>
+    <form [formGroup]="creditNoteForm" (ngSubmit)="onSubmit()">
+        <div class="form-fields" style="display: flex; flex-wrap: wrap; gap: 20px;">
+            <mat-form-field appearance="fill" class="form-field" style="flex: 1 1 30%; min-width: 200px;">
+                <mat-label>Date Created</mat-label>
+                <input matInput [matDatepicker]="picker1" formControlName="dateCreated" />
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+            <div formArrayName="returnedProducts" style="flex: 1 1 60%; display: flex; flex-wrap: wrap; gap: 20px;">
+                <div *ngFor="let returnedProduct of returnedProducts.controls; let i = index" [formGroupName]="i" style="display: flex; flex: 1 1 100%; flex-wrap: wrap; gap: 20px;">
+                    <mat-form-field appearance="fill" class="form-field" style="flex: 1 1 45%; min-width: 200px;">
+                        <mat-label>Returned Date</mat-label>
+                        <input matInput [matDatepicker]="picker2" formControlName="returnedDate" />
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" class="form-field" style="flex: 1 1 45%; min-width: 200px;">
+                        <mat-label>Reason For Return</mat-label>
+                        <input matInput formControlName="reason" />
+                    </mat-form-field>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="text-xl mb-5 text-axe-blue">Tick Checkbox to add Available Inventories to Credit Note</div>
+
+        <div *ngIf="rowData">
+            <ag-grid-angular style="width: 100%; height: 100%;" [pagination]="pagination" [paginationPageSize]="paginationPageSize" [paginationPageSizeSelector]="paginationPageSizeSelector"
+                             (selectionChanged)="onSelectionChanged($event)" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [rowSelection]="rowSelection"
+                             [suppressRowClickSelection]="true" [rowData]="rowData" [class]="'ag-theme-quartz'" (gridReady)="onGridReady($event)"></ag-grid-angular>
+        </div>
+
+        <div mat-dialog-actions class="flex justify-end">
+            <button mat-button (click)="onNoClick()" class="bg-red-500 rounded-md text-center text-white w-48 p-[5px] text-base font-normal tracking-tighter">Cancel</button>
+            <button mat-button type="submit" [disabled]="!creditNoteForm.valid" class="bg-green-500 rounded-md text-center text-white w-48 p-[5px] text-base font-normal tracking-tighter">Create</button>
+        </div>
+    </form>
+</div>

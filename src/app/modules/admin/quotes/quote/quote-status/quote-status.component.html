@@ -1,0 +1,34 @@
+<div class="flex flex-row justify-between gap-4">
+    <div class="text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight leading-8 mr-2 flex items-center"
+        [matTooltip]="quote.status == 'rejected' ? quote?.rejectedReason?.reason: quote.status" 
+        [class.text-red-600]="quote.status == 'rejected'"
+        [class.text-green-600]="quote.status == 'accepted' || quote.status == 'approved'"
+        [class.text-orange-600]="quote.status == 'draft' || quote.status == 'pending_approval'"
+        >{{ (quote.status == 'pending_approval' ? 'Submitted' : quote.status)| uppercase
+        }}</div>
+    <div class="grid grid-cols-2 grid-rows-1"
+        [matTooltip]="hasLineItems ? null : 'Add items to quote'">
+        <div class="flex-col" *ngIf="canRejectQuote">
+            <button mat-raised-button color="warn" class="text-sm" (click)="rejectQuote($event)" [disabled]="disabled"
+                title="Reject this quotation"
+                [matTooltip]=" hasLineItems ? 'Reject this quotation': 'add items to quote'"
+                *ngIf="canRejectQuote">Reject
+                Quote</button> &nbsp;
+        </div>
+        <div>
+            <button mat-raised-button color="primary" class="text-sm" (click)="requestQuoteApproval($event)"
+                [disabled]="disabled"
+                [matTooltip]=" hasLineItems ? 'Request Approval of quotation': 'add items to quote'"
+                *ngIf="canRequestQuoteApproval">Request Approval</button>
+            &nbsp;
+            <ng-container *ngIf="isSuperUser">
+                <button mat-raised-button color="accent" class="text-sm" (click)="approveQuote($event)"
+                    [disabled]="disabled" [matTooltip]=" hasLineItems ? 'Approve this quotation': 'add items to quote'"
+                    *ngIf="canApproveQuote">Approve Quote</button> &nbsp;
+                <button mat-raised-button color="accent" class="text-sm" (click)="acceptQuote($event)"
+                    [disabled]="disabled" [matTooltip]=" hasLineItems ? 'Accept this quotation': 'add items to quote'"
+                    *ngIf="canAcceptQuote">Accept Quote</button> &nbsp;
+            </ng-container>
+        </div>
+    </div>
+</div>

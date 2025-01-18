@@ -1,0 +1,66 @@
+<div class="absolute right-7 -top-2 w-56 z-10">
+  <mat-form-field [formGroup]="formGroup" class="flex flex-col flex-auto relative">
+    <input placeholder="Search" class="pr-5" matInput formControlName="search" />
+    <mat-icon
+      class="absolute right-3 icon-size-5 text-axe-blue"
+      [svgIcon]="'heroicons_solid:magnifying-glass'"
+    ></mat-icon>
+  </mat-form-field>
+</div>
+
+<mat-tab-group class="sm:px-2 stocks w-full" mat-stretch-tabs="false" [animationDuration]="'0'">
+  <mat-tab label="Stock Overview">
+    <ng-template matTabContent>
+      <app-stock-list-table></app-stock-list-table>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab *ngFor="let machine of machines" [label]="machine.label">
+    <ng-template matTabContent>
+      <app-product-coils
+        [searchValue]="formGroup.get('search')"
+        [productName]="machine.name"
+      ></app-product-coils>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab label="Consumables">
+    <ng-template matTabContent>
+      <app-consumable-in-warehouse-table
+        [searchValue]="formGroup.get('search')"
+        [paginationActive]="true"
+        [refreshTable]="refreshTable"
+        [warehouseId]="1"
+      ></app-consumable-in-warehouse-table>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab label="Inventory">
+    <ng-template matTabContent>
+      <app-inventory [searchValue]="formGroup.get('search')"></app-inventory>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab label="Consignment Stock">
+    <ng-template matTabContent>
+      <app-consignment-stock [searchValue]="formGroup.get('search')"></app-consignment-stock>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab label="Stock On Hand">
+    <ng-template matTabContent>
+      <app-stock-on-hand [searchValue]="formGroup.get('search')"></app-stock-on-hand>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab label="Consumable Details">
+    <ng-template matTabContent>
+      <app-consumable-details-table
+        [searchValue]="formGroup.get('search')"
+        [paginationActive]="true"
+        [refreshTable]="refreshTable"
+        [warehouseId]="1"
+      ></app-consumable-details-table>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>

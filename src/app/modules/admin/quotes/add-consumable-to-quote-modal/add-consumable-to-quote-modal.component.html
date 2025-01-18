@@ -1,0 +1,194 @@
+<div class="w-full flex flex-row-justify-between items-center" matDialogTitle>
+    <span class="text-lg font-bold text-axe-dark-blue">Add Consumable
+        <span class="text-sm font-normal"  *ngIf="consumablesOnQuoteCount !== 0">( {{
+            consumablesOnQuoteCount | number }}
+            items 
+            | subtotal: <span [class.text-green-700]="subtotalAmount > 0" [class.text-red-700]="subtotalAmount <= 0" matTooltip="Total costs($)">{{ subtotalAmount | currency }}</span>
+            | markup: <span [class.text-green-700]="totalMarkupAmount > 0" [class.text-red-700]="totalMarkupAmount <= 0" matTooltip="Total markup($)">{{ totalMarkupAmount | currency }}</span>
+            | total: <span [class.text-green-700]="totalValue > 0" [class.text-red-700]="totalValue <= 0" matTooltip="Total costs plus markup($)">{{ totalValue | currency }}</span>
+            ) </span>
+    </span>
+<!-- <div>{{ consumablesFormGroup.getRawValue() | json }}</div> -->
+<!-- <div>{{ quotePricesList | json }}</div> -->
+</div>
+<mat-dialog-content class="overflow-scroll max-h-120 min-w-100">
+    <div class="min-h-80 min-w-120">
+        <form [formGroup]="consumablesFormGroup" novalidate>
+            <table class="w-full h-full">
+                <thead *ngIf="hasConsumables">
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th class="min-w-72 max-w-80">Description &nbsp; </th>
+                        <th class="min-w-30"><span *ngIf="!hasManyConsumables">Qty</span> &nbsp; </th>
+                        <th class="min-w-30"><span *ngIf="!hasManyConsumables">Cost Price</span> &nbsp; </th>
+                        <th class="min-w-30 max-w-32"><span *ngIf="!hasManyConsumables">Sell Price</span> &nbsp; </th>
+                        <th class="min-w-30 max-w-32"><span *ngIf="!hasManyConsumables">Markup</span> &nbsp; </th>
+                        <th class="min-w-30">Subtotal &nbsp; </th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody formArrayName="consumablesFormArray" *ngIf="hasConsumables">
+                    <ng-container
+                        *ngFor="let aConsumableGroup of myConsumablesFormArray.controls; let index = index; let even = even">
+                        <tr [formGroup]="aConsumableGroup" class="min-h-12 min-w-80 hover:bg-[#ffc]"
+                            [style.background]="(even ? '#fff': '#f3f7fb')" style="height: 48px;">
+                            <td><span class="text-xs text-blue-900 font-bold" *ngIf="hasManyConsumables">{{ 1 +
+                                    index }}</span>
+                                <input type="hidden" formControlName="objectID" />
+                            </td>
+                            <td class="max-w-80" style="text-align: left;"> <span
+                                    class="overflow-clip"
+                                    [matTooltip]="aConsumableGroup.getRawValue()['consumableDesc']">{{
+                                    aConsumableGroup.getRawValue()["consumableDesc"] }}</span>
+                                &nbsp; </td>
+                            <td class="text-right">
+                                <div class="mat-mdc-text-field-wrapper mdc-text-field mdc-text-field--filled"
+                                    [style.backgroundColor]="(even ? '#fff': '#f3f7fb')" style="width: 120px;">
+                                    <div class="mat-mdc-form-field-focus-overlay"></div>
+                                    <div class="mat-mdc-form-field-flex">
+                                        <div class="mat-mdc-form-field-infix">
+                                            <label matformfieldfloatinglabel=""
+                                                class="mdc-floating-label mat-mdc-floating-label mdc-floating-label--float-above"
+                                                id="mat-mdc-form-field-label-0" for="mat-input-1-{{ index }}"
+                                                aria-owns="mat-input-1-{{ index }}" *ngIf="hasManyConsumables">
+                                                <mat-label>Quantity</mat-label>
+                                                <span aria-hidden="true"
+                                                    class="mat-mdc-form-field-required-marker mdc-floating-label--required"></span>
+                                            </label>
+                                            <input matinput type="number" formControlName="qty" min="0"
+                                                class="mat-mdc-input-element mat-mdc-form-field-input-control mdc-text-field__input cdk-text-field-autofill-monitored"
+                                                ng-reflect-min="0" ng-reflect-name="qty" ng-reflect-type="number"
+                                                id="mat-input-1-{{ index }}" required="" aria-required="true"
+                                                aria-invalid="false" />
+                                        </div>
+                                    </div>
+                                    <div matformfieldlineripple=""
+                                        class="mdc-line-ripple mdc-line-ripple--active mdc-line-ripple--deactivating">
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-right max-w-32"> &nbsp;
+                                <span class="" matTooltip="Cost Price">{{
+                                    aConsumableGroup.getRawValue()["unitPrice"] | number: "1.2-2"
+                                    }} $ &nbsp;
+                                </span>
+                            </td>
+                            <td class="text-right">
+                                <div class="mat-mdc-text-field-wrapper mdc-text-field mdc-text-field--filled"
+                                    [style.backgroundColor]="(even ? '#fff': '#f3f7fb')" style="width: 120px;">
+                                    <div class="mat-mdc-form-field-focus-overlay"></div>
+                                    <div class="mat-mdc-form-field-flex">
+                                        <div class="mat-mdc-form-field-infix">
+                                            <label matformfieldfloatinglabel=""
+                                                class="mdc-floating-label mat-mdc-floating-label mdc-floating-label--float-above"
+                                                id="mat-mdc-form-field-label-0" for="mat-input-2-{{ index }}"
+                                                aria-owns="mat-input-2-{{ index }}" *ngIf="hasManyConsumables">
+                                                <mat-label>Sell Price</mat-label>
+                                                <span aria-hidden="true"
+                                                    class="mat-mdc-form-field-required-marker mdc-floating-label--required"></span>
+                                            </label>
+                                            <input matinput type="number" min="0" step="0.01" formControlName="sellPrice"
+                                                class="mat-mdc-input-element mat-mdc-form-field-input-control mdc-text-field__input cdk-text-field-autofill-monitored"
+                                                ng-reflect-min="0" ng-reflect-name="sellPrice" ng-reflect-type="number"
+                                                id="mat-input-2-{{ index }}" required="" aria-required="true"
+                                                aria-invalid="false" />
+                                        </div>
+                                    </div>
+                                    <div matformfieldlineripple=""
+                                        class="mdc-line-ripple mdc-line-ripple--active mdc-line-ripple--deactivating">
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-right min-w-30">
+                                {{ ((+(aConsumableGroup.getRawValue()["sellPrice"] | number: "1.2-2") / aConsumableGroup.getRawValue()["unitPrice"]) - 1) * 100  | number: "1.2-2" }} %
+                            </td>
+                            <td class="text-right"> &nbsp; <span matTooltip="Line Total (Qty * Sell Price)">{{
+                                    (
+                                        +aConsumableGroup.getRawValue()["qty"] * 
+                                        +(aConsumableGroup.getRawValue()["sellPrice"] | number: "1.2-2")
+                                    ) | number: "1.2-2" }} $</span> &nbsp;
+                            </td>
+                            <td> &nbsp; &nbsp; &nbsp;
+                                <button mat-mini-fab color="warn" aria-label="Remove consumable from quote"
+                                    (click)="removeConsumableFromQuote(index)" tabindex="-1">
+                                     <mat-icon>delete</mat-icon>
+                                </button>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+                <tbody *ngIf="hasConsumables === false">
+                    <tr class="min-h-12 min-w-80">
+                        <td colspan="6" class="text-center my-8">No consumables on this quote</td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions class="w-full flex justify-center space-x-4 pt-5">
+    <div class="w-full flex flex-row justify-between items-center gap-8 ">
+        <form [formGroup]="consumablesForm" novalidate>
+            <input type="hidden" formControlName="unitPrice" />
+            <table class="w-full">
+                <tr>
+                    <td class="min-w-100 px-3">
+                        <span class="min-w-80 px-3">
+                            <label class="font-semibold">Consumable</label>
+                            <ng-select matInput appendTo="body" [items]="availableConsumables" bindValue="id"
+                                formControlName="consumableId" [trackByFn]="trackByConsumableId"
+                                [compareWith]="compareWithConsumable" [markFirst]="true"
+                                placeholder="Select or Search by name"
+                                notFoundText="No Consumables match the search term" tabindex="0">
+                                <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index"
+                                    ng-loadingspinner-tmp>
+                                    <div
+                                        class="w-full flex min-h-16 border-b border-gray-300 _last:border-none overflow-clip">
+                                        <!-- Consumable Label: Top Aligned -->
+                                        <span class="flex-col w-40 justify-start" [ngOptionHighlight]="search">
+                                            {{ item.label }}
+                                        </span>
+
+                                        <!-- Cost: Bottom Aligned -->
+                                        <span class="flex-col w-40 mt-auto text-right" *ngIf="item.costPrice">
+                                            <small><b>Cost:</b> {{ item.costPrice | currency }}</small>
+                                        </span>
+                                    </div>
+                                </ng-template>
+                            </ng-select>
+                        </span>
+                        <input type="hidden" [value]="selectedValue?.name" formControlName="consumableDesc" />
+                    </td>
+                    <td>
+                        <mat-form-field class="w-28 px-3">
+                            <mat-label>Quantity</mat-label>
+                            <input matInput type="number" min="0" step="1" formControlName="qty" tabindex="2" />
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field class="w-28 px-3">
+                            <mat-label>Sell Price</mat-label>
+                            <input matInput type="number" readonly formControlName="sellPrice" tabindex="3" />
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <span class="px-3">
+                            <button mat-fab extended matTooltip="Primary" color="primary"
+                                aria-label="Add consumable to quote" (click)="addConsumableToQuote($event)"
+                                [disabled]="consumablesForm.invalid || consumablesForm.pristine" tabindex="1">
+                                <mat-icon>add</mat-icon>
+                                Add
+                            </button>
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div class="w-full flex flex-row justify-around">
+        <button mat-flat-button class="text-white rounded-md w-48 bg-gray-400"
+            (click)="onCancel($event)">Cancel</button>
+        <button mat-flat-button class="text-white bg-sky-700 rounded-md w-48" type="submit"
+            (click)="onSubmit($event)">Submit</button>
+    </div>
+</mat-dialog-actions>

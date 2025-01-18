@@ -1,0 +1,37 @@
+<div>
+  <dl
+    class="mt-5 grid grid-cols-1 divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-md md:grid-cols-3 md:divide-x md:divide-y-0"
+  >
+    <div class="px-4 py-5 sm:p-6">
+      <dt class="text-base font-normal text-gray-900">{{ totalCost.title }}</dt>
+      <dd class="mt-1 flex items-baseline justify-between md:block lg:flex">
+        <div class="flex items-baseline text-2xl font-semibold text-indigo-600">
+          {{ totalCost.value | currency : 'USD' }}
+          <span class="ml-2 text-sm font-medium text-gray-500">{{ totalCost.subValue }}</span>
+        </div>
+      </dd>
+    </div>
+    <div class="px-4 py-5 sm:p-6">
+      <dt class="text-base font-normal text-gray-900">{{ totalSellingPrice.title }}</dt>
+      <dd class="mt-1 flex items-baseline justify-between md:block lg:flex">
+        <div class="flex items-baseline text-2xl font-semibold text-indigo-600">
+          {{ totalSellingPrice.value | currency : 'USD' }}
+          <span class="ml-2 text-sm font-medium text-gray-500">{{
+            totalSellingPrice.subValue
+          }}</span>
+        </div>
+      </dd>
+    </div>
+    <div class="px-4 py-5 sm:p-6">
+      <dt class="text-base font-normal text-gray-900">{{ percentageProfit.title }}</dt>
+      <dd class="mt-1 flex items-baseline justify-between md:block lg:flex">
+        <div class="flex items-baseline text-2xl font-semibold text-indigo-600">
+          {{ percentageProfit.value | currency : 'USD' }}
+          <span class="ml-2 text-sm font-medium text-green-500">{{
+            percentageProfit.subValue
+          }}</span>
+        </div>
+      </dd>
+    </div>
+  </dl>
+</div>

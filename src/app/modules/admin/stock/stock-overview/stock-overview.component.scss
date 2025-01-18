@@ -1,0 +1,19 @@
+.stocks {
+  ::ng-deep {
+    .mat-mdc-tab {
+      &.mdc-tab--active {
+        .mdc-tab__text-label {
+          color: #0071bc;
+        }
+
+        &:focus .mdc-tab-indicator__content--underline {
+          border-color: #0071bc;
+        }
+      }
+
+      .mdc-tab-indicator__content--underline {
+        border-color: #0071bc;
+      }
+    }
+  }
+}

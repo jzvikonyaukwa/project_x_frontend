@@ -1,0 +1,173 @@
+<div class="flex flex-col flex-auto w-full" *ngIf="invoice">
+    <app-page-heading>
+        <ng-container titleSlot>
+            <div class="flex justify-between w-full ml-4">
+                <ng-container>
+                    <div class="text-white text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate">
+                        Invoice {{invoice.id}}
+                    </div>
+                </ng-container>
+                <button class="hidden sm:inline-flex bg-axe-blue px-4 text-white text-base font-medium rounded-md self-start" mat-stroked-button
+                    (click)="exportAsPdf()">
+                    <mat-icon class="icon-size-5 text-white" [svgIcon]="'heroicons_mini:arrow-up-on-square'"></mat-icon>
+                    <span class="ml-2 text-white">Export</span>
+                </button>
+            </div>
+        </ng-container>
+    </app-page-heading>
+
+    <div class="flex-1 ">
+        <div class=" inset-0 min-w-0 text-center overflow-auto print:overflow-visible">
+            <div class="inline-block p-6 sm:p-10 text-left print:p-0">
+                <div #exportable
+                    class="max-w-240 p-16 rounded-2xl shadow bg-card print:w-auto print:p-0 print:rounded-none print:shadow-none print:bg-transparent">
+                    <div class="flex items-start">
+                        <div class="grid grid-rows-2 place-items-start gap-y-12">
+                            <div class="grid auto-cols-max grid-flow-col gap-x-8">
+                                <div class="place-self-center w-24"><img src="assets/images/logo/axe.jpeg" class="w-24"></div>
+                                <div class="pl-10 border-l text-md">
+                                    <div class="font-medium">AXE BUILD PRIVATE LIMITED</div>
+                                    <div>31 Asbestos Road Kelvin West</div>
+                                    <div>Bulawayo, Zimbabwe</div>
+                                    <div>BP#2003132251</div>
+                                    <div>+263-292-482-349</div>
+                                    <div>axebuild09&#64;gmail.com</div>
+                                </div>
+                            </div>
+                            <div class="grid auto-cols-max grid-flow-col gap-x-8" *ngIf="client$ | async as client">
+                                <div class="place-self-center w-24 text-center text-2xl text-secondary">
+                                    Bill To </div>
+                                <div class="pl-10 border-l text-md">
+                                    <div class="font-medium">{{client.name}}</div>
+                                    <div>{{client.addresses[0]?.street}}</div>
+                                    <div>{{client.addresses[0]?.country}},
+                                        {{client.addresses[0]?.city}}</div>
+                                    <div>{{client.phones[0]?.phone}}
+                                    </div>
+                                    <div>{{client.emails[0]?.email}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-x-4 gap-y-1 ml-auto">
+                            <div class="justify-self-end text-3xl tracking-tight text-secondary">
+                                INVOICE
+                            </div>
+                            <div class="text-3xl">#{{invoice?.id}}</div>
+                            <div class="justify-self-end font-medium tracking-tight text-secondary">
+                                INVOICE
+                                DATE</div>
+                            <div class="font-medium">{{invoice?.dateInvoiced | date: 'MMM dd, yyyy'
+                                }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-12 gap-x-1 mt-16">
+                        <div class="col-span-6 font-medium text-md text-secondary">SERVICE</div>
+                        <div class="col-span-2 font-medium text-md text-right text-secondary">UNIT PRICE</div>
+                        <div class="col-span-2 font-medium text-md text-right text-secondary">MTRS</div>
+                        <div class="col-span-2 font-medium text-md text-right text-secondary">TOTAL
+                        </div>
+                        <div class="col-span-12 my-4 border-b"></div>
+                        <div class="col-span-12 gap-x-1 grid grid-cols-12" *ngFor="let cuttingList of invoice.cuttingLists">
+                            <div class="col-span-6">
+                                <div class="text-lg font-medium">{{cuttingList.planName}}</div>
+                                <div class="mt-2 text-md text-secondary"> Plan Name </div>
+                            </div>
+                            <div class="col-span-2 self-center text-right">
+                                {{ calculatePricePerMtrsWithMarkUp(cuttingList)|
+                                currency: 'USD'}}
+                            </div>
+                            <div class="col-span-2 self-center text-right">
+                                {{ calculateTotalLength(cuttingList) }}
+                            </div>
+
+                            <div class="col-span-2 self-center text-right">
+                                {{ calculateCuttingListTotalPrice(cuttingList)
+                                | currency: "USD"}}</div>
+                            <div class="col-span-12 my-4 border-b"></div>
+                        </div>
+
+                        <div [ngStyle]="{'display': invoice?.consumablesOnQuote ? 'block' : 'none'}" class="col-span-12 gap-x-1 grid grid-cols-12"
+                            *ngFor="let lineItem of invoice.consumablesOnQuote">
+
+                            <div class="col-span-6">
+                                <div class="text-lg font-medium">{{
+                                    lineItem.consumable.name }}
+                                </div>
+                                <div class="col-span-2 mt-2 text-md text-secondary"> Consumable </div>
+                            </div>
+
+                            <div class="col-span-2 self-center text-right">{{
+                                lineItem.sellPrice | currency: 'USD'}}</div>
+
+                            <div class="col-span-2 self-center text-right">
+                                {{ lineItem.qty | number }}</div>
+
+                            <div class="col-span-2 self-center text-right">
+                                {{ ( lineItem.sellPrice  * lineItem.qty)
+                                | currency: "USD" }}
+                            </div>
+                            <div class="col-span-12 my-4 border-b"></div>
+                        </div>
+
+                        <div [ngStyle]="{'display': invoice.outsourcedProducts ? 'block' : 'none'}" class="col-span-12 gap-x-1 grid grid-cols-12"
+                            *ngFor="let outsource of invoice.outsourcedProducts">
+
+                            <div class="col-span-6">
+                                <div class="text-lg font-medium">{{ outsource.productType }}</div>
+                                <div class="mt-2 text-md text-secondary"> Outsource Product </div>
+                            </div>
+
+                            <div class="col-span-2 self-center text-right">
+                                {{getOutsourcePrice(outsource) /
+                                calculateOutsourcedQuantity(outsource) |
+                                currency: 'USD'}}</div>
+
+                            <div class="col-span-2 self-center text-right">
+                                {{ calculateOutsourcedQuantity(outsource) }}
+                            </div>
+
+                            <div class="col-span-2 self-center text-right">
+                                {{ getOutsourcePrice(outsource)
+                                | currency: "USD"}}</div>
+                            <div class="col-span-12 my-4 border-b"></div>
+
+                        </div>
+
+                        <div class="col-span-10 self-center font-medium tracking-tight text-secondary">
+                            SUBTOTAL</div>
+                        <div class="col-span-2 text-right text-lg">{{totals.totalExcVat | currency:
+                            "USD"}}
+                        </div>
+                        <div class="col-span-12 my-3 border-b"></div>
+                        <div class="col-span-10 self-center font-medium tracking-tight text-secondary">
+                            TAX
+                        </div>
+                        <div class="col-span-2 text-right text-lg">{{totals.totalVat | currency:
+                            "USD"}}
+                        </div>
+                        <div class="col-span-12 my-3 border-b"></div>
+                        <div class="col-span-10 self-center text-2xl font-medium tracking-tight text-secondary">
+                            TOTAL</div>
+                        <div class="col-span-2 text-right text-2xl font-medium">{{totals.totalIncVat
+                            |
+                            currency : "USD"}}</div>
+                    </div>
+                    <div class="mt-16">
+                        <div class="font-medium">Please pay within 7 days. Thank you for your
+                            business.
+                        </div>
+                        <div class="flex items-start mt-4"><img src="assets/images/logo/axe.jpeg" class="flex-0 w-10 mt-2">
+                            <div class="ml-6 text-sm text-secondary"> In condimentum malesuada
+                                efficitur.
+                                Mauris volutpat placerat auctor. Ut ac
+                                congue dolor. Quisque scelerisque lacus sed feugiat fermentum.
+                                Cras aliquet facilisis pellentesque.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

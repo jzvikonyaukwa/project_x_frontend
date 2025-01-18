@@ -1,0 +1,54 @@
+<div class="flex flex-col w-120 mb-5">
+  <div class="flex flex-row justify-between items-center mb-3">
+    <span class="text-2xl font-bold">Add a Custom Price</span>
+  </div>
+
+  <div class="max-h-[32rem] border-2 border-sky-700 rounded-lg border-opacity-25 p-5 form_height overflow-auto">
+    <form [formGroup]="customerPriceForm" (ngSubmit)="onSubmit()">
+
+      <div class="mb-4 flex items-center">
+        <label class="font-bold w-24">Color:</label>
+        <span class="text-gray-700">{{ data.color.color }}</span>
+      </div>
+
+
+      <div class="mb-4 flex items-center">
+        <label class="font-bold w-24">Gauge:</label>
+        <span class="text-gray-700">{{ data.gauge.gauge }}</span>
+      </div>
+
+      <!-- Editable Price -->
+      <mat-form-field class="w-full">
+        <mat-label>Price</mat-label>
+        <input
+          matInput
+          type="number"
+          min="0"
+          formControlName="price"
+        />
+      </mat-form-field>
+
+
+      <mat-dialog-actions align="center" class="mt-5">
+        <button
+          mat-flat-button
+          type="button"
+          class="rounded-md w-48 bg-gray-400 text-white"
+          color="accent"
+          mat-dialog-close
+        >
+          Cancel
+        </button>
+        <button
+          mat-flat-button
+          type="submit"
+          class="rounded-md w-48 bg-sky-700 text-white"
+          color="primary"
+          [disabled]="customerPriceForm.invalid"
+        >
+          Submit
+        </button>
+      </mat-dialog-actions>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+<div class="w-full" *ngIf="latestGrvs.length > 0">
+    <div class="text-xl font-normal tracking-tight leading-6 truncate text-center my-8">Recent GRVs Overview</div>
+    <ag-grid-angular 
+        [style.height.lt-md]="'240px'" 
+    [style.width.lt-md]="'720px'" 
+    [style.height.md]="'240px'" 
+    [style.width.md]="'940px'" 
+    [style.height.lg]="'240px'" 
+    [style.width.lg]="'1180px'" 
+    [style.height.gt-lg]="'240px'" 
+    [style.width.gt-lg]="'1620px'"    
+    class="ag-theme-alpine" [rowData]="latestGrvs" [columnDefs]="columnDefs" [gridOptions]="gridOptions"
+        [defaultColDef]="defaultColDef" (gridReady)="onGridReady($event)"></ag-grid-angular>
+</div>

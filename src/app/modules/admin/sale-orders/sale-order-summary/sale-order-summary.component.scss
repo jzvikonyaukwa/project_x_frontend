@@ -1,0 +1,12 @@
+.sales-order-footer {
+    ::ng-deep {
+      .mat-mdc-progress-bar {
+        border-radius: 8px;
+        .mdc-linear-progress__bar.mdc-linear-progress__primary-bar {
+          .mdc-linear-progress__bar-inner {
+            border-image: linear-gradient(90deg, #f30000, #ffc700, #b1c711) 30;
+          }
+        }
+      }
+    }
+  }

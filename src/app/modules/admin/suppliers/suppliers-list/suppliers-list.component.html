@@ -1,0 +1,81 @@
+<div class="flex flex-col flex-auto min-w-0">
+  <app-page-heading>
+    <ng-container titleSlot>
+      <div class="flex justify-between w-full ml-4">
+        <ng-container>
+          <div class="text-white text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate">
+            Axes Suppliers
+          </div>
+        </ng-container>
+        <!-- <div class="flex items-center">
+          <mat-icon class="icon-size-5 text-sky-500" [svgIcon]="'heroicons_solid:bell'"></mat-icon>
+          <div class="ml-1.5 leading-6 truncate text-sky-500">
+            All Suppliers
+          </div>
+        </div> -->
+      </div>
+    </ng-container>
+  </app-page-heading>
+
+  <div class="flex-auto border-t -mt-px pt-4 mb-6 sm:pt-6">
+    <div class="w-full p-5">
+      <div class="sm:col-span-2 md:col-span-4 flex flex-col flex-auto p-6 gap-4 shadow rounded-2xl overflow-visible bg-zinc-100 h-full">
+        <div class="flex flex-col sm:flex-row items-start justify-between">
+          <div class="text-lg font-medium tracking-tight leading-6 truncate flex items-center justify-between w-full">
+            <div class="flex items-center gap-2">
+              <mat-icon class="icon-size-5 text-axe-blue" [svgIcon]="'heroicons_custom:suppliers'"></mat-icon>
+              <span class="text-sky-700 font-semibold text-base tracking-wider">SUPPLIERS
+                TABLE</span>
+            </div>
+            <ng-container actionSlot>
+              <a class="bg-sky-700 rounded-md" mat-flat-button [color]="'accent'" (click)="addSupplier()">
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                <span class="ml-2 font-medium text-sm">Add Supplier</span>
+              </a>
+            </ng-container>
+          </div>
+        </div>
+        <div class="flex flex-col ">
+          <ag-grid-angular style="width: 100%; height: 100%" class="ag-theme-alpine" [pagination]="pagination" [paginationPageSize]="10"
+            [tooltipShowDelay]="tooltipShowDelay" (paginationChanged)="onPaginationChanged()" [columnDefs]="columnDefs"
+            [defaultColDef]="defaultColDef" [rowData]="rowData$ | async" [rowSelection]="'multiple'" [animateRows]="true"
+            [suppressPaginationPanel]="true" [getRowStyle]="lastRowBorder" (gridReady)="onGridReady($event)"></ag-grid-angular>
+          <div class="ag-grid-pagination bg-card h-11 flex justify-between items-center p-4 rounded-b-xl">
+            <div class="flex items-center justify-items-center">
+              <span class="text-xs font-medium">
+                {{gridApi?.paginationGetCurrentPage() * +paginationPageSize +
+                1}}-{{suppliersData?.length < (gridApi?.paginationGetCurrentPage() + 1) * +paginationPageSize ? suppliersData?.length :
+                  (gridApi?.paginationGetCurrentPage() + 1) * +paginationPageSize}} of {{suppliersData?.length}} </span>
+            </div>
+
+            <div class="flex gap-6">
+              <div class="flex items-center justify-items-center">
+                <span class="text-xs font-medium">Rows per page: {{paginationPageSize}}</span>
+                <select (change)="onPageSizeChanged()" id="page-size" class="w-5 bg-transparent">
+                  <option class="text-xs font-medium">10</option>
+                  <option class="text-xs font-medium">15</option>
+                  <option class="text-xs font-medium">20</option>
+                </select>
+              </div>
+              <div class="flex items-center justify-items-center gap-2">
+                <button (click)="onBtPrevious()" class="h-4 rounded border flex items-center justify-items-center"><mat-icon
+                    [class.text-zinc-500]="gridApi?.paginationGetCurrentPage() === 0"
+                    [class.text-slate-900]="gridApi?.paginationGetCurrentPage() !== 0"
+                    class="text-slate-900 fuse-vertical-navigation-item-arrow icon-size-4"
+                    [svgIcon]="'heroicons_solid:chevron-left'"></mat-icon></button>
+                <div class="flex items-center justify-items-center text-xs font-medium">
+                  <span class="value text-xs font-medium text-neutral-900" id="lbCurrentPage">-</span>/<span
+                    class="value text-xs font-medium text-slate-500" id="lbTotalPages">-</span>
+                </div>
+                <button (click)="onBtNext()" class="h-4 rounded border flex items-center justify-items-center"><mat-icon
+                    [class.text-zinc-500]="gridApi?.paginationGetCurrentPage() + 1 === gridApi?.paginationGetTotalPages()"
+                    [class.text-slate-900]="gridApi?.paginationGetCurrentPage() + 1 !== gridApi?.paginationGetTotalPages()"
+                    class="fuse-vertical-navigation-item-arrow icon-size-4" [svgIcon]="'heroicons_solid:chevron-right'"></mat-icon></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
